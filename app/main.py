@@ -38,7 +38,11 @@ def msg():
     namedata['currency'] = currency # currency column을 새로 추가
     namedata2 = namedata
     
-    none_ticker = {
+
+
+
+
+    none = {
                 "version": "2.0",
                 "template": {
                 "outputs": [
@@ -67,7 +71,7 @@ def msg():
                 "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
           }
      
-]
+        ]
                 }
             }
     
