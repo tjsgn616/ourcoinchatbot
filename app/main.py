@@ -38,16 +38,38 @@ def msg():
     namedata['currency'] = currency # currency column을 새로 추가
     namedata2 = namedata
     
-    jsonChoiceRes = {
-    "version": "2.0",
-    "template": {"outputs": [{"simpleText": {"text": "원하시는 코인 선택"}}],
-                 "quickReplies": [{"label": "비트코인", "action": "message", "messageText": "비트코인"},
-                                  {"label": "도지코인", "action": "message", "messageText": "도지코인"},
-                                  {"label": "뭐라쓰지", "action": "message", "messageText": "뭐라쓰지"},
-                        
-                                  ]
-                 }
-}
+    none_ticker = {
+                "version": "2.0",
+                "template": {
+                "outputs": [
+                {
+                "simpleText": {
+                "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
+                    }
+                }    
+            ],
+                "quickReplies": [
+          {
+                "messageText": "이더리움",
+                "action": "message",
+                "label": "이더리움"
+          },
+                    
+          {
+                "messageText": "비트코인",
+                "action": "message",
+                "label": "비트코인"
+          },  
+                    
+          {
+                "messageText": "도지코인",
+                "action": "message",
+                "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
+          }
+     
+]
+                }
+            }
     
     
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
@@ -230,7 +252,7 @@ def msg():
         
         
         
-        return  jsonify(jsonChoiceRes)
+        return  jsonify(none_ticker)
 
       
         #cur_sel = dataReceive["userRequest"]["utterance"]

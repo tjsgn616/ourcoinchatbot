@@ -1,233 +1,229 @@
-from flask import Flask, make_response, jsonify, request, g
-import pandas as pd
-import pyupbit
-import requests
+from flask import Flask,request,jsonify
+import bs4
+import urllib.request
+import time
+ 
+import os
+import sys
+ 
 app = Flask(__name__)
-
-@app.route('/msg', methods=['POST'])
-def msg():
-    
-    dataReceive = request.get_json() # 사용자가 입력한 데이터
-    print(dataReceive)
-    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-    if marketData.status_code == 200 :
-        jsonMarket = marketData.json()
-        
-    market = []
-    korean_name = []
-    english_name = []
-    for i in range(len(jsonMarket)) :
-        namedata = jsonMarket[i]
-        market.append(namedata['market'])
-        korean_name.append(namedata['korean_name'])
-        english_name.append(namedata['english_name'].lower().replace(" ",""))
-        
-    tickers=pyupbit.get_tickers()
-    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
-    
-    
-    currency = []
-    for i in namedata.loc[:,'market']:
-        if i.split('-')[0] == "KRW":
-            currency.append("KRW")
-        elif i.split('-')[0] == "BTC":
-            currency.append("BTC")
-        else:
-            currency.append("USDT")
-            
-    namedata['currency'] = currency # currency column을 새로 추가
-    namedata2 = namedata
-    
-    
-    
-    
-    coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-    #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
-#print(namedata2['korean_name'])
-    answer = []
-#print(namedata2.korean_name[0])
-    for i in namedata2.index:
-        if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-            answer.append([namedata2.market[i],namedata2.currency[i]])
-
-
-    
-# answer[여럿나온 답의 순서][0=market code, 1= currency]
-#print(answer[:len(answer)][:len(answer)])
-    while len(answer) == 0:
-        #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-        #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
-        #coin_name = dataReceive["content"]
-        none_ticker = {
+ 
+#식당성정->날짜설정->아침점심저녁 설정->처음으로
+ 
+Restaurant=["학생식당","푸름관","오름1동","오름3동","교직원 식당"]
+ 
+ChoiceUrl=""
+ChoiceDay=0
+ChoiceRes=0
+ 
+urlStudent="http://www.kumoh.ac.kr/ko/restaurant01.do"
+urlProfess="http://www.kumoh.ac.kr/ko/restaurant02.do"
+urlPorum="http://dorm.kumoh.ac.kr/dorm/restaurant_menu01.do"
+urlorum1="http://dorm.kumoh.ac.kr/dorm/restaurant_menu02.do"
+urlorum3="http://dorm.kumoh.ac.kr/dorm/restaurant_menu03.do"
+ 
+'''
+월요일~일요일 중식 : 0~6
+월요일~일요일 석식 : 7~13
+@@@ 예외적으로 오름 1동은 중식->조식 @@@
+'''
+ 
+jsonChoiceDay = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "날짜를 선택해 주세요"}}],
+                 "quickReplies": [{"label": "오늘", "action": "message", "messageText": "오늘"},
+                                  {"label": "월", "action": "message", "messageText": "월"},
+                                  {"label": "화", "action": "message", "messageText": "화"},
+                                  {"label": "수", "action": "message", "messageText": "수"},
+                                  {"label": "목", "action": "message", "messageText": "목"},
+                                  {"label": "금", "action": "message", "messageText": "금"},
+                                  {"label": "토", "action": "message", "messageText": "토"},
+                                  {"label": "일", "action": "message", "messageText": "일"}
+                                  ]
+                 }
+}
+ 
+jsonChoiceRes = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "식당을 선택해 주세요"}}],
+                 "quickReplies": [{"label": "학생식당", "action": "message", "messageText": "학생식당"},
+                                  {"label": "푸름관", "action": "message", "messageText": "푸름관"},
+                                  {"label": "오름1동", "action": "message", "messageText": "오름1동"},
+                                  {"label": "오름3동", "action": "message", "messageText": "오름3동"},
+                                  {"label": "교직원", "action": "message", "messageText": "교직원"},
+                                  ]
+                 }
+}
+ 
+ 
+jsonChoiceTime = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "시간을 선택해 주세요"}}],
+                 "quickReplies": [{"label": "아침", "action": "message", "messageText": "아침"},
+                                  {"label": "점심", "action": "message", "messageText": "점심"},
+                                  {"label": "저녁", "action": "message", "messageText": "저녁"},
+                                  ]
+                 }
+}
+ 
+ 
+ 
+def returnMenu(url,num):  #식단을 보여줄수 있게 하는 함수 (링크,식단종류)
+    html = bs4.BeautifulSoup(urllib.request.urlopen(url), "html.parser")
+    menus=html.find("td")
+    menu=str(menus.text)  #bs4 자료형을 String 형태로 변환, 식단의 존재 유무 판별
+ 
+    if(menu=="등록된 메뉴가 없습니다."): #식단이 없을경우
+        return menu
+    else:                              #식단이 있을경우
+        html = bs4.BeautifulSoup(urllib.request.urlopen(url), "html.parser")
+        menu = html.findAll("ul", {"class": "s-dot"})
+        return menu[num].text.strip()
+ 
+ 
+def returnAvaliableTimeDormitory(url):  #기숙사 식당 이용 시간을 리턴하는 함수
+    html = bs4.BeautifulSoup(urllib.request.urlopen(url), "html.parser")
+    Time=html.findAll("div",{"class":"contents-area"})
+    return Time[3].text + Time[4].text
+ 
+ 
+def returnAvaliableTime(url):  #전체식당 이용 시간을 리턴하는 함수
+    html = bs4.BeautifulSoup(urllib.request.urlopen(url), "html.parser")
+    Time=html.findAll("ul",{"class":"ul-h-list01"})
+    return Time[1].text
+ 
+ 
+@app.route('/message', methods=['POST'])  #json으로 들어온 사용자 요청을 보고 판단
+def bob():
+ 
+    content = request.get_json() #사용자가 보낸 메세지 입력
+    content = content['userRequest']
+    content = content['utterance']
+ 
+    global ChoiceUrl
+    global ChoiceDay
+    global ChoiceRes
+    global jsonChoiceDay
+    global jsonChoiceRes
+    global jsonChoiceTime
+ 
+    if content==u"학생식당":
+        response_data=jsonChoiceDay
+        ChoiceUrl=urlStudent
+        ChoiceRes=0
+ 
+    elif content==u"푸름관":
+        response_data=jsonChoiceDay
+        ChoiceUrl=urlPorum
+        ChoiceRes = 1
+ 
+    elif content==u"오름1동":
+        response_data=jsonChoiceDay
+        ChoiceUrl=urlorum1
+        ChoiceRes = 2
+ 
+    elif content == u"오름3동":
+        response_data=jsonChoiceDay
+        ChoiceUrl=urlorum3
+        ChoiceRes = 3
+ 
+    elif content==u"교직원":
+        response_data=jsonChoiceDay
+        ChoiceUrl=urlProfess
+        ChoiceRes = 4
+ 
+    elif content==u"오늘":
+        response_data=jsonChoiceTime
+        ChoiceDay = time.localtime().tm_wday
+ 
+    elif content==u"월":
+        response_data=jsonChoiceTime
+        ChoiceDay = 0
+ 
+    elif content==u"화":
+        response_data = jsonChoiceTime
+        ChoiceDay = 1
+ 
+    elif content==u"수":
+        response_data = jsonChoiceTime
+        ChoiceDay = 2
+ 
+    elif content==u"목":
+        response_data = jsonChoiceTime
+        ChoiceDay = 3
+ 
+    elif content==u"금":
+        response_data = jsonChoiceTime
+        ChoiceDay = 4
+ 
+    elif content==u"토":
+        response_data = jsonChoiceTime
+        ChoiceDay = 5
+ 
+    elif content==u"일":
+        response_data = jsonChoiceTime
+        ChoiceDay = 6
+ 
+    elif content==u"아침":
+        if(ChoiceUrl==urlorum1):  #오름1동 아침일경우 정상 출력
+            response_data={
+            "version": "2.0",
+            "template": {
+                "outputs": [{"simpleText": {"text": returnMenu(ChoiceUrl,ChoiceDay)}}],
+                "quickReplies": [{"label": "처음으로", "action": "message", "messageText": "처음으로"},
+                                 ]
+                         }
+            }
+ 
+        else:   #오름1동 아침이 아닐경우 경고 메시지 출력
+            response_data = {
                 "version": "2.0",
                 "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
-                    }
-                }    
-            ],
-                "quickReplies": [
-          {
-                "messageText": "이더리움",
-                "action": "message",
-                "label": "이더리움"
-          },
-                    
-          {
-                "messageText": "비트코인",
-                "action": "message",
-                "label": "비트코인"
-          },  
-                    
-          {
-                "messageText": "도지코인",
-                "action": "message",
-                "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
-          }
-     
-]
-                }
+                    "outputs": [{"simpleText": {"text": Restaurant[ChoiceRes]+"은 아침이 없습니다. 다시 선택해 주세요."}}],
+                    "quickReplies": [{"label": "아침", "action": "message", "messageText": "아침"},
+                                     {"label": "점심", "action": "message", "messageText": "점심"},
+                                     {"label": "저녁", "action": "message", "messageText": "저녁"}, ]}
             }
-        return jsonify(none_ticker)
-        
-        
-#print(namedata2['korean_name'])
-        answer = []
-
-#print(namedata2.korean_name[0])
-        for i in namedata2.index:
-            if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-                answer.append([namedata2.market[i],namedata2.currency[i]])
-                
-    if len(answer) == 1: # 화폐 단위 하나만 있을 때
-    #print(answer)
-        ticker = answer[0][0]
-        now_price = {
+ 
+ 
+    elif content == u"점심":
+        if (ChoiceUrl != urlorum1):  #오름1동 점심이 아닐경우 정상출력
+            response_data = {
                 "version": "2.0",
                 "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[0][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다" # f-string 수정
-                    }
-                }    
-            ]
+                    "outputs": [{"simpleText": {"text": returnMenu(ChoiceUrl, ChoiceDay)}}],
+                    "quickReplies": [{"label": "처음으로", "action": "message", "messageText": "처음으로"},
+                                     ]
                 }
             }
-        return  jsonify(now_price) # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
-    
-    
-    
-    
-    elif len(answer) == 2: # 화폐 단위 2개 있을 때
-        #print(answer)
-        selection = []
-        for i in range(len(answer)): # 이거 왜 안됨??
-            selection.append(answer[i][1])
-        #print(selection)
-
-        manycurrency = {
+ 
+ 
+        else:  #오름1동 점심일경우 경고 메시지 출력
+            response_data = {
                 "version": "2.0",
                 "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "기준 화폐가 다수 존재합니다" f"{selection}" 
-                    }
-                }    
-            ],
-                    
-                "quickReplies": [
-          {
-                "messageText": f"{selection[0]}",
-                "action": "message",
-                "label": f"{selection[0]}"
-          },
-                    
-          {
-                "messageText": f"{selection[1]}",
-                "action": "message",
-                "label": f"{selection[1]}"
-          }
-     
-]
-                }
+                    "outputs": [{"simpleText": {"text": Restaurant[ChoiceRes] + "은 아침이 없습니다. 다시 선택해 주세요."}}],
+                    "quickReplies": [{"label": "아침", "action": "message", "messageText": "아침"},
+                                     {"label": "점심", "action": "message", "messageText": "점심"},
+                                     {"label": "저녁", "action": "message", "messageText": "저녁"}, ]}
             }
-        return  jsonify(manycurrency)
-    
-    else: # 화폐 단위 3개
-        selection = []
-        for i in range(len(answer)): 
-            selection.append(answer[i][1])
-        #print(selection)
-        manycurrency = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "기준 화폐가 다수 존재합니다" f"{selection}" 
-                    }
-                }    
-            ],
-                    
-                "quickReplies": [
-          {
-                "messageText": f"{selection[0]}",
-                "action": "message",
-                "label": f"{selection[0]}"
-          },
-                    
-          {
-                "messageText": f"{selection[1]}",
-                "action": "message",
-                "label": f"{selection[1]}"
-          },
-          {
-                "messageText": f"{selection[2]}",
-                "action": "message",
-                "label": f"{selection[2]}"
-          }
-     
-]
-                }
-            }
-        return  jsonify(manycurrency)
-
-        cur_sel = dataReceive["userRequest"]["utterance"]
-            
-        n = selection.index(cur_sel)
-        
-        ticker = answer[n][0]
-        
-        now_price = {
-            
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[n][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
-                    }
-                }    
-            ]
-                }
-            }
-        return  jsonify(now_price)
-        #cur_sel = dataReceive["userRequest"]["utterance"]
-        #if cur_sel == "KRW" or "BTC" or "USDT" :
-        #cur_sel = "KRW"    
-          # 일반 발화 안됨
-        #cur_sel = dataReceive["action"]["clientExtra"] # 바로가기 응답 받아오는 코드 안됨
-        #cur_sel = dataReceive["action"]["params"]["currency"]["value"]
-        #cur_sel = dataReceive["quickReplies"]["messageText"]
-        #cur_sel = dataReceive["quickReplies"]["messageText"]
-        #cur_sel = dataReceive["userRequest"]["utterance"].upper()
-        #cur_sel = dataReceive["quickReplies"]["action"]["message"]
-
-        
-    
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+ 
+    elif content==u"저녁":
+        response_data={
+        "version": "2.0",
+        "template": {
+            "outputs": [{"simpleText": {"text": returnMenu(ChoiceUrl,ChoiceDay)}}],
+            "quickReplies": [{"label": "처음으로", "action": "message", "messageText": "처음으로"},]}
+        }
+ 
+ 
+    elif content==u"처음으로":
+        response_data=jsonChoiceRes
+ 
+    else :
+        response_data = jsonChoiceRes
+ 
+    return jsonify(response_data)
+ 
+if __name__=="__main__":
+     app.run(host="0.0.0.0", port=5000)
