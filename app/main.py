@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import pandas as pd
 import pyupbit
 import requests
-app = Flask(__name__)
+app = Flask(__name__) 
 
 @app.route('/msg', methods=['POST'])
 def msg():
