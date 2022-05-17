@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, make_response, jsonify, request, g
 import pandas as pd
 import pyupbit
 import requests
