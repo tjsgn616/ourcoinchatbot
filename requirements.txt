@@ -24,3 +24,5 @@ xlrd==2.0.1
 zipp==3.8.0
 websockets==10.3
 pyupbit==0.2.30
+beautifulsoup4=4.11.1
+soupsieve==2.3.2
