@@ -8,7 +8,7 @@ app = Flask(__name__)
 def msg():
     
     dataReceive = request.get_json() # 사용자가 입력한 데이터
-    print(dataReceive)
+    #print(dataReceive)
     marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
     if marketData.status_code == 200 :
         jsonMarket = marketData.json()
@@ -100,6 +100,7 @@ def msg():
         for i in namedata2.index:
             if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
                 answer.append([namedata2.market[i],namedata2.currency[i]])
+                print("여기 되는건가?")
                 
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
     #print(answer)
@@ -194,6 +195,7 @@ def msg():
 ]
                 }
             }
+        return  jsonify(manycurrency)
         cur_sel = dataReceive["userRequest"]["utterance"]
             
         n = selection.index(cur_sel)
@@ -214,7 +216,7 @@ def msg():
                 }
             }
         
-        return  jsonify(manycurrency,now_price)
+        return  jsonify(now_price)
 
       
         #cur_sel = dataReceive["userRequest"]["utterance"]
