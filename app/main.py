@@ -256,7 +256,7 @@ def msg():
         
         
         
-        return  jsonify(none_ticker)
+        return  jsonify(none)
 
       
         #cur_sel = dataReceive["userRequest"]["utterance"]
