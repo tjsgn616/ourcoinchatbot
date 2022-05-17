@@ -4,7 +4,7 @@ import pyupbit
 import requests
 app = Flask(__name__) 
 
-@app.route('/msg', methods=['POST'])
+@app.route('/msg2', methods=['POST'])
 def msg():
     
     dataReceive = request.get_json() # 사용자가 입력한 데이터
@@ -37,7 +37,13 @@ def msg():
             
     namedata['currency'] = currency # currency column을 새로 추가
     namedata2 = namedata
+    ## 여기까지 데이터 받아오는거..
+
+    title_coin = ["비트코인","이더리움","도지코인","새벽 2시 28분"]
     
+    ChoiceUrl=""
+    ChoiceDay=0
+    ChoiceRes=0
 
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
