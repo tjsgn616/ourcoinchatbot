@@ -38,7 +38,16 @@ def msg():
     namedata['currency'] = currency # currency column을 새로 추가
     namedata2 = namedata
     
-    
+    jsonChoiceRes = {
+    "version": "2.0",
+    "template": {"outputs": [{"simpleText": {"text": "원하시는 코인 선택"}}],
+                 "quickReplies": [{"label": "비트코인", "action": "message", "messageText": "비트코인"},
+                                  {"label": "도지코인", "action": "message", "messageText": "도지코인"},
+                                  {"label": "뭐라쓰지", "action": "message", "messageText": "뭐라쓰지"},
+                        
+                                  ]
+                 }
+}
     
     
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
@@ -102,7 +111,7 @@ def msg():
                 answer.append([namedata2.market[i],namedata2.currency[i]])
                 print("여기 되는건가?")
 
-        return jsonify(none_ticker)       
+        #return jsonify(none_ticker)       
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
     #print(answer)
         ticker = answer[0][0]
@@ -118,7 +127,7 @@ def msg():
             ]
                 }
             }
-        return  jsonify(now_price) # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
+             # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
     
     
     
@@ -157,7 +166,7 @@ def msg():
 ]
                 }
             }
-        return  jsonify(manycurrency)
+        #return  jsonify(manycurrency)
     
     else: # 화폐 단위 3개
         selection = []
@@ -214,14 +223,14 @@ def msg():
             }
 
         
-        return  jsonify(manycurrency)
+        #return  jsonify(manycurrency)
         
             
         
         
         
         
-        return  jsonify(now_price)
+        return  jsonify(jsonChoiceRes)
 
       
         #cur_sel = dataReceive["userRequest"]["utterance"]
@@ -234,8 +243,3 @@ def msg():
         #cur_sel = dataReceive["quickReplies"]["messageText"]
         #cur_sel = dataReceive["userRequest"]["utterance"].upper()
         #cur_sel = dataReceive["quickReplies"]["action"]["message"]
-
-        
-    
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
