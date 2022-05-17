@@ -90,7 +90,7 @@ def msg():
 ]
                 }
             }
-        return jsonify(none_ticker)
+        
         
         
 #print(namedata2['korean_name'])
@@ -101,7 +101,8 @@ def msg():
             if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
                 answer.append([namedata2.market[i],namedata2.currency[i]])
                 print("여기 되는건가?")
-                
+
+        return jsonify(none_ticker)       
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
     #print(answer)
         ticker = answer[0][0]
@@ -195,16 +196,12 @@ def msg():
 ]
                 }
             }
-        return  jsonify(manycurrency)
-        cur_sel = dataReceive["userRequest"]["utterance"]
-            
-        n = selection.index(cur_sel)
         
+        cur_sel = dataReceive["userRequest"]["utterance"]
+        n = selection.index(cur_sel)
         ticker = answer[n][0]
         
-        now_price = {
-            
-                "version": "2.0",
+        { "version": "2.0",
                 "template": {
                 "outputs": [
                 {
@@ -215,6 +212,14 @@ def msg():
             ]
                 }
             }
+
+        
+        return  jsonify(manycurrency)
+        
+            
+        
+        
+        
         
         return  jsonify(now_price)
 
