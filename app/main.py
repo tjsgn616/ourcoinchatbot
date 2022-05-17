@@ -39,43 +39,6 @@ def msg():
     namedata2 = namedata
     
 
-
-
-
-    none = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
-                    }
-                }    
-            ],
-                "quickReplies": [
-          {
-                "messageText": "이더리움",
-                "action": "message",
-                "label": "이더리움"
-          },
-                    
-          {
-                "messageText": "비트코인",
-                "action": "message",
-                "label": "비트코인"
-          },  
-                    
-          {
-                "messageText": "도지코인",
-                "action": "message",
-                "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
-          }
-     
-        ]
-                }
-            }
-    
-    
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
 #print(namedata2['korean_name'])
@@ -136,8 +99,7 @@ def msg():
             if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
                 answer.append([namedata2.market[i],namedata2.currency[i]])
                 print("여기 되는건가?")
-
-        #return jsonify(none_ticker)       
+        return jsonify(none_ticker)       
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
     #print(answer)
         ticker = answer[0][0]
@@ -154,7 +116,7 @@ def msg():
                 }
             }
              # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
-    
+        return jsonify(now_price)
     
     
     
@@ -165,7 +127,7 @@ def msg():
             selection.append(answer[i][1])
         #print(selection)
 
-        manycurrency = {
+        manycurrency2 = {
                 "version": "2.0",
                 "template": {
                 "outputs": [
@@ -192,7 +154,7 @@ def msg():
 ]
                 }
             }
-        #return  jsonify(manycurrency)
+        return  jsonify(manycurrency2)
     
     else: # 화폐 단위 3개
         selection = []
@@ -227,15 +189,14 @@ def msg():
                 "action": "message",
                 "label": f"{selection[2]}"
           }
-     
-]
-                }
-            }
         
+]
+             }
+            }
+
         cur_sel = dataReceive["userRequest"]["utterance"]
         n = selection.index(cur_sel)
         ticker = answer[n][0]
-        
         { "version": "2.0",
                 "template": {
                 "outputs": [
@@ -247,16 +208,9 @@ def msg():
             ]
                 }
             }
+        return jsonify(manycurrency)
 
-        
-        #return  jsonify(manycurrency)
-        
-            
-        
-        
-        
-        
-        return  jsonify(none)
+    
 
       
         #cur_sel = dataReceive["userRequest"]["utterance"]
