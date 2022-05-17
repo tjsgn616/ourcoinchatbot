@@ -194,8 +194,6 @@ def msg():
 ]
                 }
             }
-        return  jsonify(manycurrency)
-
         cur_sel = dataReceive["userRequest"]["utterance"]
             
         n = selection.index(cur_sel)
@@ -215,7 +213,10 @@ def msg():
             ]
                 }
             }
-        return  jsonify(now_price)
+        
+        return  jsonify(manycurrency,now_price)
+
+      
         #cur_sel = dataReceive["userRequest"]["utterance"]
         #if cur_sel == "KRW" or "BTC" or "USDT" :
         #cur_sel = "KRW"    
