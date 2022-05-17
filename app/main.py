@@ -53,7 +53,7 @@ def msg():
 # answer[여럿나온 답의 순서][0=market code, 1= currency]
 #print(answer[:len(answer)][:len(answer)])
     while len(answer) == 0:
-        #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
+        coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
         #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
         #coin_name = dataReceive["content"]
         none_ticker = {
