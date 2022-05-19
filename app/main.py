@@ -48,6 +48,8 @@ def msg():
         if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
             answer.append([namedata2.market[i],namedata2.currency[i]])
 
+    print(answer[0][0])
+
 
     
 # answer[여럿나온 답의 순서][0=market code, 1= currency]
@@ -91,17 +93,7 @@ def msg():
         return jsonify(none_ticker)
         
         
-#print(namedata2['korean_name'])
-        answer = []
-
-#print(namedata2.korean_name[0])
-        for i in namedata2.index:
-            if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-                answer.append([namedata2.market[i],namedata2.currency[i]])
-                print("여기 되는건가?")
-        return jsonify(none_ticker)       
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
-    #print(answer)
         ticker = answer[0][0]
         now_price = {
                 "version": "2.0",
@@ -164,35 +156,3 @@ def msg():
             }
         }
         return jsonify(currency)
-        dataReceive = request.get_json()
-        cur_sel = dataReceive["userRequest"]["utterance"]
-        if (cur_sel == "KRW") or (cur_sel == "BTC") or (cur_sel == "USDT") :
-            
-            n = selection.index(cur_sel)
-            ticker = answer[n][0]
-            abc = { "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[n][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
-                    }
-                }    
-            ]
-                }
-            }
-            return jsonify(abc)
-
-    
-
-      
-        #cur_sel = dataReceive["userRequest"]["utterance"]
-        #if cur_sel == "KRW" or "BTC" or "USDT" :
-        #cur_sel = "KRW"    
-          # 일반 발화 안됨
-        #cur_sel = dataReceive["action"]["clientExtra"] # 바로가기 응답 받아오는 코드 안됨
-        #cur_sel = dataReceive["action"]["params"]["currency"]["value"]
-        #cur_sel = dataReceive["quickReplies"]["messageText"]
-        #cur_sel = dataReceive["quickReplies"]["messageText"]
-        #cur_sel = dataReceive["userRequest"]["utterance"].upper()
-        #cur_sel = dataReceive["quickReplies"]["action"]["message"]
