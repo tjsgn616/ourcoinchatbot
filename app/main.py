@@ -126,35 +126,22 @@ def msg():
         for i in range(len(answer)): # 이거 왜 안됨??
             selection.append(answer[i][1])
         #print(selection)
-
-        manycurrency2 = {
-                "version": "2.0",
-                "template": {
+        print(selection.index("KRW")) # 2
+        KRW = selection.index("KRW")
+        ticker = answer[KRW][0]
+        currency = { 
+            "version":"2.0",
+            "template": {
                 "outputs": [
-                {
-                "simpleText": {
-                "text": "기준 화폐가 다수 존재합니다" f"{selection}" 
+                    {
+                        "simpleText": {
+                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
+                        }
                     }
-                }    
-            ],
-                    
-                "quickReplies": [
-          {
-                "messageText": f"{selection[0]}",
-                "action": "message",
-                "label": f"{selection[0]}"
-          },
-                    
-          {
-                "messageText": f"{selection[1]}",
-                "action": "message",
-                "label": f"{selection[1]}"
-          }
-     
-]
-                }
+                ]
             }
-        return  jsonify(manycurrency2)
+        }
+        return jsonify(currency)
     
     else: # 화폐 단위 3개
         selection = []
