@@ -73,7 +73,8 @@ def more():
             ]
         }
     }
-
+    chat = request.get_json()
+    print("1번 : ",chat)
     return responseBody
 
 
@@ -97,7 +98,7 @@ def res():
         }
     }
     chat = request.get_json()
-    print(chat)
+    print("2번 : ",chat)
     return responseBody
 
 
