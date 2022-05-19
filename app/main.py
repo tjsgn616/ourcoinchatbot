@@ -40,7 +40,7 @@ def msg():
     ## 여기까지 데이터 받아오는거..
 
     print("namedata : ",namedata)
-    print("korean_name", namedata['market_korean_name'])
+    print("korean_name", namedata['korean_name'])
 
 
 
