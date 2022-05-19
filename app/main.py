@@ -54,7 +54,7 @@ def msg():
     
 # answer[여럿나온 답의 순서][0=market code, 1= currency]
 #print(answer[:len(answer)][:len(answer)])
-    if len(answer) == 0:
+    while len(answer) == 0:
         coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
         #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
         #coin_name = dataReceive["content"]
@@ -93,7 +93,7 @@ def msg():
         return jsonify(none_ticker)
         
         
-    else: # 화폐 단위 하나만 있을 때
+    if len(answer) != 0 : # 화폐 단위 하나만 있을 때
         selection = []
         for i in range(len(answer)): # 이거 왜 안됨??
             selection.append(answer[i][1])
