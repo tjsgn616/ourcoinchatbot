@@ -60,20 +60,21 @@ def msg():
 
 
     if coin_name == "그외":
-        etc = { 
-            "version":"2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text":  " 원하는 가상 화폐 명을 입력해 주세요.",
-                            "action": "block",
-                            "blockId" : "6284847275eca02fba63ab96"
-                        }
-                    }
-                ]
-            }
-        }
+        
+        # etc = { 
+        #     "version":"2.0",
+        #     "template": {
+        #         "outputs": [
+        #             {
+        #                 "simpleText": {
+        #                     "text":  " 원하는 가상 화폐 명을 입력해 주세요.",
+        #                     "action": "block",
+        #                     "blockId" : "6284847275eca02fba63ab96"
+        #                 }
+        #             }
+        #         ]
+        #     }
+        # }
         return etc
 
         # 6284847275eca02fba63ab96
@@ -144,3 +145,5 @@ def msg():
             }
         }
         return now_price
+
+
