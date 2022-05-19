@@ -42,6 +42,7 @@ def msg():
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
 #print(namedata2['korean_name'])
+    print("coin : " ,coin_name)
     answer = []
 #print(namedata2.korean_name[0])
     for i in namedata2.index:
