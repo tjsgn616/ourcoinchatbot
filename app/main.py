@@ -61,7 +61,7 @@ def more():
     print(body)
     rip = "리플"
     body = body['contexts']
-    print("------콘텍트 : ", body)
+    print("------콘텍트1 : ", body)
     responseBody = {
         "version": "2.0",
         "template": {
@@ -83,7 +83,8 @@ def res():
     # body = body["userRequest"]["utterance"].lower().replace(" ","")
     body = body["userRequest"]["utterance"]
     print("2번 : ",body)
-
+    body = body['contexts']
+    print("------콘텍트2 : ", body)
     if body =="리플":
         responseBody = {
             "version": "2.0",
