@@ -161,6 +161,7 @@ def msg():
         for i in range(len(answer)): 
             selection.append(answer[i][1])
         #print(selection)
+        print(selection.index("KRW")) 
         manycurrency = {
                 "version": "2.0",
                 "template": {
