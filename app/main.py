@@ -49,8 +49,9 @@ def msg():
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
 #print(namedata2['korean_name'])
     print("coin : " ,coin_name)
-
-    # if coin_name in namedata['market_korean_name']:
+    coin_list =  list(namedata['korean_name'])
+    print(coin_list)
+    # if coin_name in namedata['korean_name']:
 
 
 
