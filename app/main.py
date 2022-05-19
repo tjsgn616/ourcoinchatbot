@@ -96,7 +96,8 @@ def res():
             ]
         }
     }
-
+    chat = request.get_json()
+    print(chat)
     return responseBody
 
 
