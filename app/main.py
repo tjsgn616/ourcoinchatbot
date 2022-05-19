@@ -57,9 +57,8 @@ def now():
 
 @app.route('/more/guide',methods=['POST'])
 def more():
-    body = request.get_json()
-    print(body)
-    print(body['userRequest']['utterance'])
+    # body = request.get_json()
+    # print(body['userRequest']['utterance'])
 
     responseBody = {
         "version": "2.0",
@@ -67,39 +66,36 @@ def more():
             "outputs": [
                 {
                     "simpleText": {
-                        "text": "안녕 hello I'm Ryan"
+                        "text": "현 시세 조회를 원하는 가상 화폐의 종류를 선택해주세요. \n 그 외의 경우, 가상 화폐 명을 입력해 주세요."
                     }
                 }
             ]
         }
     }
-    chat = request.get_json()
-    print("1번 : ",chat)
     return responseBody
 
 
 @app.route('/more/res',methods=['POST'])
 def res():
     body = request.get_json()
-    print(body)
-    print(body['userRequest']['utterance'])
+    body = ["userRequest"]["utterance"].lower().replace(" ","")
+    print("2번 : ",body)
 
-    responseBody = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleImage": {
-                        "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
-                        "altText": "hello I'm Ryan"
+    if 
+        responseBody = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleImage": {
+                            "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
+                            "altText": "hello I'm Ryan"
+                        }
                     }
-                }
-            ]
+                ]
+            }
         }
-    }
-    chat = request.get_json()
-    print("2번 : ",chat)
-    return responseBody
+        return responseBody
 
 
 
