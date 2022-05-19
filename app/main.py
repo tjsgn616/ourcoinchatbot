@@ -60,7 +60,7 @@ def more():
     body = request.get_json()
     print(body['userRequest']['utterance'])
     rip = "리플"
-    body = body['contexts']['name']
+    body = body['contexts'][0]
     print("------콘텍트 : ", body)
     responseBody = {
         "version": "2.0",
