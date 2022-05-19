@@ -59,8 +59,10 @@ def msg():
         print("실패")
 
 
-    if coin_name == "그 외":
+    if coin_name == "그외":
         print("햄버거")
+    else:
+        print("우")
 
 
 
