@@ -104,6 +104,8 @@ def res():
     # print("2번 : ",body)
     body = body['contexts']
     print("------콘텍트2 : ", body)
+    body = body['contexts'][0]['params']['key2']['value']
+    print("우리가 원하던 거....!!!!! : ", body)
     if body =="리플":
         responseBody = {
             "version": "2.0",
