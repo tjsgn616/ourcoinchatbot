@@ -58,7 +58,7 @@ def now():
 @app.route('/more/guide',methods=['POST'])
 def more():
     body = request.get_json()
-    print("body1 : ",body)
+    print("body1 : ",body[0])
     rip = "샌드"
     body = body['contexts']
     print("------콘텍트1 : ", body)
