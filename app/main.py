@@ -73,6 +73,24 @@ def more():
                 }
             ]
         },
+        "context":{
+            "values":[
+                {
+                    "name":"ABC",
+                    "lifeSpan":3,
+                    "params":{
+                        "key1":"리플"
+                    }
+                },
+                {
+                    "name":"moreCoin",
+                    "lifeSpan":3,
+                    "params":{
+                        "key2":"샌드박스"
+                    }
+                }
+            ]
+        }
     }
     return responseBody
 
