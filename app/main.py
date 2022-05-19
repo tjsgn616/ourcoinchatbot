@@ -40,8 +40,7 @@ def msg():
     ## 여기까지 데이터 받아오는거..
 
     print("namedata : ",namedata)
-    print("currency : ",currency)
-
+    print("korean_name", namedata['market_korean_name'])
 
 
 
@@ -51,7 +50,17 @@ def msg():
 #print(namedata2['korean_name'])
     print("coin : " ,coin_name)
 
-    # if coin_name in 
+    # if coin_name in namedata['market_korean_name']:
+
+
+
+
+
+
+
+
+
+
 
 
 
