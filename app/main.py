@@ -48,7 +48,7 @@ def msg():
         if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
             answer.append([namedata2.market[i],namedata2.currency[i]])
 
-    print(answer[0][0])
+    print("1 : ", answer[0][0])
 
 
     
@@ -118,7 +118,7 @@ def msg():
         for i in range(len(answer)): # 이거 왜 안됨??
             selection.append(answer[i][1])
         #print(selection)
-        print(selection.index("KRW")) # 2
+        print("2:" , selection.index("KRW")) # 2
         KRW = selection.index("KRW")
         ticker = answer[KRW][0]
         currency = { 
@@ -140,7 +140,7 @@ def msg():
         for i in range(len(answer)): 
             selection.append(answer[i][1])
         #print(selection)
-        print(selection.index("KRW")) # 2
+        print("3:",selection.index("KRW")) # 2
         KRW = selection.index("KRW")
         ticker = answer[KRW][0]
         currency = { 
