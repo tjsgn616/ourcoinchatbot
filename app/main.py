@@ -78,7 +78,8 @@ def more():
 @app.route('/more/res',methods=['POST'])
 def res():
     body = request.get_json()
-    body = body["userRequest"]["utterance"].lower().replace(" ","")
+    # body = body["userRequest"]["utterance"].lower().replace(" ","")
+    body = body["userRequest"]["utterance"]
     print("2번 : ",body)
 
     if body =="리플":
