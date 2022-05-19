@@ -39,8 +39,8 @@ def msg():
     namedata2 = namedata
     ## 여기까지 데이터 받아오는거..
 
-    print("namedata : ",namedata[0])
-    print("currency : ",currency[0])
+    print("namedata : ",namedata)
+    print("currency : ",currency)
 
 
 
