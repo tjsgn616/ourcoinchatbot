@@ -58,6 +58,34 @@ def msg():
     # else : 
     #     print("실패")
 
+    answer = []
+    for i in namedata2.index:
+        if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
+            answer.append([namedata2.market[i],namedata2.currency[i]])
+
+    print("1 : ", answer)
+    print("len:",len(answer))
+
+    selection = []
+    for i in range(len(answer)):
+        selection.append(answer[i][1])
+    print("2:" , selection.index("KRW")) # 2
+    KRW = selection.index("KRW")
+    ticker = answer[KRW][0]
+        # now_price = { 
+        #     "version":"2.0",
+        #     "template": {
+        #         "outputs": [
+        #             {
+        #                 "simpleText": {
+        #                     "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
+        #                 }
+        #             }
+        #         ]
+        #     }
+        # }
+        # return now_price
+
     current_price =  {  "version": "2.0",
                         "template": {
                             "outputs": [
@@ -72,16 +100,19 @@ def msg():
                                     "items": [
                                         {
                                         "title": "비트코인",
-                                        "description": "4,500원",
+                                        # "description": "4,500원",
+                                        "description" : f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
                                         "imageUrl": "https://static.upbit.com/logos/BTC.png"
                                         },
                                         {
                                         "title": "이더리움",
                                         "description": "5,500원",
+                                        "imageUrl": "https://static.upbit.com/logos/ETH.png"
                                         },
                                         {
                                         "title": "도지코인",
                                         "description": "5,300원",
+                                        "imageUrl": ""
                                         }
                                     ],
                                     "buttons": [
