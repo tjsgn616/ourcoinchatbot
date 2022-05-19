@@ -52,7 +52,8 @@ def msg():
     # market_id =  list(namedata['market'])
     # market_kor = list(namedata['korean_name']) 
     # market_eng = list(namedata['english_name'])
-    print(list(namedata))
+    coin_list = list(zip(market,korean_name,english_name))
+    print(coin_list)
     # if coin_name in coin_list:
 
 
