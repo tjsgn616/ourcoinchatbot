@@ -73,7 +73,7 @@ def msg():
                                         {
                                         "title": "비트코인",
                                         "description": "4,500원",
-                                        # "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
+                                        "imageUrl": "https://static.upbit.com/logos/BTC.png"
                                         },
                                         {
                                         "title": "이더리움",
