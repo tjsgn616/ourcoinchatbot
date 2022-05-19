@@ -49,7 +49,7 @@ def msg():
         if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
             answer.append([namedata2.market[i],namedata2.currency[i]])
 
-    print("1 : ", answer[0])
+    print("1 : ", answer)
 
 
     
