@@ -53,34 +53,52 @@ def msg():
     market_eng = list(namedata['english_name'])
     
     # if (coin_name in market_id) or (coin_name in market_kor) or (coin_name in market_eng):
-    if coin_name in market_kor:
-        print("오늘 점심은 햄버거")
-    else : 
-        print("실패")
+    # if coin_name in market_kor:
+    #     print("오늘 점심은 햄버거")
+    # else : 
+    #     print("실패")
 
-
-    if coin_name == "그외":
-        
-        # etc = { 
-        #     "version":"2.0",
-        #     "template": {
-        #         "outputs": [
-        #             {
-        #                 "simpleText": {
-        #                     "text":  " 원하는 가상 화폐 명을 입력해 주세요.",
-        #                     "action": "block",
-        #                     "blockId" : "6284847275eca02fba63ab96"
-        #                 }
-        #             }
-        #         ]
-        #     }
-        # }
-        return etc
-
-        # 6284847275eca02fba63ab96
-    else:
-        print("우")
-
+    current_price =  {  "version": "2.0",
+                        "template": {
+                            "outputs": [
+                            {
+                                "carousel": {
+                                "type": "listCard",
+                                "items": [
+                                    {
+                                    "header": {
+                                        "title": "현재 시세 조회"
+                                    },
+                                    "items": [
+                                        {
+                                        "title": "비트코인",
+                                        "description": "4,500원",
+                                        # "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
+                                        },
+                                        {
+                                        "title": "이더리움",
+                                        "description": "5,500원",
+                                        },
+                                        {
+                                        "title": "도지코인",
+                                        "description": "5,300원",
+                                        }
+                                    ],
+                                    "buttons": [
+                                        {
+                                        "label": "더 많은 코인 보러가기",
+                                        "action": "message",
+                                        "messageText" : "그 외"
+                                        }
+                                    ]
+                                    }
+                                ]
+                                }
+                            }
+                            ]
+                        }
+                    }
+    return current_price
 
 
 
