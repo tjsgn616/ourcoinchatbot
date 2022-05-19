@@ -96,6 +96,21 @@ def res():
             }
         }
         return responseBody
+    else :
+        responseBody = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text":"집가자"
+                        }
+                    }
+                ]
+            }
+        }
+        return responseBody
+
 
 
 
