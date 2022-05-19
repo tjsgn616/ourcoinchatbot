@@ -46,8 +46,7 @@ def msg():
 
 
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-    #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
-#print(namedata2['korean_name'])
+
     print("coin : " ,coin_name)
     market_id =  list(namedata['market'])
     market_kor = list(namedata['korean_name']) 
@@ -60,7 +59,8 @@ def msg():
         print("실패")
 
 
-
+    if coin_name == "그 외":
+        print("햄버거")
 
 
 
