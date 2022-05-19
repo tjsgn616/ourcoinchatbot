@@ -39,12 +39,28 @@ def msg():
     namedata2 = namedata
     ## 여기까지 데이터 받아오는거..
 
+    print("namedata : ",namedata[0])
+    print("currency : ",currency[0])
+
+
+
+
+
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
 #print(namedata2['korean_name'])
     print("coin : " ,coin_name)
+
+    # if coin_name in 
+
+
+
+
+
+
+
+
     answer = []
-#print(namedata2.korean_name[0])
     for i in namedata2.index:
         if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
             answer.append([namedata2.market[i],namedata2.currency[i]])
@@ -52,14 +68,7 @@ def msg():
     print("1 : ", answer)
     print("len:",len(answer))
 
-
-    
-# answer[여럿나온 답의 순서][0=market code, 1= currency]
-#print(answer[:len(answer)][:len(answer)])
-    while len(answer) == 0:
-        coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-        #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
-        #coin_name = dataReceive["content"]
+    while len(answer) == 0: # 값이 없는 경우 풀백 코드
         none_ticker = {
                 "version": "2.0",
                 "template": {
@@ -82,11 +91,10 @@ def msg():
         return none_ticker
         
         
-    if len(answer) != 0 : # 화폐 단위 하나만 있을 때
+    if len(answer) != 0 : # KRW 기준으로 출력 코드
         selection = []
-        for i in range(len(answer)): # 이거 왜 안됨??
+        for i in range(len(answer)):
             selection.append(answer[i][1])
-        #print(selection)
         print("2:" , selection.index("KRW")) # 2
         KRW = selection.index("KRW")
         ticker = answer[KRW][0]
