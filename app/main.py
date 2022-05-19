@@ -57,8 +57,8 @@ def now():
 
 @app.route('/more/guide',methods=['POST'])
 def more():
-    # body = request.get_json()
-    # print(body['userRequest']['utterance'])
+    body = request.get_json()
+    print(body['userRequest']['utterance'])
 
     responseBody = {
         "version": "2.0",
