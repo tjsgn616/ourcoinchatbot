@@ -39,7 +39,7 @@ def msg():
     namedata2 = namedata
     ## 여기까지 데이터 받아오는거..
 
-   coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
+    coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
 #print(namedata2['korean_name'])
     answer = []
