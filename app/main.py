@@ -52,11 +52,12 @@ def msg():
     market_id =  list(namedata['market'])
     market_kor = list(namedata['korean_name']) 
     market_eng = list(namedata['english_name'])
-    coin_list = list(zip(market_id,market_kor,market_eng))
-    print(coin_list)
-    # if coin_name in coin_list:
-
-
+    
+    # if (coin_name in market_id) or (coin_name in market_kor) or (coin_name in market_eng):
+    if coin_name in market_kor:
+        print("오늘 점심은 햄버거")
+    else : 
+        print("실패")
 
 
 
