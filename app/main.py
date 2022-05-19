@@ -49,9 +49,12 @@ def msg():
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
 #print(namedata2['korean_name'])
     print("coin : " ,coin_name)
-    coin_list =  list(namedata['korean_name'])
-    print(coin_list)
-    # if coin_name in namedata['korean_name']:
+    # market_id =  list(namedata['market'])
+    # market_kor = list(namedata['korean_name']) 
+    # market_eng = list(namedata['english_name'])
+    print(list(namedata))
+    # if coin_name in coin_list:
+
 
 
 
