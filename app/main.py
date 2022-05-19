@@ -58,7 +58,6 @@ def msg():
     # else : 
     #     print("실패")
 
-    best = ['비트코인','이더리움','도지코인']
     best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
 
     current_price =  {  "version": "2.0",
@@ -76,17 +75,17 @@ def msg():
                                         {
                                         "title": "비트코인",
                                         # "description": "4,500원",
-                                        "description" : f"{best[0]}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(best_Id[0]):.2f}" "입니다",
+                                        "description" : f"{pyupbit.get_current_price(best_Id[0]):.2f}원",
                                         "imageUrl": "https://static.upbit.com/logos/BTC.png"
                                         },
                                         {
                                         "title": "이더리움",
-                                        "description": "5,500원",
+                                        "description": f"{pyupbit.get_current_price(best_Id[1]):.2f}원",
                                         "imageUrl": "https://static.upbit.com/logos/ETH.png"
                                         },
                                         {
                                         "title": "도지코인",
-                                        "description": "5,300원",
+                                        "description": f"{pyupbit.get_current_price(best_Id[2]):.2f}원",
                                         "imageUrl": ""
                                         }
                                     ],
