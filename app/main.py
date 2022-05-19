@@ -101,7 +101,7 @@ def msg():
                                         {
                                         "title": "비트코인",
                                         # "description": "4,500원",
-                                        "description" : f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
+                                        "description" : f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다",
                                         "imageUrl": "https://static.upbit.com/logos/BTC.png"
                                         },
                                         {
