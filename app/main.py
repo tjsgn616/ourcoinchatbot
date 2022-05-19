@@ -87,9 +87,9 @@ def msg():
                                     "buttons": [
                                         {
                                         "label": "더 많은 코인 보러가기",
-                                        "action": "message",
-                                        "messageText" : "그 외"
-                                        }
+                                        "action": "block",
+                                        "blockId": "6284847275eca02fba63ab96",
+                                        "messageText" : "그 외"                                        }
                                     ]
                                     }
                                 ]
