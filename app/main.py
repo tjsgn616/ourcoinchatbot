@@ -54,7 +54,7 @@ def msg():
     
 # answer[여럿나온 답의 순서][0=market code, 1= currency]
 #print(answer[:len(answer)][:len(answer)])
-    while len(answer) == 0:
+    if len(answer) == 0:
         coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
         #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
         #coin_name = dataReceive["content"]
@@ -93,7 +93,7 @@ def msg():
         return jsonify(none_ticker)
         
         
-    if len(answer) == 1: # 화폐 단위 하나만 있을 때
+    else: # 화폐 단위 하나만 있을 때
         selection = []
         for i in range(len(answer)): # 이거 왜 안됨??
             selection.append(answer[i][1])
@@ -101,7 +101,7 @@ def msg():
         print("2:" , selection.index("KRW")) # 2
         KRW = selection.index("KRW")
         ticker = answer[KRW][0]
-        currency = { 
+        now_price = { 
             "version":"2.0",
             "template": {
                 "outputs": [
@@ -113,51 +113,4 @@ def msg():
                 ]
             }
         }
-        return jsonify(currency)
-    
-    
-    
-    elif len(answer) == 2: # 화폐 단위 2개 있을 때
-        #print(answer)
-        selection = []
-        for i in range(len(answer)): # 이거 왜 안됨??
-            selection.append(answer[i][1])
-        #print(selection)
-        print("2:" , selection.index("KRW")) # 2
-        KRW = selection.index("KRW")
-        ticker = answer[KRW][0]
-        currency = { 
-            "version":"2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
-                        }
-                    }
-                ]
-            }
-        }
-        return jsonify(currency)
-    
-    else: # 화폐 단위 3개
-        selection = []
-        for i in range(len(answer)): 
-            selection.append(answer[i][1])
-        #print(selection)
-        print("3:",selection.index("KRW")) # 2
-        KRW = selection.index("KRW")
-        ticker = answer[KRW][0]
-        currency = { 
-            "version":"2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
-                        }
-                    }
-                ]
-            }
-        }
-        return jsonify(currency)
+        return jsonify(now_price)
