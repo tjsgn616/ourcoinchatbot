@@ -94,23 +94,26 @@ def msg():
         
         
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
-        ticker = answer[0][0]
-        price = round(pyupbit.get_current_price(ticker))
-        print(price)
-        now_price = {
-                "version": "2.0",
-                "template": {
+        selection = []
+        for i in range(len(answer)): # 이거 왜 안됨??
+            selection.append(answer[i][1])
+        #print(selection)
+        print("2:" , selection.index("KRW")) # 2
+        KRW = selection.index("KRW")
+        ticker = answer[KRW][0]
+        currency = { 
+            "version":"2.0",
+            "template": {
                 "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[0][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다" # f-string 수정
+                    {
+                        "simpleText": {
+                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
+                        }
                     }
-                }    
-            ]
-                }
+                ]
             }
-             # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
-        return jsonify(now_price)
+        }
+        return jsonify(currency)
     
     
     
@@ -129,7 +132,7 @@ def msg():
                 "outputs": [
                     {
                         "simpleText": {
-                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
+                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
                         }
                     }
                 ]
@@ -151,7 +154,7 @@ def msg():
                 "outputs": [
                     {
                         "simpleText": {
-                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
+                            "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
                         }
                     }
                 ]
