@@ -95,6 +95,8 @@ def msg():
         
     if len(answer) == 1: # 화폐 단위 하나만 있을 때
         ticker = answer[0][0]
+        price = round(pyupbit.get_current_price(ticker))
+        print(price)
         now_price = {
                 "version": "2.0",
                 "template": {
