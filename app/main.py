@@ -101,7 +101,7 @@ def msg():
                 print("여기 되는건가?")
         return jsonify(none_ticker)       
     
-    if len(answer) == 0 # 화폐 단위 하나만 있을 때
+    if len(answer) == 0 # 화폐 단위 하나만 있을
     #print(answer)
         ticker = answer[0][0]
 
