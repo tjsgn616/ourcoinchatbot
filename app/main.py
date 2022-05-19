@@ -57,12 +57,48 @@ def now():
 
 @app.route('/more/guide',methods=['POST'])
 def more():
-    print("guide")
+    body = request.get_json()
+    print(body)
+    print(body['userRequest']['utterance'])
+
+    responseBody = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": "안녕 hello I'm Ryan"
+                    }
+                }
+            ]
+        }
+    }
+
+    return responseBody
 
 
 @app.route('/more/res',methods=['POST'])
 def res():
-    print("res")
+    body = request.get_json()
+    print(body)
+    print(body['userRequest']['utterance'])
+
+    responseBody = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleImage": {
+                        "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
+                        "altText": "hello I'm Ryan"
+                    }
+                }
+            ]
+        }
+    }
+
+    return responseBody
+
 
 
     # # dataReceive = request.get_json() # 사용자가 입력한 데이터
