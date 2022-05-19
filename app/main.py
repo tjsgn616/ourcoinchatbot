@@ -38,6 +38,7 @@ def msg():
     namedata['currency'] = currency # currency column을 새로 추가
     namedata2 = namedata
     
+    ### 여기까지 데이터 가져오는 코드
 
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
@@ -98,10 +99,9 @@ def msg():
         for i in namedata2.index:
             if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
                 answer.append([namedata2.market[i],namedata2.currency[i]])
-                print("여기 되는건가?")
         return jsonify(none_ticker)       
     
-    if len(answer) == 0 # 화폐 단위 하나만 있을
+    if len(answer) == 0 
     #print(answer)
         ticker = answer[0][0]
 
@@ -129,7 +129,7 @@ def msg():
         for i in range(len(answer)): # 이거 왜 안됨??
             selection.append(answer[i][1])
         #print(selection)
-
+        KRW-BTC
         manycurrency2 = {
                 "version": "2.0",
                 "template": {
@@ -170,6 +170,7 @@ def msg():
         for i in range(len(answer)): 
             selection.append(answer[i][1])
         #print(selection)
+        print(selection.index("KRW")) 
         manycurrency = {
                 "version": "2.0",
                 "template": {
