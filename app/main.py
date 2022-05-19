@@ -59,7 +59,9 @@ def now():
 def more():
     body = request.get_json()
     print(body['userRequest']['utterance'])
-
+    rip = "리플"
+    body = body['contexts']['name']
+    print("------콘텍트 : ", body)
     responseBody = {
         "version": "2.0",
         "template": {
@@ -70,7 +72,7 @@ def more():
                     }
                 }
             ]
-        }
+        },
     }
     return responseBody
 
