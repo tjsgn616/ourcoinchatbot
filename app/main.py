@@ -81,8 +81,8 @@ def more():
 def res():
     body = request.get_json()
     # body = body["userRequest"]["utterance"].lower().replace(" ","")
-    body = body["userRequest"]["utterance"]
-    print("2번 : ",body)
+    # body = body["userRequest"]["utterance"]
+    # print("2번 : ",body)
     body = body['contexts']
     print("------콘텍트2 : ", body)
     if body =="리플":
