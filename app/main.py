@@ -50,6 +50,7 @@ def msg():
             answer.append([namedata2.market[i],namedata2.currency[i]])
 
     print("1 : ", answer)
+    print("len:",len(answer))
 
 
     
