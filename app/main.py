@@ -59,7 +59,7 @@ def now():
 def more():
     body = request.get_json()
     print("body1 : ",body)
-    rip = "리플"
+    rip = "샌드"
     body = body['contexts']
     print("------콘텍트1 : ", body)
     responseBody = {
@@ -86,7 +86,7 @@ def more():
                     "name":"moreCoin",
                     "lifeSpan":3,
                     "params":{
-                        "key2":"샌드박스"
+                        "key2":f"{rip}"
                     }
                 }
             ]
@@ -105,7 +105,7 @@ def res():
     body = body['contexts']
     print("------콘텍트2 : ", body)
     # body = body['contexts'][0]['params']['key2']['value']
-    body = [0]['params']['key2']['value']
+    body = [0]
     print("우리가 원하던 거....!!!!! : ", body)
     if body =="리플":
         responseBody = {
