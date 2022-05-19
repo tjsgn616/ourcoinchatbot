@@ -162,7 +162,7 @@ def msg():
             selection.append(answer[i][1])
         #print(selection)
         print(selection.index("KRW")) # 2
-        KRW = selection.index(KRW)
+        KRW = selection.index("KRW")
         ticker = answer[KRW][0]
         currency = { 
             "version":"2.0",
@@ -176,38 +176,6 @@ def msg():
                 ]
             }
         }
-#         manycurrency = {
-#                 "version": "2.0",
-#                 "template": {
-#                 "outputs": [
-#                 {
-#                 "simpleText": {
-#                 "text": "기준 화폐가 다수 존재합니다" f"{selection}" 
-#                     }
-#                 }    
-#             ],
-                    
-#                 "quickReplies": [
-#           {
-#                 "messageText": f"{selection[0]}",
-#                 "action": "message",
-#                 "label": f"{selection[0]}"
-#           },
-                    
-#           {
-#                 "messageText": f"{selection[1]}",
-#                 "action": "message",
-#                 "label": f"{selection[1]}"
-#           },
-#           {
-#                 "messageText": f"{selection[2]}",
-#                 "action": "message",
-#                 "label": f"{selection[2]}"
-#           }
-        
-# ]
-#              }
-#             }
         return jsonify(currency)
         dataReceive = request.get_json()
         cur_sel = dataReceive["userRequest"]["utterance"]
