@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request, g
+from flask import Flask, jsonify, request
 import pandas as pd
 import pyupbit
 import requests
 app = Flask(__name__) 
 
-@app.route('/msg', methods=['POST'])
+@app.route('/msg2', methods=['POST'])
 def msg():
     
     dataReceive = request.get_json() # 사용자가 입력한 데이터
@@ -37,8 +37,7 @@ def msg():
             
     namedata['currency'] = currency # currency column을 새로 추가
     namedata2 = namedata
-    
-    ### 여기까지 데이터 가져오는 코드
+    ## 여기까지 데이터 받아오는거..
 
     coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
     #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
@@ -54,7 +53,7 @@ def msg():
 # answer[여럿나온 답의 순서][0=market code, 1= currency]
 #print(answer[:len(answer)][:len(answer)])
     while len(answer) == 0:
-        
+        coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
         #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
         #coin_name = dataReceive["content"]
         none_ticker = {
@@ -83,15 +82,15 @@ def msg():
           {
                 "messageText": "도지코인",
                 "action": "message",
-                "label": "도지코인" 
+                "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
           }
      
 ]
                 }
             }
+        return jsonify(none_ticker)
         
         
-        coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
 #print(namedata2['korean_name'])
         answer = []
 
@@ -99,13 +98,11 @@ def msg():
         for i in namedata2.index:
             if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
                 answer.append([namedata2.market[i],namedata2.currency[i]])
+                print("여기 되는건가?")
         return jsonify(none_ticker)       
-    
-    if len(answer) == 0 
+    if len(answer) == 1: # 화폐 단위 하나만 있을 때
     #print(answer)
         ticker = answer[0][0]
-
-        
         now_price = {
                 "version": "2.0",
                 "template": {
@@ -118,9 +115,9 @@ def msg():
             ]
                 }
             }
-        
              # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
         return jsonify(now_price)
+    
     
     
     elif len(answer) == 2: # 화폐 단위 2개 있을 때
@@ -129,7 +126,7 @@ def msg():
         for i in range(len(answer)): # 이거 왜 안됨??
             selection.append(answer[i][1])
         #print(selection)
-        KRW-BTC
+
         manycurrency2 = {
                 "version": "2.0",
                 "template": {
@@ -143,26 +140,20 @@ def msg():
                     
                 "quickReplies": [
           {
-                "action": "block",
-                "label": f"{selection[0]}",
-                "blockId" : "6284847275eca02fba63ab96"
-                
-
+                "messageText": f"{selection[0]}",
+                "action": "message",
+                "label": f"{selection[0]}"
           },
                     
           {
-                
-                "action": "block",
-                "label": f"{selection[1]}",
-                "blockId" : "6284847275eca02fba63ab96"
-
-
+                "messageText": f"{selection[1]}",
+                "action": "message",
+                "label": f"{selection[1]}"
           }
      
 ]
                 }
             }
-        
         return  jsonify(manycurrency2)
     
     else: # 화폐 단위 3개
@@ -170,7 +161,6 @@ def msg():
         for i in range(len(answer)): 
             selection.append(answer[i][1])
         #print(selection)
-        print(selection.index("KRW")) 
         manycurrency = {
                 "version": "2.0",
                 "template": {
@@ -185,8 +175,8 @@ def msg():
                 "quickReplies": [
           {
                 "messageText": f"{selection[0]}",
-                "action": "block",
-                "label": "6284847275eca02fba63ab96"
+                "action": "message",
+                "label": f"{selection[0]}"
           },
                     
           {
@@ -203,41 +193,27 @@ def msg():
 ]
              }
             }
-        dataReceive = request.get_json()
-
-        # return jsonify(manycurrency)
-
-        test_j = {
-            
-            "version" : "2.0",
-            "data" : {
-                "coin" : f"{coin_name}",
-                "money" : f"{selection[0]}",
-                "price" : f"{pyupbit.get_current_price(ticker):.3f}"
-            }
-            
-            }
-        
         return jsonify(manycurrency)
-#스킬 + 함수로 블록 분리
-@app.route('/abc', methods=['POST'])
-def abc() :
-    dataReceive = request.get_json()
-    cur_sel = dataReceive["userRequest"]["utterance"] # 밑에 
-    n = g.selection.index(cur_sel) # 비트코인입력했을때, KRW OR BTC 
-    ticker = g.answer[n][0]
-    abc = { "version": "2.0",
+        dataReceive = request.get_json()
+        cur_sel = dataReceive["userRequest"]["utterance"]
+        if (cur_sel == "KRW") or (cur_sel == "BTC") or (cur_sel == "USDT") :
+            
+            n = selection.index(cur_sel)
+            ticker = answer[n][0]
+            abc = { "version": "2.0",
                 "template": {
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f"{g.coin_name}" "의 현재 가격은" f"{g.answer[n][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
+                "text": f"{coin_name}" "의 현재 가격은" f"{answer[n][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
                     }
                 }    
             ]
                 }
             }
-    return jsonify(abc)
+            return jsonify(abc)
+
+    
 
       
         #cur_sel = dataReceive["userRequest"]["utterance"]
