@@ -58,7 +58,7 @@ def now():
 @app.route('/more/guide',methods=['POST'])
 def more():
     body = request.get_json()
-    print(body)
+    print("body1 : ",body)
     rip = "리플"
     body = body['contexts']
     print("------콘텍트1 : ", body)
@@ -80,6 +80,7 @@ def more():
 @app.route('/more/res',methods=['POST'])
 def res():
     body = request.get_json()
+    print("body2 : ",body)
     # body = body["userRequest"]["utterance"].lower().replace(" ","")
     # body = body["userRequest"]["utterance"]
     # print("2번 : ",body)
