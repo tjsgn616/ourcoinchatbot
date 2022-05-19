@@ -4,9 +4,59 @@ import pyupbit
 import requests
 app = Flask(__name__) 
 
-@app.route('/msg2', methods=['POST'])
-def msg():
-    
+@app.route('/now', methods=['POST'])
+def now():
+    best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
+
+    current_price =  {  "version": "2.0",
+                        "template": {
+                            "outputs": [
+                            {
+                                "carousel": {
+                                "type": "listCard",
+                                "items": [
+                                    {
+                                    "header": {
+                                        "title": "현재 시세 조회"
+                                    },
+                                    "items": [
+                                        {
+                                        "title": "비트코인",
+                                        # "description": "4,500원",
+                                        "description" : f"{pyupbit.get_current_price(best_Id[0]):.2f}원",
+                                        "imageUrl": "https://static.upbit.com/logos/BTC.png"
+                                        },
+                                        {
+                                        "title": "이더리움",
+                                        "description": f"{pyupbit.get_current_price(best_Id[1]):.2f}원",
+                                        "imageUrl": "https://static.upbit.com/logos/ETH.png"
+                                        },
+                                        {
+                                        "title": "도지코인",
+                                        "description": f"{pyupbit.get_current_price(best_Id[2]):.2f}원",
+                                        "imageUrl": "https://static.upbit.com/logos/DOGE.png"
+                                        }
+                                    ],
+                                    "buttons": [
+                                        {
+                                        "label": "다른 코인 보러가기",
+                                        "action": "block",
+                                        "blockId": "6284847275eca02fba63ab96",
+                                        "messageText" : "그 외"                                        }
+                                    ]
+                                    }
+                                ]
+                                }
+                            }
+                            ]
+                        }
+                    }
+    return current_price
+
+
+
+@app.route('/more',methods=['POST'])
+def more():
     dataReceive = request.get_json() # 사용자가 입력한 데이터
     #print(dataReceive)
     marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
@@ -57,53 +107,6 @@ def msg():
     #     print("오늘 점심은 햄버거")
     # else : 
     #     print("실패")
-
-    best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
-
-    current_price =  {  "version": "2.0",
-                        "template": {
-                            "outputs": [
-                            {
-                                "carousel": {
-                                "type": "listCard",
-                                "items": [
-                                    {
-                                    "header": {
-                                        "title": "현재 시세 조회"
-                                    },
-                                    "items": [
-                                        {
-                                        "title": "비트코인",
-                                        # "description": "4,500원",
-                                        "description" : f"{pyupbit.get_current_price(best_Id[0]):.2f}원",
-                                        "imageUrl": "https://static.upbit.com/logos/BTC.png"
-                                        },
-                                        {
-                                        "title": "이더리움",
-                                        "description": f"{pyupbit.get_current_price(best_Id[1]):.2f}원",
-                                        "imageUrl": "https://static.upbit.com/logos/ETH.png"
-                                        },
-                                        {
-                                        "title": "도지코인",
-                                        "description": f"{pyupbit.get_current_price(best_Id[2]):.2f}원",
-                                        "imageUrl": ""
-                                        }
-                                    ],
-                                    "buttons": [
-                                        {
-                                        "label": "더 많은 코인 보러가기",
-                                        "action": "block",
-                                        "blockId": "6284847275eca02fba63ab96",
-                                        "messageText" : "그 외"                                        }
-                                    ]
-                                    }
-                                ]
-                                }
-                            }
-                            ]
-                        }
-                    }
-    return current_price
 
 
 
