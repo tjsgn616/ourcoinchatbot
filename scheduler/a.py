@@ -4,6 +4,18 @@ import pyupbit
 app = Flask(__name__)
 
 @app.route('/sche', methods=['POST'])
+
+
+
+
+
+
+
+
+
+
+
+'''
 def sche():
     now = datetime.now()
     sche = {
@@ -24,7 +36,8 @@ def sche():
     }
     return jsonify(sche)
     
-     
+'''
+
 '''
 현재 시간 기준 비트코인의 시세는 ㅇ원으로 맑음🌞,
 리플의 시세는 ㅁ원으로 흐림☁,

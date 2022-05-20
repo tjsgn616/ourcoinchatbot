@@ -3,12 +3,16 @@ import pandas as pd
 import pyupbit
 import requests
 import datetime
+app = Flask(__name__) 
 
-dataReceive = request.get_json() # 사용자가 입력한 데이터
+@app.route('/msg3', methods=['POST'])
+
+def msg():
+    dataReceive = request.get_json() # 사용자가 입력한 데이터
     #print(dataReceive)
-marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-if marketData.status_code == 200 :
-    jsonMarket = marketData.json()
+    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
+    if marketData.status_code == 200 :
+        jsonMarket = marketData.json()
         
     market = []
     korean_name = []
