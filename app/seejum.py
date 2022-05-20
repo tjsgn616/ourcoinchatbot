@@ -3,6 +3,11 @@ import pandas as pd
 import pyupbit
 import requests
 import datetime
+
+
+
+
+
 app = Flask(__name__) 
 
 @app.route('/msg3', methods=['POST'])
