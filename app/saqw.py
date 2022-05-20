@@ -26,27 +26,23 @@ def msg():
     tickers=pyupbit.get_tickers()
     namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
     
-    
-    currency = []
-    for i in namedata.loc[:,'market']:
-        if i.split('-')[0] == "KRW":
-            currency.append("KRW")
-        elif i.split('-')[0] == "BTC":
-            currency.append("BTC")
-        else:
-            currency.append("USDT")
-            
-    namedata['currency'] = currency # currency column을 새로 추가
+
     #namedata2 = namedata
     
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
-    coin_name = dataReceive["action"]["params"]["coin"] # 에반데
+    coin_name = dataReceive["action"]["params"]["coin"].lower().replace(" ","") # 에반데
+    answer = []
+    for i in namedata.index:
+        if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i]:
+            answer.append([namedata.market[i]])
+
+    
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
     print(full_time_replace)
     print(coin_name)
-    print(full_time)
+    print(answer)
    
     while True:
         try:
@@ -84,7 +80,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 상승 , ' f'변동량: {a} , '  f'변동량: {b}' f'{coin}' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                "text": f'가격 상승 , ' f'변동량: {a} , '  f'변동량: {b}' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
@@ -123,7 +119,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b}' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b} \n' f'비교 가상 화폐: {coin_name} \t' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
