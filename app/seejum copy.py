@@ -5,10 +5,6 @@ import requests
 import datetime
 import project_def as pr_d
 
-namedata2 = pr_d.get_namedata()
-
-
-
 app = Flask(__name__) 
 
 @app.route('/msg4', methods=['POST'])
@@ -17,7 +13,7 @@ def msg():
     dataReceive = request.get_json() # 사용자가 입력한 데이터
     #print(dataReceive)
     namedata = pr_d.get_namedata()
-    
+    print(namedata)
 
 
 
