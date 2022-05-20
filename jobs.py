@@ -3,7 +3,7 @@ from helper import your_function_a, your_function_b
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', minutes='30')
+@sched.scheduled_job('interval', minutes='1')
 def print_data():
 	print("Have a good day!")
 
