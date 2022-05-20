@@ -1,10 +1,10 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-
+import time
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', seconds='5')
+@sched.scheduled_job('interval', seconds=5)
 def print_data():
-	print("Have a good day!")
+	print(f'job1 : {time.strftime("%H:%M:%S")}')
 
 
 
