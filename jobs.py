@@ -1,14 +1,17 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, make_response, jsonify, request
-sched = BlockingScheduler()
+
+import time
+import atexit
+
+scheduler = BackgroundScheduler()
 app = Flask(__name__)
+
 @app.route('/msg', methods=['POST'])
-@sched.scheduled_job('interval', seconds=3)
+
 def print_data():
 	#print(f'job1 : {time.strftime("%H:%M:%S")}')
-	app = BlockingScheduler.app
-	with app.app_context():
-		now_price = {
+	now_price = {
             "version": "2.0",
             "template": {
             "outputs": [
@@ -20,7 +23,8 @@ def print_data():
             ]
                 }
             }
-		return  jsonify(now_price)
+	return  jsonify(now_price)
 
-
-sched.start()
+scheduler.add_job(func=print_data, trigger="interval", seconds=3)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
