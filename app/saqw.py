@@ -35,7 +35,7 @@ def msg():
     answer = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
-            answer.append([namedata.market[0][0]])
+            answer.append(namedata.market[i][0])
 
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
