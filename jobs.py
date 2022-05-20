@@ -1,6 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, make_response, jsonify, request
-
 import time
 import atexit
 
@@ -27,4 +26,4 @@ def print_data():
 
 scheduler.add_job(func=print_data, trigger="interval", seconds=3)
 scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+#atexit.register(lambda: scheduler.shutdown())
