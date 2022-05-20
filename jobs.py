@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/msg4', methods=['POST'])
 
 def print_data():
-	#print(f'job1 : {time.strftime("%H:%M:%S")}')
+	print(f'job1 : {time.strftime("%H:%M:%S")}')
 	now_price = {
             "version": "2.0",
             "template": {
