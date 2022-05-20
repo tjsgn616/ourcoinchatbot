@@ -1,12 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 
-def sensor():
-    print("Scheduler is alive!")
-    home()
-scheduler = BackgroundScheduler(daemon=True)
-scheduler.add_job(sensor, "interval", seconds=3)
-scheduler.start()
+
 
 app = Flask(__name__)
 
@@ -25,3 +20,11 @@ def home():
                 }
             }
 	return  (now_price)
+
+    
+def sensor():
+    print("Scheduler is alive!")
+    home()
+scheduler = BackgroundScheduler(daemon=True)
+scheduler.add_job(sensor, "interval", seconds=3)
+scheduler.start()
