@@ -42,8 +42,20 @@ def message():
     news_df = DataFrame(news_dict)
     #xlsx_file_name = '네이버뉴스_{}_{}.xlsx'.format(query, date)
     #news_df.to_excel(xlsx_file_name)
-    print(news_df)
+
+    title = []
+    url = [] 
+    i = 0
+    for i in range(len(news_dict)):
+        title.append(news_df.loc['title'][i])
+        url.append(news_df.loc['url'][i])
     #print(news_dict)
+    #title = news_df.loc['title'][i]
+    #url = news_df.loc['title'][i]
+    print(title)
+    print(url)
+#message()
+
 
     abc = {
     "version": "2.0",
@@ -59,11 +71,11 @@ def message():
           },
           "items": [
             {
-              "title": "header[0]",
-              "description": "뉴스 첫줄",
-              "imageUrl": "뉴스 이미지",
+              "title": f"title[0]",
+              "description": "무슨 내용을 씀??",
+              "imageUrl": "https://img.hankyung.com/photo/202004/d744af8c6b5cbe6d52746566f5ccb4ed.jpg",
               "link": {
-                "web": "뉴스 링크)"
+                "web": f"url[0]"
               }
             },
             {
@@ -89,3 +101,4 @@ def message():
   }
 }
     return jsonify(abc)
+  
