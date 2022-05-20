@@ -112,8 +112,8 @@ def msg():
     }
         return  jsonify(price_now)
     else:
-        a = current_price-past_price 
-        b = round((current_price-past_price)*100/past_price, 2)
+        a = past_price-current_price
+        b = round((past_price-current_price)*100/current_price, 2)
 
         price_down =  {
                 "version": "2.0",
