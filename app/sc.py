@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/price', methods=['POST'])
+@app.route('/news', methods=['POST'])
 def message():
 
     date = str(datetime.now())
@@ -72,7 +72,6 @@ def message():
           "items": [
             {
               "title": f"{title[0]}",
-              "description": "무슨 내용을 씀??",
               "imageUrl": "https://img.hankyung.com/photo/202004/d744af8c6b5cbe6d52746566f5ccb4ed.jpg",
               "link": {
                 "web": f"{url[0]}"
