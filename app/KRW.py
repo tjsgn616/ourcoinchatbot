@@ -5,20 +5,7 @@ app = Flask(__name__)
 @app.route('/price', methods=['POST'])
 def message():
 
-    price_up =  {
-    "version": "2.0",
-    "template": {
-        "outputs": [
-            {
-                "simpleImage": {
-                    "imageUrl": "http://file.mk.co.kr/meet/neds/2022/02/image_readtop_2022_178086_16456851034956965.jpg"
-                }
-            }
-        ]
-    }
-}
-    return  jsonify(price_up)
-
+    
     '''
     t = {
                 "version": "2.0",
