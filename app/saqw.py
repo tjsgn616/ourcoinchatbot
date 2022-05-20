@@ -84,7 +84,8 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 상승 , ' f'변동량: {a} , '  f'변동량: {b}' f'{coin}'
+                "text": f'가격 상승 , ' f'변동량: {a} , '  f'변동량: {b}' f'{coin}' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
                          # f-string 수정
@@ -101,7 +102,8 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 보합(변화 없음)'
+                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
                          # f-string 수정
@@ -121,7 +123,8 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b}'
+                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b}' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
                          # f-string 수정
