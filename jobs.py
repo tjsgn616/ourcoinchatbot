@@ -3,7 +3,7 @@ from flask import Flask
 
 def sensor():
     print("Scheduler is alive!")
-
+    home()
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(sensor, "interval", seconds=3)
 scheduler.start()
