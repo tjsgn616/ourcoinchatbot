@@ -6,7 +6,8 @@ app = Flask(__name__)
 @sched.scheduled_job('interval', seconds=3)
 def print_data():
 	#print(f'job1 : {time.strftime("%H:%M:%S")}')
-	with sched.app_context()
+	app = BlockingScheduler.app
+	with app.app_context():
 		now_price = {
             "version": "2.0",
             "template": {
