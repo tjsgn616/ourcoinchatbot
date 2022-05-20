@@ -7,7 +7,7 @@ import atexit
 scheduler = BackgroundScheduler()
 app = Flask(__name__)
 
-@app.route('/msg', methods=['POST'])
+@app.route('/msg4', methods=['POST'])
 
 def print_data():
 	#print(f'job1 : {time.strftime("%H:%M:%S")}')
