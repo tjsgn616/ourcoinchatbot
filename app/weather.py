@@ -65,66 +65,6 @@ def msg():
         a = current_price -past_price 
         b = round((current_price-past_price)*100/past_price, 2)
 
-        t = {
-                "version": "2.0",
-                "template": {
-                    "outputs": [
-                        {
-                            "simpleImage": {
-                                "imageUrl": "http://k.kakaocdn.net/dn/83BvP/bl20duRC1Q1/lj3JUcmrzC53YIjNDkqbWK/i_6piz1p.jpg",
-                                "altText": "보물상자입니다"
-                            }
-                        }
-                    ]
-                }
-            }
-        return jsonify(t)
-    elif current_price == past_price:
-        price_now =  {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {answer}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
-                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
-                        
-
-                         # f-string 수정
-                    }
-                }    
-            ]
-                }
-    }
-        return  jsonify(price_now)
-    else:
-        a = past_price-current_price
-        b = round((past_price-current_price)*100/current_price, 2)
-
-        t = {
-                "version": "2.0",
-                "template": {
-                    "outputs": [
-                        {
-                            "simpleImage": {
-                                "imageUrl": "http://k.kakaocdn.net/dn/83BvP/bl20duRC1Q1/lj3JUcmrzC53YIjNDkqbWK/i_6piz1p.jpg",
-                                "altText": "보물상자입니다"
-                            }
-                        }
-                    ]
-                }
-            }
-        return jsonify(t)
-
-
-
-
-
-    '''
-    if current_price > past_price:
-        a = current_price -past_price 
-        b = round((current_price-past_price)*100/past_price, 2)
-
         price_up =  {
                 "version": "2.0",
                 "template": {

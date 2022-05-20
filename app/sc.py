@@ -39,24 +39,27 @@ def message():
         req = requests.get('https://search.naver.com/search.naver' + next_page_url)
         soup = BeautifulSoup(req.text, 'html.parser')
     print('크롤링 완료')
-    news_df = DataFrame(news_dict).T
-    xlsx_file_name = '네이버뉴스_{}_{}.xlsx'.format(query, date)
-    news_df.to_excel(xlsx_file_name)
-
-
+    news_df = DataFrame(news_dict)
+    #xlsx_file_name = '네이버뉴스_{}_{}.xlsx'.format(query, date)
+    #news_df.to_excel(xlsx_file_name)
+    print(news_df)
+    #print(news_dict)
 
     abc = {
     "version": "2.0",
     "template": {
     "outputs": [
       {
-        "listCard": {
+        "carousel": {
+          "type": "listCard",
+          "items": [
+         {
           "header": {
             "title": "비트코인 뉴스 보러가기"
           },
           "items": [
             {
-              "title": "뉴스 제목",
+              "title": "header[0]",
               "description": "뉴스 첫줄",
               "imageUrl": "뉴스 이미지",
               "link": {
@@ -77,9 +80,11 @@ def message():
               "action": "message",
               "messageText": "Kakao i Voice Service"
             }
-          ],
+          ]
         }
+       ]
       }
+     }
     ]
   }
 }
