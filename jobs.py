@@ -1,15 +1,17 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, make_response, jsonify, request
-import time
-import atexit
+from flask import Flask
 
-scheduler = BackgroundScheduler()
+def sensor():
+    print("Scheduler is alive!")
+
+scheduler = BackgroundScheduler(daemon=True)
+scheduler.add_job(func=print_data, trigger="interval", seconds=3)
+scheduler.start()
+
 app = Flask(__name__)
 
 @app.route('/msg4', methods=['POST'])
-
-def print_data():
-	print(f'job1 : {time.strftime("%H:%M:%S")}')
+def home():
 	now_price = {
             "version": "2.0",
             "template": {
@@ -22,8 +24,4 @@ def print_data():
             ]
                 }
             }
-	return  jsonify(now_price)
-
-scheduler.add_job(func=print_data, trigger="interval", seconds=3)
-scheduler.start()
-#atexit.register(lambda: scheduler.shutdown())
+	return  (now_price)
