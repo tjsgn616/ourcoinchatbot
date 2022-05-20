@@ -46,13 +46,13 @@ def msg():
    
     while True:
         try:
-            past_price =pyupbit.get_ohlcv(coin_name, interval="minute1", to=full_time_replace, count=1).open[0]
+            past_price =pyupbit.get_ohlcv(answer, interval="minute1", to=full_time_replace, count=1).open[0]
             break 
 
         except AttributeError:
             print("해당 시점에 해당 코인이 존재하지 않았거나 기록이 없습니다.")
     
-    current_price = pyupbit.get_current_price(coin_name)
+    current_price = pyupbit.get_current_price(answer)
     nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     coin = {
                 "version": "2.0",
@@ -60,7 +60,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                "text": f'비교 가상 화폐: {answer}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
 
                          # f-string 수정
@@ -80,7 +80,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 상승 , ' f'변동량: {a} , '  f'변동량: {b}' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                "text": f'가격 상승 , ' f'변동량: {a} , '  f'변동량: {b}' f'비교 가상 화폐: {answer}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
@@ -98,7 +98,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {coin_name}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
+                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {answer}' f'현재 시간: {nowDatetime}, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
