@@ -5,8 +5,6 @@ app = Flask(__name__)
 @app.route('/msg', methods=['POST'])
 @sched.scheduled_job('interval', seconds=5)
 def print_data():
-	dataReceive = request.get_json()
-
 	#print(f'job1 : {time.strftime("%H:%M:%S")}')
 	now_price = {
             "version": "2.0",
