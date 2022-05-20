@@ -34,8 +34,8 @@ def msg():
     coin_name = dataReceive["action"]["params"]["coin"].replace(" ","") # 에반데
     answer = []
     for i in namedata.index:
-        if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i]:
-            answer.append(namedata.market[0][0])
+        if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
+            answer.append([namedata.market[0]])
 
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
