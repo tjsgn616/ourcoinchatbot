@@ -43,6 +43,9 @@ def msg():
     print(full_time_replace)
     print(coin_name)
     print(answer)
+    print(answer[0])
+    print(answer[0][0])
+    print(answer[1])
    
     while True:
         try:
