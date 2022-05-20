@@ -31,11 +31,11 @@ def msg():
     
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
-    coin_name = dataReceive["action"]["params"]["coin"].lower().replace(" ","") # 에반데
+    coin_name = dataReceive["action"]["params"]["coin"].replace(" ","") # 에반데
     answer = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i]:
-            answer.append(namedata.market[0])
+            answer.append(namedata.market[0][0])
 
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
