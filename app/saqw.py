@@ -40,13 +40,11 @@ def msg():
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
+    answer = answer[0]
     print(full_time_replace)
     print(coin_name)
     print(answer)
-    print(answer[0])
-    print(answer[0][0])
-    print(answer[1])
-   
+    
     while True:
         try:
             past_price =pyupbit.get_ohlcv(answer, interval="minute1", to=full_time_replace, count=1).open[0]
