@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-
+import datetime
+now = datetime.datetime.now()
 @app.route('/price', methods=['POST'])
 def message():
-
-    
-    '''
-    t = {
+        while True:
+            t = {
                 "version": "2.0",
                 "template": {
                     "outputs": [
@@ -20,6 +19,12 @@ def message():
                     ]
                 }
             }
-    return jsonify(t)
-    '''
+            if now.hour != 5:
+                break
+    
+        return jsonify(t)
+
+    
+
+
 

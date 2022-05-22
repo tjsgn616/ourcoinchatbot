@@ -55,9 +55,7 @@ def message():
     print(title)
     print(url)
 #message()
-
-
-    abc = {
+   abc = {
     "version": "2.0",
     "template": {
     "outputs": [
@@ -100,4 +98,51 @@ def message():
   }
 }
     return jsonify(abc)
+'''
+abc = {
+    "version": "2.0",
+    "template": {
+    "outputs": [
+      {
+        "carousel": {
+          "type": "listCard",
+          "items": [
+         {
+          "header": {
+            "title": "비트코인 뉴스 보러가기"
+          },
+          "items": [
+            {
+              "title": f"{title[0]}",
+              "imageUrl": "https://img.hankyung.com/photo/202004/d744af8c6b5cbe6d52746566f5ccb4ed.jpg",
+              "link": {
+                "web": f"{url[0]}"
+              }
+            },
+            {
+              "title": "챗봇 관리자센터",
+              "description": "카카오톡 채널 챗봇 만들기",
+              "imageUrl": "http://k.kakaocdn.net/dn/N4Epz/btqqHCfF5II/a3kMRckYml1NLPEo7nqTmK/1x1.jpg",
+              "action": "block",
+              "blockId": "6266c1152ec05a4395328d72"
+            },
+            {
+              "title": "Kakao i Voice Service",
+              "description": "보이스봇 / KVS 제휴 신청하기",
+              "imageUrl": "http://k.kakaocdn.net/dn/bE8AKO/btqqFHI6vDQ/mWZGNbLIOlTv3oVF1gzXKK/1x1.jpg",
+              "action": "message",
+              "messageText": "Kakao i Voice Service"
+            }
+          ]
+        }
+       ]
+      }
+     }
+    ]
+  }
+}
+    return jsonify(abc)
+
+'''
+ 
   

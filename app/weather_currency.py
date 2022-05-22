@@ -92,7 +92,7 @@ def msg():
                                     "action":"block",
                                     "label":"시점 조회로 돌아가기",
                                     "blockId": "627a1fd316b99e0c33812774",
-                                    "messageText":"짜잔!"
+                                    #"messageText":"짜잔!"
                                 }
                             ]
                         }
