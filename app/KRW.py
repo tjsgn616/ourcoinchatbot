@@ -19,7 +19,7 @@ def message():
                     ]
                 }
             }
-            if now.hour != 5:
+            if now.hour != 4:
                 break
     
         return jsonify(t)
