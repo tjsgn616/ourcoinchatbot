@@ -109,13 +109,13 @@ def msg():
                 BTC = selection.index("BTC")
                 ticker = answer[BTC][0]
                 print(ticker)
-                current_price = pyupbit.get_current_price("ticker")
+                current_price = pyupbit.get_current_price(ticker)
                 past_price = pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
                 #coin_money = pyupbit.get_current_price(ticker)
                 #coin_price = (BITCOIN * coin_money)
             else:
                 ticker = answer[0][0]
-                current_price = pyupbit.get_current_price("ticker")
+                current_price = pyupbit.get_current_price(ticker)
                 past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
                 #coin_money = pyupbit.get_current_price(ticker)
                 #coin_price = (USD * coin_money)
@@ -124,7 +124,7 @@ def msg():
             print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
             KRW = selection.index("KRW")
             ticker = answer[KRW][0]
-            current_price = pyupbit.get_current_price("ticker")
+            current_price = pyupbit.get_current_price(ticker)
             past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
             #coin_price = pyupbit.get_current_price(ticker)
 
