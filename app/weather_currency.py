@@ -108,7 +108,8 @@ def msg():
                 #BITCOIN = pyupbit.get_current_price("KRW-BTC")
                 BTC = selection.index("BTC")
                 ticker = answer[BTC][0]
-                current_price = pyupbit.get_current_price(ticker)
+                print(ticker)
+                current_price = pyupbit.get_current_price("ticker")
                 past_price = pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
                 #coin_money = pyupbit.get_current_price(ticker)
                 #coin_price = (BITCOIN * coin_money)
