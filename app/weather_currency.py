@@ -4,12 +4,6 @@ import pyupbit
 import requests
 import datetime
 
-
-
-
-
-
-
 def marketData():
      # 사용자가 입력한 데이터
     #print(dataReceive)
@@ -64,15 +58,85 @@ def msg():
     print(coin_name)
     print(answer)
 
-    while True:
-        try:
-            past_price =pyupbit.get_ohlcv(answer, interval="minute1", to=full_time_replace, count=1).open[0]
-            break 
+    USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
+    USD = USD.json()
+    USD = USD[0]['basePrice'] #USDT 가격 조회를 위함.
 
-        except AttributeError:
-            print("해당 시점에 해당 코인이 존재하지 않았거나 기록이 없습니다.")
+
+    name_list = namedata.values.tolist()
+    coin_now = []
+    for i in range(len(name_list)):
+        if coin in name_list[i]:
+            coin_now.extend(name_list[i])
+    print("---coin_name----",coin_now)
+    coin_now = set(coin_now)
+    print("----no 중복 코인 ----",coin_now)
+
+    selection = []
+    for i in range(len(answer)):
+        selection.append(answer[i][1])
+
+    if coin not in coin_now:
+        coin_error = {
+            "version":"2.0",
+            "template":{
+                "outputs":[
+                    {
+                        "basicCard":{
+                            "title":"입력 오류",
+                            "description":"존재하지 않는 가상 화폐이거나 입력 오류입니다",
+                            "thumbnail":{
+                                "imageUrl":"https://user-images.githubusercontent.com/65166786/169485601-ea315e41-4b3c-4520-b11a-6461d3e3233e.jpg"
+                            },
+                            "buttons":[
+                                {
+                                    "action":"block",
+                                    "label":"시점 조회로 돌아가기",
+                                    "blockId": "627a1fd316b99e0c33812774",
+                                    "messageText":"짜잔!"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+        return coin_error
+    else:
+        #KRW가 없을 때
+        if "KRW" not in selection :
+            if "BTC" in selection :
+                #BITCOIN = pyupbit.get_current_price("KRW-BTC")
+                BTC = selection.index("BTC")
+                ticker = answer[BTC][0]
+                current_price = pyupbit.get_current_price(ticker)
+                past_price = pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
+                #coin_money = pyupbit.get_current_price(ticker)
+                #coin_price = (BITCOIN * coin_money)
+            else:
+                ticker = answer[0][0]
+                current_price = pyupbit.get_current_price(ticker)
+                past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
+                #coin_money = pyupbit.get_current_price(ticker)
+                #coin_price = (USD * coin_money)
+                print("한국 돈 변환 값 USDT : ",coin_price)
+        else:
+            print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
+            KRW = selection.index("KRW")
+            ticker = answer[KRW][0]
+            current_price = pyupbit.get_current_price(ticker)
+            past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
+            #coin_price = pyupbit.get_current_price(ticker)
+
+    #while True:
+     #   try:
+      #      past_price =pyupbit.get_ohlcv(answer, interval="minute1", to=full_time_replace, count=1).open[0]
+       #     break 
+
+        #except AttributeError:
+         #   print("해당 시점에 해당 코인이 존재하지 않았거나 기록이 없습니다.")
     
-    current_price = pyupbit.get_current_price(answer)
+    
     nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     if current_price > past_price:
