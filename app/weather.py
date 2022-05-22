@@ -27,9 +27,12 @@ def msg():
         market.append(namedata['market'])
         korean_name.append(namedata['korean_name'])
         english_name.append(namedata['english_name'].upper().replace(" ",""))
-        
-    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
+
     
+    
+
+
+    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
     
 
 
@@ -122,3 +125,4 @@ def msg():
                 }
     }
         return  jsonify(price_down)
+
