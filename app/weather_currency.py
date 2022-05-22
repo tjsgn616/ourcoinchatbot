@@ -44,12 +44,13 @@ app = Flask(__name__)
 @app.route('/msg5', methods=['POST'])
 def msg():
     dataReceive = request.get_json()
-    namedata = marketData()
+    
     #namedata2 = namedata
     
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
-    coin_name = dataReceive["action"]["params"]["coin"].upper.replace(" ","") # 에반데
+    coin_name = dataReceive["action"]["params"]["coin"] #.upper.replace(" ","")
+    namedata = marketData() # 에반데
     answer = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
