@@ -1,14 +1,51 @@
 from crypt import methods
+from os import name
+from select import select
 from flask import Flask, jsonify, request
 import pandas as pd
 import pyupbit
 import requests
-app = Flask(__name__) 
 
+
+
+def marketData():
+    # 마켓 데이터 불러오기
+    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
+
+    if marketData.status_code == 200 :
+        marketData = marketData.json()
+
+    # 마켓 코드, 한글, 영어 df로 정리
+    market = []
+    korean_name = []
+    english_name = []
+    for i in range(len(marketData)) :
+        namedata = marketData[i]
+        market.append(namedata['market'])
+        korean_name.append(namedata['korean_name'])
+        english_name.append(namedata['english_name'].upper().replace(" ",""))
+
+    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
+    
+    # 코인 종류 분할
+    currency = []
+    for i in namedata.loc[:,'market']:
+        if i.split('-')[0] == "KRW":
+            currency.append("KRW")
+        elif i.split('-')[0] == "BTC":
+            currency.append("BTC")
+        else:
+            currency.append("USDT")
+    namedata['currency'] = currency
+    return namedata
+
+
+
+
+app = Flask(__name__)
 @app.route('/now', methods=['POST'])
 def now():
     best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
-
     current_price =  {  "version": "2.0",
                         "template": {
                             "outputs": [
@@ -39,10 +76,10 @@ def now():
                                     ],
                                     "buttons": [
                                         {
-                                        "label": "더 많은 코인 조회하러 가기",
+                                        "label": "더 많은 코인 조회하기",
                                         "action": "block",
-                                        "blockId": "6284847275eca02fba63ab96",
-                                        "messageText" : "그 외"                                        }
+                                        "blockId": "6284847275eca02fba63ab96"
+                                                                                                       }
                                     ]
                                     }
                                 ]
@@ -55,198 +92,115 @@ def now():
 
 
 
-@app.route('/more/guide',methods=['POST'])
-def more():
-    body = request.get_json()
-    print("body1 : ",body[0])
-    rip = "샌드"
-    body = body['contexts']
-    print("------콘텍트1 : ", body)
-    responseBody = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": "현 시세 조회를 원하는 가상 화폐의 종류를 선택해주세요. \n 그 외의 경우, 가상 화폐 명을 입력해 주세요."
-                    }
-                }
-            ]
-        },
-        "context":{
-            "values":[
-                {
-                    "name":"ABC",
-                    "lifeSpan":3,
-                    "params":{
-                        "key1":"리플"
-                    }
-                },
-                {
-                    "name":"moreCoin",
-                    "lifeSpan":3,
-                    "params":{
-                        "key2":f"{rip}"
-                    }
-                }
-            ]
-        }
-    }
-    return responseBody
+
+@app.route('/more',methods=['POST'])
+def test():
+    # 마켓 이름 데이터, 환율값, 발화 값 가져오기
+    nameData = marketData()
+    dataRecive = request.get_json()
+    coin = dataRecive['action']['params']['guideMore'].upper().replace(" ","")
+    USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
+    USD = USD.json()
+    USD = USD[0]['basePrice']
+
+    # 
+    answer = []
+    for i in nameData.index:
+        if coin == nameData.korean_name[i] or coin == nameData.english_name[i] or coin == nameData.market[i]:
+            answer.append([nameData.market[i],nameData.currency[i]])
+
+    print("---list----",answer)
+    # 전체 마켓 시장에서 입력한 코인과 같은 종류의 코인 뽑아서 리스트로 반환 (KRW, BTC,USDT)
+    # 코인 외 잘못 발화된 값은 coin_now =[]로 빈 리스트 추출
+    # 다양한 입력 형태 다 포용한다.
+    name_list = nameData.values.tolist()
+    coin_now = []
+    for i in range(len(name_list)):
+        if coin in name_list[i]:
+            coin_now.extend(name_list[i])
+    print("---coin_name----",coin_now)
+    coin_now = set(coin_now)
+    print("----no 중복 코인 ----",coin_now)
+
+    # 해당 코인의 화폐 시장 종류 뽑아내서 리스트로 반환 ->selection ['KRW','BTC','USDT] 형태
+    # 잘못된 발화인 경우 selection =[] 빈 리스트 추출
+    selection = []
+    for i in range(len(answer)):
+        selection.append(answer[i][1])
 
 
-@app.route('/more/res',methods=['POST'])
-def res():
-    body = request.get_json()
-    print("body2 : ",body)
-    # body = body["userRequest"]["utterance"].lower().replace(" ","")
-    # body = body["userRequest"]["utterance"]
-    # print("2번 : ",body)
-    body = body['contexts']
-    print("------콘텍트2 : ", body)
-    # body = body['contexts'][0]['params']['key2']['value']
-    body = [0]
-    print("우리가 원하던 거....!!!!! : ", body)
-    if body =="리플":
-        responseBody = {
-            "version": "2.0",
-            "template": {
-                "outputs": [
+    if coin not in coin_now:
+        # coin_error = {
+        #         "version": "2.0",
+        #         "template": {
+        #             "outputs": [
+        #                 {
+        #                     "simpleText":{
+        #                         "text":"존재하지 않는 가상화폐입니다. \n 다시 시도해 주세요. \n\n"
+        #                     }
+        #                 }
+        #             ]
+        #         }
+        #     }
+        coin_error = {
+            "version":"2.0",
+            "template":{
+                "outputs":[
                     {
-                        "simpleImage": {
-                            "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
-                            "altText": "hello I'm Ryan"
+                        "basicCard":{
+                            "title":"입력 오류",
+                            "description":"존재하지 않는 가상 화폐이거나 입력 오류입니다",
+                            "thumbnail":{
+                                "imageUrl":"https://user-images.githubusercontent.com/65166786/169485601-ea315e41-4b3c-4520-b11a-6461d3e3233e.jpg"
+                            },
+                            "buttons":[
+                                {
+                                    "action":"block",
+                                    "label":"시세 조회로 돌아가기",
+                                    "blockId": "627a430245b5fc3106459cab",
+                                    "messageText":"짜잔!"
+                                }
+                            ]
                         }
                     }
                 ]
             }
         }
-        return responseBody
-    else :
-        responseBody = {
-            "version": "2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text":"집가자"
+        return coin_error
+    else:
+        # 첫 배포 -> KRW 기준의 시세조회
+        # KRW 시장이 없는 코인의 경우 -> 해당 시장 값 * btc로 원화 값 반환
+        # KRW 시장이 있는 경우 그대로 현재 시세 조회
+        if "KRW" not in selection:
+            # print("KRW 없음")
+            if "BTC" in selection:
+                BITCOIN = pyupbit.get_current_price("KRW-BTC")
+                BTC = selection.index("BTC")
+                ticker = answer[BTC][0]
+                coin_money = pyupbit.get_current_price(ticker)
+                coin_price = (BITCOIN * coin_money)
+                print("한국 돈 변환 값 BTC : ",coin_price)
+            else : 
+                ticker = answer[0][0]
+                coin_money = pyupbit.get_current_price(ticker)
+                coin_price = (USD * coin_money)
+                print("한국 돈 변환 값 USDT : ",coin_price)
+        else:
+            print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
+            KRW = selection.index("KRW")
+            ticker = answer[KRW][0]
+            coin_price = pyupbit.get_current_price(ticker)
+
+        coin_price_now = {
+                "version": "2.0",
+                "template": {
+                    "outputs": [
+                        {
+                            "simpleText": {
+                                "text": f"{coin}의 현재 가격은 KRW 기준 {coin_price:.2f}원 입니다" #link 넣으면 좋을 듯
+                            }
                         }
-                    }
-                ]
+                    ]
+                }
             }
-        }
-        return responseBody
-
-
-
-
-    # # dataReceive = request.get_json() # 사용자가 입력한 데이터
-    # #print(dataReceive)
-
-    # # 마켓 데이터 불러오기
-    # marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-    # if marketData.status_code == 200 :
-    #     jsonMarket = marketData.json()
-
-
-    # # 마켓 코드, 한글, 영어 df로 정리    
-    # market = []
-    # korean_name = []
-    # english_name = []
-    # for i in range(len(jsonMarket)) :
-    #     namedata = jsonMarket[i]
-    #     market.append(namedata['market'])
-    #     korean_name.append(namedata['korean_name'])
-    #     english_name.append(namedata['english_name'].lower().replace(" ",""))
-        
-    # # tickers=pyupbit.get_tickers()
-    # namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
-    
-    
-    # currency = []
-    # for i in namedata.loc[:,'market']:
-    #     if i.split('-')[0] == "KRW":
-    #         currency.append("KRW")
-    #     elif i.split('-')[0] == "BTC":
-    #         currency.append("BTC")
-    #     else:
-    #         currency.append("USDT")
-            
-    # namedata['currency'] = currency # currency column을 새로 추가
-    # namedata2 = namedata
-    # ## 여기까지 데이터 받아오는거..
-
-    # print("namedata : ",namedata)
-    # print("korean_name", namedata['korean_name'])
-
-
-
-
-    # coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-
-    # print("coin : " ,coin_name)
-    # market_id =  list(namedata['market'])
-    # market_kor = list(namedata['korean_name']) 
-    # market_eng = list(namedata['english_name'])
-    
-    # if (coin_name in market_id) or (coin_name in market_kor) or (coin_name in market_eng):
-    # # if coin_name in market_kor:
-    # #     print("오늘 점심은 햄버거")
-    # # else : 
-    # #     print("실패")
-
-
-
-    # answer = []
-    # for i in namedata2.index:
-    #     if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-    #         answer.append([namedata2.market[i],namedata2.currency[i]])
-
-    # print("1 : ", answer)
-    # print("len:",len(answer))
-
-    # while len(answer) == 0: # 값이 없는 경우 풀백 코드
-    #     none_ticker = {
-    #             "version": "2.0",
-    #             "template": {
-    #                 "outputs": [
-    #                     {
-    #                         "simpleText": {
-    #                             "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
-    #                         }
-    #                     }    
-    #                 ],
-    #                 "quickReplies": [
-    #                     {
-    #                         "messageText": "시세조회",
-    #                         "action": "message",
-    #                         "label": "시세조회로 돌아가기"
-    #                     }
-    #                 ]
-    #             }
-    #         }
-    #     return none_ticker
-        
-        
-    # if len(answer) != 0 : # KRW 기준으로 출력 코드
-    #     selection = []
-    #     for i in range(len(answer)):
-    #         selection.append(answer[i][1])
-    #     print("2:" , selection.index("KRW")) # 2
-    #     KRW = selection.index("KRW")
-    #     ticker = answer[KRW][0]
-    #     now_price = { 
-    #         "version":"2.0",
-    #         "template": {
-    #             "outputs": [
-    #                 {
-    #                     "simpleText": {
-    #                         "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
-    #                     }
-    #                 }
-    #             ]
-    #         }
-    #     }
-    #     return now_price
-
-
+        return coin_price_now
