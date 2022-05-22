@@ -27,7 +27,6 @@ def msg():
         market.append(namedata['market'])
         korean_name.append(namedata['korean_name'])
         english_name.append(namedata['english_name'].upper().replace(" ",""))
-
     
     
 
