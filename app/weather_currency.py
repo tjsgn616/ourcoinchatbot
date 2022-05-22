@@ -66,7 +66,7 @@ def msg():
     name_list = namedata.values.tolist()
     coin_now = []
     for i in range(len(name_list)):
-        if coin in name_list[i]:
+        if coin_name in name_list[i]:
             coin_now.extend(name_list[i])
     print("---coin_name----",coin_now)
     coin_now = set(coin_now)
@@ -76,7 +76,7 @@ def msg():
     for i in range(len(answer)):
         selection.append(answer[i][1])
 
-    if coin not in coin_now:
+    if coin_name not in coin_now:
         coin_error = {
             "version":"2.0",
             "template":{
@@ -119,7 +119,7 @@ def msg():
                 past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
                 #coin_money = pyupbit.get_current_price(ticker)
                 #coin_price = (USD * coin_money)
-                print("한국 돈 변환 값 USDT : ",coin_price)
+                #print("한국 돈 변환 값 USDT : ",coin_price)
         else:
             print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
             KRW = selection.index("KRW")
