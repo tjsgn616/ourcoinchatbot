@@ -1,225 +1,252 @@
+from crypt import methods
 from flask import Flask, jsonify, request
 import pandas as pd
 import pyupbit
 import requests
 app = Flask(__name__) 
 
-@app.route('/msg', methods=['POST'])
-def msg():
-    
-    dataReceive = request.get_json() # 사용자가 입력한 데이터
-    #print(dataReceive)
-    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-    if marketData.status_code == 200 :
-        jsonMarket = marketData.json()
+@app.route('/now', methods=['POST'])
+def now():
+    best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
+
+    current_price =  {  "version": "2.0",
+                        "template": {
+                            "outputs": [
+                            {
+                                "carousel": {
+                                "type": "listCard",
+                                "items": [
+                                    {
+                                    "header": {
+                                        "title": "현재 시세 조회"
+                                    },
+                                    "items": [
+                                        {
+                                        "title": "비트코인",
+                                        "description" : f"{pyupbit.get_current_price(best_Id[0]):.2f}원",
+                                        "imageUrl": "https://static.upbit.com/logos/BTC.png"
+                                        },
+                                        {
+                                        "title": "이더리움",
+                                        "description": f"{pyupbit.get_current_price(best_Id[1]):.2f}원",
+                                        "imageUrl": "https://static.upbit.com/logos/ETH.png"
+                                        },
+                                        {
+                                        "title": "도지코인",
+                                        "description": f"{pyupbit.get_current_price(best_Id[2]):.2f}원",
+                                        "imageUrl": "https://static.upbit.com/logos/DOGE.png"
+                                        }
+                                    ],
+                                    "buttons": [
+                                        {
+                                        "label": "더 많은 코인 조회하러 가기",
+                                        "action": "block",
+                                        "blockId": "6284847275eca02fba63ab96",
+                                        "messageText" : "그 외"                                        }
+                                    ]
+                                    }
+                                ]
+                                }
+                            }
+                            ]
+                        }
+                    }
+    return current_price
+
+
+
+@app.route('/more/guide',methods=['POST'])
+def more():
+    body = request.get_json()
+    print("body1 : ",body[0])
+    rip = "샌드"
+    body = body['contexts']
+    print("------콘텍트1 : ", body)
+    responseBody = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": "현 시세 조회를 원하는 가상 화폐의 종류를 선택해주세요. \n 그 외의 경우, 가상 화폐 명을 입력해 주세요."
+                    }
+                }
+            ]
+        },
+        "context":{
+            "values":[
+                {
+                    "name":"ABC",
+                    "lifeSpan":3,
+                    "params":{
+                        "key1":"리플"
+                    }
+                },
+                {
+                    "name":"moreCoin",
+                    "lifeSpan":3,
+                    "params":{
+                        "key2":f"{rip}"
+                    }
+                }
+            ]
+        }
+    }
+    return responseBody
+
+
+@app.route('/more/res',methods=['POST'])
+def res():
+    body = request.get_json()
+    print("body2 : ",body)
+    # body = body["userRequest"]["utterance"].lower().replace(" ","")
+    # body = body["userRequest"]["utterance"]
+    # print("2번 : ",body)
+    body = body['contexts']
+    print("------콘텍트2 : ", body)
+    # body = body['contexts'][0]['params']['key2']['value']
+    body = [0]
+    print("우리가 원하던 거....!!!!! : ", body)
+    if body =="리플":
+        responseBody = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleImage": {
+                            "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
+                            "altText": "hello I'm Ryan"
+                        }
+                    }
+                ]
+            }
+        }
+        return responseBody
+    else :
+        responseBody = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text":"집가자"
+                        }
+                    }
+                ]
+            }
+        }
+        return responseBody
+
+
+
+
+    # # dataReceive = request.get_json() # 사용자가 입력한 데이터
+    # #print(dataReceive)
+
+    # # 마켓 데이터 불러오기
+    # marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
+    # if marketData.status_code == 200 :
+    #     jsonMarket = marketData.json()
+
+
+    # # 마켓 코드, 한글, 영어 df로 정리    
+    # market = []
+    # korean_name = []
+    # english_name = []
+    # for i in range(len(jsonMarket)) :
+    #     namedata = jsonMarket[i]
+    #     market.append(namedata['market'])
+    #     korean_name.append(namedata['korean_name'])
+    #     english_name.append(namedata['english_name'].lower().replace(" ",""))
         
-    market = []
-    korean_name = []
-    english_name = []
-    for i in range(len(jsonMarket)) :
-        namedata = jsonMarket[i]
-        market.append(namedata['market'])
-        korean_name.append(namedata['korean_name'])
-        english_name.append(namedata['english_name'].lower().replace(" ",""))
-        
-    tickers=pyupbit.get_tickers()
-    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
+    # # tickers=pyupbit.get_tickers()
+    # namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
     
     
-    currency = []
-    for i in namedata.loc[:,'market']:
-        if i.split('-')[0] == "KRW":
-            currency.append("KRW")
-        elif i.split('-')[0] == "BTC":
-            currency.append("BTC")
-        else:
-            currency.append("USDT")
+    # currency = []
+    # for i in namedata.loc[:,'market']:
+    #     if i.split('-')[0] == "KRW":
+    #         currency.append("KRW")
+    #     elif i.split('-')[0] == "BTC":
+    #         currency.append("BTC")
+    #     else:
+    #         currency.append("USDT")
             
-    namedata['currency'] = currency # currency column을 새로 추가
-    namedata2 = namedata
+    # namedata['currency'] = currency # currency column을 새로 추가
+    # namedata2 = namedata
+    # ## 여기까지 데이터 받아오는거..
+
+    # print("namedata : ",namedata)
+    # print("korean_name", namedata['korean_name'])
+
+
+
+
+    # coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
+
+    # print("coin : " ,coin_name)
+    # market_id =  list(namedata['market'])
+    # market_kor = list(namedata['korean_name']) 
+    # market_eng = list(namedata['english_name'])
     
-
-    coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-    #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
-#print(namedata2['korean_name'])
-    answer = []
-#print(namedata2.korean_name[0])
-    for i in namedata2.index:
-        if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-            answer.append([namedata2.market[i],namedata2.currency[i]])
+    # if (coin_name in market_id) or (coin_name in market_kor) or (coin_name in market_eng):
+    # # if coin_name in market_kor:
+    # #     print("오늘 점심은 햄버거")
+    # # else : 
+    # #     print("실패")
 
 
-    
-# answer[여럿나온 답의 순서][0=market code, 1= currency]
-#print(answer[:len(answer)][:len(answer)])
-    while len(answer) == 0:
-        coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-        #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
-        #coin_name = dataReceive["content"]
-        none_ticker = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
-                    }
-                }    
-            ],
-                "quickReplies": [
-          {
-                "messageText": "이더리움",
-                "action": "message",
-                "label": "이더리움"
-          },
-                    
-          {
-                "messageText": "비트코인",
-                "action": "message",
-                "label": "비트코인"
-          },  
-                    
-          {
-                "messageText": "도지코인",
-                "action": "message",
-                "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
-          }
-     
-]
-                }
-            }
-        return jsonify(none_ticker)
+
+    # answer = []
+    # for i in namedata2.index:
+    #     if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
+    #         answer.append([namedata2.market[i],namedata2.currency[i]])
+
+    # print("1 : ", answer)
+    # print("len:",len(answer))
+
+    # while len(answer) == 0: # 값이 없는 경우 풀백 코드
+    #     none_ticker = {
+    #             "version": "2.0",
+    #             "template": {
+    #                 "outputs": [
+    #                     {
+    #                         "simpleText": {
+    #                             "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
+    #                         }
+    #                     }    
+    #                 ],
+    #                 "quickReplies": [
+    #                     {
+    #                         "messageText": "시세조회",
+    #                         "action": "message",
+    #                         "label": "시세조회로 돌아가기"
+    #                     }
+    #                 ]
+    #             }
+    #         }
+    #     return none_ticker
         
         
-#print(namedata2['korean_name'])
-        answer = []
+    # if len(answer) != 0 : # KRW 기준으로 출력 코드
+    #     selection = []
+    #     for i in range(len(answer)):
+    #         selection.append(answer[i][1])
+    #     print("2:" , selection.index("KRW")) # 2
+    #     KRW = selection.index("KRW")
+    #     ticker = answer[KRW][0]
+    #     now_price = { 
+    #         "version":"2.0",
+    #         "template": {
+    #             "outputs": [
+    #                 {
+    #                     "simpleText": {
+    #                         "text":  f"{coin_name}" "의 현재 가격은 KRW 기준" f"{pyupbit.get_current_price(ticker):.2f}" "입니다"
+    #                     }
+    #                 }
+    #             ]
+    #         }
+    #     }
+    #     return now_price
 
-#print(namedata2.korean_name[0])
-        for i in namedata2.index:
-            if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-                answer.append([namedata2.market[i],namedata2.currency[i]])
-                print("여기 되는건가?")
-        return jsonify(none_ticker)       
-    if len(answer) == 1: # 화폐 단위 하나만 있을 때
-    #print(answer)
-        ticker = answer[0][0]
-        now_price = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[0][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다" # f-string 수정
-                    }
-                }    
-            ]
-                }
-            }
-             # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다. 
-        return jsonify(now_price)
-    
-    
-    
-    elif len(answer) == 2: # 화폐 단위 2개 있을 때
-        #print(answer)
-        selection = []
-        for i in range(len(answer)): # 이거 왜 안됨??
-            selection.append(answer[i][1])
-        #print(selection)
 
-        manycurrency2 = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "기준 화폐가 다수 존재합니다" f"{selection}" 
-                    }
-                }    
-            ],
-                    
-                "quickReplies": [
-          {
-                "messageText": f"{selection[0]}",
-                "action": "message",
-                "label": f"{selection[0]}"
-          },
-                    
-          {
-                "messageText": f"{selection[1]}",
-                "action": "message",
-                "label": f"{selection[1]}"
-          }
-     
-]
-                }
-            }
-        return  jsonify(manycurrency2)
-    
-    else: # 화폐 단위 3개
-        selection = []
-        for i in range(len(answer)): 
-            selection.append(answer[i][1])
-        #print(selection)
-        manycurrency = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "기준 화폐가 다수 존재합니다" f"{selection}" 
-                    }
-                }    
-            ],
-                    
-                "quickReplies": [
-          {
-                "messageText": f"{selection[0]}",
-                "action": "message",
-                "label": f"{selection[0]}"
-          },
-                    
-          {
-                "messageText": f"{selection[1]}",
-                "action": "message",
-                "label": f"{selection[1]}"
-          },
-          {
-                "messageText": f"{selection[2]}",
-                "action": "message",
-                "label": f"{selection[2]}"
-          }
-        
-]
-             }
-            }
-
-        #cur_sel = dataReceive["userRequest"]["utterance"]
-        n = selection.index(cur_sel)
-        ticker = answer[n][0]
-        { "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[n][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다"
-                    }
-                }    
-            ]
-                }
-            }
-        return jsonify(manycurrency)
-
-    
-
-      
-        #cur_sel = dataReceive["userRequest"]["utterance"]
-        #if cur_sel == "KRW" or "BTC" or "USDT" :
-        #cur_sel = "KRW"    
-          # 일반 발화 안됨
-        #cur_sel = dataReceive["action"]["clientExtra"] # 바로가기 응답 받아오는 코드 안됨
-        #cur_sel = dataReceive["action"]["params"]["currency"]["value"]
-        #cur_sel = dataReceive["quickReplies"]["messageText"]
-        #cur_sel = dataReceive["quickReplies"]["messageText"]
-        #cur_sel = dataReceive["userRequest"]["utterance"].upper()
-        #cur_sel = dataReceive["quickReplies"]["action"]["message"]
