@@ -41,7 +41,7 @@ def marketData():
     return namedata
 
 app = Flask(__name__) 
-@app.route('/msg3', methods=['POST'])
+@app.route('/msg5', methods=['POST'])
 def msg():
     dataReceive = request.get_json()
     namedata = marketData()
