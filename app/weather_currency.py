@@ -140,7 +140,7 @@ def msg():
     nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     if current_price > past_price:
-        a = current_price -past_price 
+        a = current_price - past_price 
         b = round((current_price-past_price)*100/past_price, 2)
 
         price_up =  {
@@ -150,12 +150,11 @@ def msg():
                          {
                         "itemCard": {
                             "imageTitle": {
-                            "title": "가격 상승",
-                            "description": "가격 상승"
+                            "title": "가격 상승"
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": "https://static.upbit.com/logos/{ticker}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{ticker}.png"
                     },
                     "itemList": [
                         {
@@ -172,15 +171,15 @@ def msg():
                         },
                         {
                             "title": "비교 시간",
-                            "description": f'{full_time}'
+                            "description": f'{full_time_replace}'
                         },
                         {
                             "title": "변동량",
-                            "description": f"{a}"
+                            "description": abs(f"{a}")
                         },
                         {
                             "title": "변동량(%)",
-                            "description": f"{b}"
+                            "description": abs(f"{b}")
                         }
                     ],
                     "itemListAlignment" : "right",
@@ -188,7 +187,7 @@ def msg():
                         {
                             "label": "View Boarding Pass",
                             "action": "webLink",
-                            "webLinkUrl": "https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                            "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
                         }
                     ],
                     "buttonLayout" : "vertical"
@@ -207,12 +206,12 @@ def msg():
                          {
                         "itemCard": {
                             "imageTitle": {
-                            "title": "가격 변동 없음 ",
-                            "description": "가격 변동 없음"
+                            "title": "가격 변동 없음 "
+                            
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": "https://static.upbit.com/logos/{ticker}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{ticker}.png"
                     },
                     "itemList": [
                         {
@@ -229,15 +228,15 @@ def msg():
                         },
                         {
                             "title": "비교 시간",
-                            "description": f'{full_time}'
+                            "description": f'{full_time_replace}'
                         },
                         {
                             "title": "변동량",
-                            "description": f"{a}"
+                            "description": abs(f"{a}")
                         },
                         {
                             "title": "변동량(%)",
-                            "description": f"{b}"
+                            "description": abs(f"{b}")
                         }
                     ],
                     "itemListAlignment" : "right",
@@ -245,7 +244,7 @@ def msg():
                         {
                             "label": "View Boarding Pass",
                             "action": "webLink",
-                            "webLinkUrl": "https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                            "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
                         }
                     ],
                     "buttonLayout" : "vertical"
@@ -256,8 +255,8 @@ def msg():
 }
         return  jsonify(price_now)
     else:
-        a = past_price-current_price
-        b = round((past_price-current_price)*100/current_price, 2)
+        a = current_price - past_price
+        b = round((current_price-past_price)*100/past_price, 2)
 
         price_down =  {
                     "version": "2.0",
@@ -266,12 +265,12 @@ def msg():
                          {
                         "itemCard": {
                             "imageTitle": {
-                            "title": "가격 하락",
-                            "description": "가격 하락"
+                            "title": "가격 하락"
+                           
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": "https://static.upbit.com/logos/{ticker}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{ticker}.png"
                     },
                     "itemList": [
                         {
@@ -279,7 +278,7 @@ def msg():
                             "description": f'{current_price}'
                         },
                         {
-                            "title": "비교 시간 가격",
+                            "title": "비교 가격",
                             "description": f'{past_price}'
                         },
                         {
@@ -288,23 +287,23 @@ def msg():
                         },
                         {
                             "title": "비교 시간",
-                            "description": f'{full_time}'
+                            "description": f'{full_time_replace}'
                         },
                         {
                             "title": "변동량",
-                            "description": f"{a}"
+                            "description": abs(f"{a}")
                         },
                         {
                             "title": "변동량(%)",
-                            "description": f"{b}"
+                            "description": abs(f"{b}")
                         }
                     ],
                     "itemListAlignment" : "right",
                     "buttons": [
                         {
-                            "label": "View Boarding Pass",
+                            "label": "업비트 바로가기",
                             "action": "webLink",
-                            "webLinkUrl": "https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                            "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
                         }
                     ],
                     "buttonLayout" : "vertical"
