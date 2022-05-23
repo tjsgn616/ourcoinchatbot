@@ -7,6 +7,15 @@ import datetime
 #import schedule
 import time
 from flask import Flask, jsonify, request
+import pandas as pd
+import json
+
+csv_data = pd.read_csv("top5_coin.csv", sep = ",")
+csv_data.to_json("test.json", orient = "records")
+with open('test.json', 'r') as f:
+    json_data = json.load(f)
+
+#print(json.dumps(json_data) )
 
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
@@ -27,8 +36,7 @@ def func_9():
     past_h = pastDatetime_HM[0:2]
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
-    f = open('top5_coin.csv', 'r', encoding='utf-8')
-    for i in f['market']:
+    for i in json_data['market']:
         top5_coins.append(i)
     #for i in range(len(top5_coin)):
     #    top_5_coin_names.append(top5_coin['market'])
