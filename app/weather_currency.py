@@ -48,11 +48,11 @@ def msg():
 
     namedata = marketData() # 에반데
     answer = []
+    id = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
             answer.append([namedata.market[i],namedata.currency[i]])
 
-    
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
@@ -66,18 +66,26 @@ def msg():
     USD = USD[0]['basePrice'] #USDT 가격 조회를 위함.
 
 
+
+
+
     name_list = namedata.values.tolist()
     coin_now = []
     for i in range(len(name_list)):
         if coin_name in name_list[i]:
             coin_now.extend(name_list[i])
-    print("---coin_name----",coin_now)
+    print("---coin_name----",coin_now) 
+    coin_id = ''.join(coin_now[0])
+    print(coin_id)
+    coin_id_id = coin_id[4:7]
+    print(coin_id_id)
     coin_now = set(coin_now)
     print("----no 중복 코인 ----",coin_now)
 
     selection = []
     for i in range(len(answer)):
         selection.append(answer[i][1])
+
     if coin_name not in coin_now:
         coin_error = {
             "version":"2.0",
@@ -125,7 +133,7 @@ def msg():
                 #coin_price = (USD * coin_money)
                 #print("한국 돈 변환 값 USDT : ",coin_price)
         else:
-            print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
+            #print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
             KRW = selection.index("KRW")
             ticker = answer[KRW][0]
             current_price = pyupbit.get_current_price(ticker)
@@ -158,7 +166,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
                         {
@@ -215,7 +223,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
                         {
@@ -274,7 +282,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
                         {
