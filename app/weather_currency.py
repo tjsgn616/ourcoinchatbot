@@ -52,7 +52,7 @@ def msg():
 
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
-    full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
+    full_time_replace = full_time.strftime('%Y-%m-%d %H:%M:%S').replace("-","").replace("T","").replace(":","")
     print(full_time_replace)
     print(coin_name)
     print(answer)
@@ -138,7 +138,7 @@ def msg():
     
     
     nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    full_time_replace = 
+    
     if current_price > past_price:
         a = abs(current_price - past_price)
         b = abs(round((current_price-past_price)*100/past_price, 2))
