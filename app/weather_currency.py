@@ -67,11 +67,22 @@ def msg():
         if coin_name in name_list[i]:
             coin_now.extend(name_list[i])
     print("---coin_name----",coin_now)
+    j=0
+    for k in name_list:
+        if coin_name in k:
+            coin_id = namedata.iloc[j]['Id']
+            #coin_korea = namedata.iloc[j]['korean_name']
+            break
+        j +=1
+
+
+
+
     #coin_id = ' '.join(coin_now[0])
-    coin_id = ''.join(coin_now[0])
-    print(coin_id)
-    coin_id_id = coin_id[4:7]
-    print(coin_id_id)
+    #coin_id = ''.join(coin_now[0])
+    #print(coin_id)
+    #coin_id_id = coin_id[4:7]
+    #print(coin_id_id)
     coin_now = set(coin_now)
     print("----no 중복 코인 ----",coin_now)
     selection = []
@@ -156,7 +167,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
                         {
@@ -212,7 +223,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
                         {
@@ -270,7 +281,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
                         {
