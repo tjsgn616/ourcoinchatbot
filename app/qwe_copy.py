@@ -9,6 +9,7 @@ import time
 from flask import Flask, jsonify, request
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
+market = pd.read_csv('top5_coin.csv')['market'] 
 app = Flask(__name__)
 @app.route('/price', methods=['POST'])
 def func_9():
@@ -26,7 +27,7 @@ def func_9():
     past_h = pastDatetime_HM[0:2]
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
-    for i in pd.read_csv('top5_coin.csv')['market']:
+    for i in market:
         top5_coins.append(i)
     #for i in range(len(top5_coin)):
     #    top_5_coin_names.append(top5_coin['market'])
@@ -37,8 +38,8 @@ def func_9():
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.01)
         print(i)
-        coin_id = ''.join(i)
-        coin_id_id = coin_id[4:7]
+        #coin_id = ''.join(i)
+        #coin_id_id = coin_id[4:7]
         past_time2 = 0
         for num1 in 12,10,8,6,4,2,0 : #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2
@@ -114,6 +115,6 @@ def func_9():
              }
         }
             return (past)
-#func_9()
+func_9()
 #func_14()
 #func_20()
