@@ -67,7 +67,7 @@ def msg():
         if coin_name in name_list[i]:
             coin_now.extend(name_list[i])
     print("---coin_name----",coin_now)
-    coin_id = ' '.join(coin_now[0])
+    #coin_id = ' '.join(coin_now[0])
     coin_id = ''.join(coin_now[0])
     print(coin_id)
     coin_id_id = coin_id[4:7]

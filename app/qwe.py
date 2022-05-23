@@ -11,6 +11,8 @@ import csv
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
 def func_9():
+
+
     #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거
     nowDatetime = datetime.datetime.now().strftime('%d,%H')
     now_d = nowDatetime.split(',')[0]
@@ -36,7 +38,7 @@ def func_9():
         print(i)
         past_time2 = 0
         for num1 in 12,10,8,6,4,2,0 : #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
-            past_time1 = past_time2
+            past_time1 = past_time2 # 1이 과거 값 , 2가 미래 값
             past_time2 = (datetime.datetime.now()+datetime.timedelta(hours=-num1)).strftime('%Y%m%d%H%M')
             if past_time1 == 0:
                 continue
