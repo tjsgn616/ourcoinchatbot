@@ -155,7 +155,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{coin_now}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
                     },
                     "itemList": [
                         {
@@ -212,7 +212,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{coin_now}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
                     },
                     "itemList": [
                         {
@@ -271,7 +271,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{coin_now}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
                     },
                     "itemList": [
                         {
