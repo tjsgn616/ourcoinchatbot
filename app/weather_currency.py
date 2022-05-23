@@ -162,8 +162,7 @@ def msg():
                          {
                         "itemCard": {
                             "imageTitle": {
-                            "title": "가격 상승",
-                             "description": "가격 상승"
+                            "title": "가격 상승"
                     },
                     "profile": {
                         "title": f'{ticker}',
