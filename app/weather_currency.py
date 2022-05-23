@@ -138,7 +138,7 @@ def msg():
     
     
     nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
+    full_time_replace = 
     if current_price > past_price:
         a = abs(current_price - past_price)
         b = abs(round((current_price-past_price)*100/past_price, 2))
@@ -154,7 +154,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{ticker}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_now}.png"
                     },
                     "itemList": [
                         {
@@ -185,7 +185,7 @@ def msg():
                     "itemListAlignment" : "right",
                     "buttons": [
                         {
-                            "label": "View Boarding Pass",
+                            "label": "업비트 차트 보기",
                             "action": "webLink",
                             "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
                         }
@@ -211,7 +211,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{ticker}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_now}.png"
                     },
                     "itemList": [
                         {
@@ -242,7 +242,7 @@ def msg():
                     "itemListAlignment" : "right",
                     "buttons": [
                         {
-                            "label": "View Boarding Pass",
+                            "label": "업비트 차트 보기",
                             "action": "webLink",
                             "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
                         }
@@ -270,7 +270,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{ticker}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_now}.png"
                     },
                     "itemList": [
                         {
