@@ -44,12 +44,15 @@ def msg():
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
     coin_name = dataReceive["action"]["params"]["coin"] #.upper.replace(" ","")
+
+
     namedata = marketData() # 에반데
     answer = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
             answer.append([namedata.market[i],namedata.currency[i]])
 
+    
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
@@ -75,7 +78,6 @@ def msg():
     selection = []
     for i in range(len(answer)):
         selection.append(answer[i][1])
-
     if coin_name not in coin_now:
         coin_error = {
             "version":"2.0",
@@ -92,7 +94,7 @@ def msg():
                                 {
                                     "action":"block",
                                     "label":"시점 조회로 돌아가기",
-                                    "blockId": "627a1fd316b99e0c33812774",
+                                    "blockId": "6281c5009ac8ed784416bccd",
                                     #"messageText":"짜잔!"
                                 }
                             ]
@@ -102,6 +104,7 @@ def msg():
             }
         }
         return coin_error
+    
     else:
         #KRW가 없을 때
         if "KRW" not in selection :
