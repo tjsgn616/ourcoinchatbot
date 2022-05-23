@@ -53,7 +53,7 @@ def msg():
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
-    full_time_T = full_time.replace("T","")
+    full_time_T = full_time.replace("T"," ")
     print(full_time_replace)
     print(coin_name)
     print(answer)
