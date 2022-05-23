@@ -6,11 +6,14 @@ import datetime
 import project_def as pr_d
 #import schedule
 import time
-import test as ts
-import csv
+from flask import Flask, jsonify, request
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
+app = Flask(__name__)
+@app.route('/price', methods=['POST'])
 def func_9():
+    #dataReceive = request.get_json()
+    #full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"]
     #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거
     nowDatetime = datetime.datetime.now().strftime('%d,%H')
     now_d = nowDatetime.split(',')[0]
