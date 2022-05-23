@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import json
 import datetime
-import project_def as pr_d
+#import project_def as pr_d
 #import schedule
 import time
 from flask import Flask, jsonify, request
