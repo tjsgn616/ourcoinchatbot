@@ -1,15 +1,15 @@
 import pyupbit
 import requests
 import pandas as pd
-import json
+import csv
 import datetime
 #import project_def as pr_d
 #import schedule
 import time
 from flask import Flask, jsonify, request
+
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
-market = pd.read_csv('top5_coin.csv')
 app = Flask(__name__)
 @app.route('/price', methods=['POST'])
 def func_9():
@@ -27,7 +27,8 @@ def func_9():
     past_h = pastDatetime_HM[0:2]
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
-    for i in market['market'] :
+    f = open('top5_coin.csv', 'r', encoding='utf-8')
+    for i in f['market']:
         top5_coins.append(i)
     #for i in range(len(top5_coin)):
     #    top_5_coin_names.append(top5_coin['market'])
