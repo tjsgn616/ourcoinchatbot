@@ -144,58 +144,173 @@ def msg():
         b = round((current_price-past_price)*100/past_price, 2)
 
         price_up =  {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f'가격 상승 , ' f'변동량: {a} , 'f'변동량: {b} \n' f'비교 가상 화폐: {ticker}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
-                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
-                        
-
-                         # f-string 수정
-                    }
-                }    
-            ]
+                    "version": "2.0",
+                    "template": {
+                    "outputs": [
+                         {
+                        "itemCard": {
+                            "imageTitle": {
+                            "title": "가격 상승",
+                            "description": "가격 상승"
+                    },
+                    "profile": {
+                        "title": f'{ticker}',
+                        "imageUrl": "https://static.upbit.com/logos/{ticker}.png"
+                    },
+                    "itemList": [
+                        {
+                            "title": "현재 가격",
+                            "description": f'{current_price}'
+                        },
+                        {
+                            "title": "비교 시간 가격",
+                            "description": f'{past_price}'
+                        },
+                        {
+                            "title": "현재 시간",
+                            "description": f'{nowDatetime}'
+                        },
+                        {
+                            "title": "비교 시간",
+                            "description": f'{full_time}'
+                        },
+                        {
+                            "title": "변동량",
+                            "description": f"{a}"
+                        },
+                        {
+                            "title": "변동량(%)",
+                            "description": f"{b}"
+                        }
+                    ],
+                    "itemListAlignment" : "right",
+                    "buttons": [
+                        {
+                            "label": "View Boarding Pass",
+                            "action": "webLink",
+                            "webLinkUrl": "https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                        }
+                    ],
+                    "buttonLayout" : "vertical"
                 }
+            }
+        ]
     }
+}
+
         return  jsonify(price_up)
     elif current_price == past_price:
         price_now =  {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {ticker}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
-                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
-                        
-
-                         # f-string 수정
-                    }
-                }    
-            ]
+                    "version": "2.0",
+                    "template": {
+                    "outputs": [
+                         {
+                        "itemCard": {
+                            "imageTitle": {
+                            "title": "가격 변동 없음 ",
+                            "description": "가격 변동 없음"
+                    },
+                    "profile": {
+                        "title": f'{ticker}',
+                        "imageUrl": "https://static.upbit.com/logos/{ticker}.png"
+                    },
+                    "itemList": [
+                        {
+                            "title": "현재 가격",
+                            "description": f'{current_price}'
+                        },
+                        {
+                            "title": "비교 시간 가격",
+                            "description": f'{past_price}'
+                        },
+                        {
+                            "title": "현재 시간",
+                            "description": f'{nowDatetime}'
+                        },
+                        {
+                            "title": "비교 시간",
+                            "description": f'{full_time}'
+                        },
+                        {
+                            "title": "변동량",
+                            "description": f"{a}"
+                        },
+                        {
+                            "title": "변동량(%)",
+                            "description": f"{b}"
+                        }
+                    ],
+                    "itemListAlignment" : "right",
+                    "buttons": [
+                        {
+                            "label": "View Boarding Pass",
+                            "action": "webLink",
+                            "webLinkUrl": "https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                        }
+                    ],
+                    "buttonLayout" : "vertical"
                 }
+            }
+        ]
     }
+}
         return  jsonify(price_now)
     else:
         a = past_price-current_price
         b = round((past_price-current_price)*100/current_price, 2)
 
         price_down =  {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b} \n' f'비교 가상 화폐: {ticker} ' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
-                        f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
-                        
-
-                         # f-string 수정
-                    }
-                }    
-            ]
+                    "version": "2.0",
+                    "template": {
+                    "outputs": [
+                         {
+                        "itemCard": {
+                            "imageTitle": {
+                            "title": "가격 하락",
+                            "description": "가격 하락"
+                    },
+                    "profile": {
+                        "title": f'{ticker}',
+                        "imageUrl": "https://static.upbit.com/logos/{ticker}.png"
+                    },
+                    "itemList": [
+                        {
+                            "title": "현재 가격",
+                            "description": f'{current_price}'
+                        },
+                        {
+                            "title": "비교 시간 가격",
+                            "description": f'{past_price}'
+                        },
+                        {
+                            "title": "현재 시간",
+                            "description": f'{nowDatetime}'
+                        },
+                        {
+                            "title": "비교 시간",
+                            "description": f'{full_time}'
+                        },
+                        {
+                            "title": "변동량",
+                            "description": f"{a}"
+                        },
+                        {
+                            "title": "변동량(%)",
+                            "description": f"{b}"
+                        }
+                    ],
+                    "itemListAlignment" : "right",
+                    "buttons": [
+                        {
+                            "label": "View Boarding Pass",
+                            "action": "webLink",
+                            "webLinkUrl": "https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                        }
+                    ],
+                    "buttonLayout" : "vertical"
                 }
+            }
+        ]
     }
+}
         return  jsonify(price_down)
