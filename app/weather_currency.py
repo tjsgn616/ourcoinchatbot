@@ -52,7 +52,8 @@ def msg():
 
     
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
-    full_time_replace = full_time.strftime('%Y-%m-%d %H:%M:%S').replace("-","").replace("T","").replace(":","")
+    full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
+    full_time_T = full_time.replace("T","")
     print(full_time_replace)
     print(coin_name)
     print(answer)
@@ -171,7 +172,7 @@ def msg():
                         },
                         {
                             "title": "비교 시간",
-                            "description": f'{full_time_replace}'
+                            "description": f'{full_time_T}'
                         },
                         {
                             "title": "변동량",
@@ -228,7 +229,7 @@ def msg():
                         },
                         {
                             "title": "비교 시간",
-                            "description": f'{full_time_replace}'
+                            "description": f'{full_time_T}'
                         },
                         {
                             "title": "변동량",
@@ -287,7 +288,7 @@ def msg():
                         },
                         {
                             "title": "비교 시간",
-                            "description": f'{full_time_replace}'
+                            "description": f'{full_time_T}'
                         },
                         {
                             "title": "변동량",
