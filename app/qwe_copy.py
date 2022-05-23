@@ -10,7 +10,7 @@ from flask import Flask, jsonify, request
 import pandas as pd
 import json
 
-csv_data = pd.read_csv("top5_coin.csv")
+csv_data = pd.read_csv("./app/top5_coin.csv")
 
 
 #print(json.dumps(json_data) )
@@ -20,6 +20,7 @@ csv_data = pd.read_csv("top5_coin.csv")
 app = Flask(__name__)
 @app.route('/price', methods=['POST'])
 def func_9():
+    print(csv_data)
     #dataReceive = request.get_json()
     #full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"]
     #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거
