@@ -67,6 +67,11 @@ def msg():
         if coin_name in name_list[i]:
             coin_now.extend(name_list[i])
     print("---coin_name----",coin_now)
+    coin_id = ' '.join(coin_now[0])
+    coin_id = ''.join(coin_now[0])
+    print(coin_id)
+    coin_id_id = coin_id[4:7]
+    print(coin_id_id)
     coin_now = set(coin_now)
     print("----no 중복 코인 ----",coin_now)
     selection = []
@@ -151,7 +156,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
                         {
@@ -207,7 +212,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
                         {
@@ -265,7 +270,7 @@ def msg():
                     },
                     "profile": {
                         "title": f'{ticker}',
-                        "imageUrl": f"https://static.upbit.com/logos/{answer}.png"
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
                         {
