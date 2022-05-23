@@ -149,7 +149,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 상승 , ' f'변동량: {a} , 'f'변동량: {b} \n' f'비교 가상 화폐: {answer}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
+                "text": f'가격 상승 , ' f'변동량: {a} , 'f'변동량: {b} \n' f'비교 가상 화폐: {ticker}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
@@ -167,7 +167,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {answer}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
+                "text": f'가격 보합(변화 없음)' f'비교 가상 화폐: {ticker}' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
@@ -188,7 +188,7 @@ def msg():
                 "outputs": [
                 {
                 "simpleText": {
-                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b} \n' f'비교 가상 화폐: {coin_name} ' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
+                "text": f'가격 하락 , ' f'변동량: {a} , '  f'변동량: {b} \n' f'비교 가상 화폐: {ticker} ' f'현재 시간: {nowDatetime} \n, 현재 가격: {current_price}'
                         f'비교 시간: {full_time}, 비교 시간 가격: {past_price}'
                         
 
