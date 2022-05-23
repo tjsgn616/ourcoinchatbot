@@ -140,8 +140,8 @@ def msg():
     nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     if current_price > past_price:
-        a = current_price - past_price 
-        b = round((current_price-past_price)*100/past_price, 2)
+        a = abs(current_price - past_price)
+        b = abs(round((current_price-past_price)*100/past_price, 2))
 
         price_up =  {
                     "version": "2.0",
@@ -175,11 +175,11 @@ def msg():
                         },
                         {
                             "title": "변동량",
-                            "description": abs(f"{a}")
+                            "description": f"{a}"
                         },
                         {
                             "title": "변동량(%)",
-                            "description": abs(f"{b}")
+                            "description": f"{b}"
                         }
                     ],
                     "itemListAlignment" : "right",
@@ -232,11 +232,11 @@ def msg():
                         },
                         {
                             "title": "변동량",
-                            "description": abs(f"{a}")
+                            "description": f"{a}"
                         },
                         {
                             "title": "변동량(%)",
-                            "description": abs(f"{b}")
+                            "description": f"{b}"
                         }
                     ],
                     "itemListAlignment" : "right",
@@ -291,11 +291,11 @@ def msg():
                         },
                         {
                             "title": "변동량",
-                            "description": abs(f"{a}")
+                            "description": f"{a}"
                         },
                         {
                             "title": "변동량(%)",
-                            "description": abs(f"{b}")
+                            "description": f"{b}"
                         }
                     ],
                     "itemListAlignment" : "right",
