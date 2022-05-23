@@ -162,10 +162,12 @@ def msg():
                          {
                         "itemCard": {
                             "imageTitle": {
-                            "title": "가격 상승"
+                            "title": "가격 상승",
+                             "description": "가격 상승"
                     },
                     "profile": {
                         "title": f'{ticker}',
+                        "description": "가격 상승",
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id_id}.png"
                     },
                     "itemList": [
