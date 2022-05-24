@@ -55,10 +55,11 @@ def msg():
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
     full_time_T = full_time.replace("T"," ")
-    print(full_time_replace)
-    print(coin_name)
-    print(answer)
-    print(answer[2])
+    print(full_time_replace) # 20220520000000
+    print(coin_name) # 비트코인
+    print(answer) # [['KRW-BTC', 'KRW'], ['USDT-BTC', 'USDT']]
+    print(answer[0][0])
+    print(answer[0])
     USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
     USD = USD.json()
     USD = USD[0]['basePrice'] #USDT 가격 조회를 위함.
