@@ -64,7 +64,7 @@ def func_9():
                 past_price3 = round(100*(past_price2-past_price1)/past_price1,3)
                 past_price4 = round(100*(current_price-past_price_20)/past_price_20,3)
                 if past_price2 >= past_price1:
-                    sun = {
+                        sun = {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -76,11 +76,11 @@ def func_9():
                 ]
              }
         }
-                    return (sun)
+                        return (sun)
                     
                     # print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
-                    cloud = {
+                        cloud = {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -92,11 +92,11 @@ def func_9():
                 ]
              }
         }
-                    return (cloud)
+                        return (cloud)
                     #print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
         
         if current_price >= past_price_20:
-            current = {
+                current = {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -108,9 +108,9 @@ def func_9():
                 ]
              }
         }
-            return (current)
+                return (current)
         else:
-            past = {
+                past = {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -122,7 +122,7 @@ def func_9():
                 ]
              }
         }
-            return (past)
+                return (past)
 func_9()
 #func_14()
 #func_20()
