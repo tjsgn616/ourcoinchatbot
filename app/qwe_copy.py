@@ -59,9 +59,9 @@ def func_9():
                 past_d1 = past_time1[6:8]
                 past_H1 = past_time1[8:10]
                 past_price1 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time1}', count=1).open[0])
-                time.sleep(0.05)
+                time.sleep(0.025)
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
-                time.sleep(0.05)
+                time.sleep(0.025)
                 if past_price2 >= past_price1:
                     print("testif")
                     #print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
