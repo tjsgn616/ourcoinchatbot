@@ -93,17 +93,17 @@ def func_9():
                 },
                 {
                   "title": "베이컨 아보카도",
-                  "description": f"{sun}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_02.jpg"
                 },
                 {
                   "title": "에그 포테이토",
-                  "description": f"{cloud}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_03.jpg"
                 },
                 {
                   "title": "갈릭 베이컨 토마토",
-                  "description": f"{cloud}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_04.jpg"
                 }
               ],
@@ -189,22 +189,22 @@ def func_9():
               "items": [
                 {
                   "title": "햄치즈",
-                  "description": f"{sun}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
                 },
                 {
                   "title": "베이컨 아보카도",
-                  "description": f"{sun}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_02.jpg"
                 },
                 {
                   "title": "에그 포테이토",
-                  "description": f"{cloud}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_03.jpg"
                 },
                 {
                   "title": "갈릭 베이컨 토마토",
-                  "description": f"{cloud}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_04.jpg"
                 }
               ],
