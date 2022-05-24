@@ -123,6 +123,6 @@ def func_9():
              }
         }
             return (past)
-func_9()
+#func_9()
 #func_14()
 #func_20()
