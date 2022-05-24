@@ -35,10 +35,10 @@ def func_9():
     past_h = pastDatetime_HM[0:2]
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
-    for i in csv_data['market']:
-        top5_coins.append(i)
-    #for i in range(len(top5_coin)):
-    #    top_5_coin_names.append(top5_coin['market'])
+    #for i in csv_data['market']:
+    #    top5_coins.append(i)
+    for i in range(len(csv_data['market'])):
+        top5_coins.append(csv_data['market'])
     #for i in top_5_coin_names:      # 위에꺼랑 합칠수 없나? 될거가튼데
     for i in top5_coins:
         current_price = (pyupbit.get_current_price(i))
