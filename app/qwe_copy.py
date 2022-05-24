@@ -49,6 +49,8 @@ def func_9():
         #coin_id = ''.join(i)
         #coin_id_id = coin_id[4:7]
         past_time2 = 0
+        past_price3 = round(100*(past_price2-past_price1)/past_price1,3)
+        past_price4 = round(100*(current_price-past_price_20)/past_price_20,3)
         for num1 in 12,10,8,6,4,2,0 : #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2
             past_time2 = (datetime.datetime.now()+datetime.timedelta(hours=-num1)).strftime('%Y%m%d%H%M')
@@ -61,8 +63,6 @@ def func_9():
                 time.sleep(0.05)
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
                 time.sleep(0.05)
-                past_price3 = round(100*(past_price2-past_price1)/past_price1,3)
-                past_price4 = round(100*(current_price-past_price_20)/past_price_20,3)
                 if past_price2 >= past_price1:
                         sun = {
                         "version": "2.0",
@@ -70,7 +70,7 @@ def func_9():
                         "outputs": [
                         {
                             "simpleText": {
-                            "text": f"{past_d1}, 일, {past_H1}, 시, {past_price1}, {past_price3}, %, 맑음"
+                            "text": f"{past_d1}일 {past_H1}시 , {past_price1} {past_price3}%, 맑음"
                          }
                     }
                 ]
@@ -86,7 +86,7 @@ def func_9():
                         "outputs": [
                         {
                             "simpleText": {
-                            "text": f"{past_d1}, 일, {past_H1}, 시, {past_price1}, {past_price3}, %, 흐림"
+                            "text": f"{past_d1}일 {past_H1}시 , {past_price1} {past_price3}%, 흐림"
                          }
                     }
                 ]
