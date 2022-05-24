@@ -73,90 +73,79 @@ def func_9():
                     #print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
         
         if current_price >= past_price_20:
-                get = {
-            "version": "2.0",
-            "template": {
-            "outputs": [
-        {
-            "simpleText": {
-                "text": "총 2개의 예약 내역이 있습니다. 취소할 예약을 선택해 주세요."
-            }
-          },
+                qwe = {
+  "version": "2.0",
+  "template": {
+    "outputs": [
       {
         "carousel": {
-          "type": "itemCard",
+          "type": "listCard",
           "items": [
             {
-              "imageTitle": {
-                "title": "예약 완료",
-                "imageUrl" : "https://t1.kakaocdn.net/openbuilder/docs_image/wine.jpg"
+              "header": {
+                "title": "샌드위치"
               },
-              "itemList": [
+              "items": [
                 {
-                  "title": "매장명",
-                  "description": f"{sun}"
+                  "title": "햄치즈",
+                  "description": f"{sun}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
                 },
                 {
-                  "title": "예약 일시",
-                  "description": f"{sun}"
+                  "title": "베이컨 아보카도",
+                  "description": f"{sun}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_02.jpg"
                 },
                 {
-                  "title" : f"{cloud}",
-                  "description" : f"{cloud}"
+                  "title": "에그 포테이토",
+                  "description": f"{cloud}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_03.jpg"
                 },
                 {
-                  "title" : f"{cloud}",
-                  "description" : "40,000원 (결제 완료)"
+                  "title": "갈릭 베이컨 토마토",
+                  "description": f"{cloud}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_04.jpg"
                 }
               ],
-              "itemListAlignment": "left",
               "buttons": [
                 {
-                  "label": "예약 정보",
+                  "label": "더보기",
                   "action": "message",
-                  "messageText" : "예약 정보"
-                },
-                {
-                  "label": "예약 취소",
-                  "action": "message",
-                  "messageText": "예약 취소"
+                  "messageText" : "샌드위치 더보기"
                 }
               ]
             },
             {
-              "imageTitle": {
-                "title": "결제 대기",
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/pizza.jpg"
+              "header": {
+                "title": "커피"
               },
-              "itemList": [
+              "items": [
                 {
-                  "title": "매장명",
-                  "description": "정자역점"
+                  "title": "아메리카노",
+                  "description": "1,800원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_05.jpg"
                 },
                 {
-                  "title": "예약 일시",
-                  "description": "2022.12.25, 19:25"
+                  "title": "카페라떼",
+                  "description": "2,000원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_06.jpg"
                 },
                 {
-                  "title" : "예약 인원",
-                  "description" : "3명"
+                  "title": "카페모카",
+                  "description": "2,500원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_07.jpg"
                 },
                 {
-                  "title" : "예약금",
-                  "description" : "30,000원 (결제 대기)"
+                  "title": "소이라떼",
+                  "description": "2,200원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_08.jpg"
                 }
               ],
-              "itemListAlignment": "left",
               "buttons": [
                 {
-                  "label": "예약 취소",
+                  "label": "더보기",
                   "action": "message",
-                  "messageText" : "예약 취소"
-                },
-                {
-                  "label": "결제",
-                  "action": "message",
-                  "messageText": "결제"
+                  "messageText" : "커피 더보기"
                 }
               ]
             }
@@ -182,93 +171,82 @@ def func_9():
       }
     ]
   }
-}
-                return (get)
+}   
+                return (qwe)
         else:
                 abc = {
   "version": "2.0",
   "template": {
     "outputs": [
-        {
-            "simpleText": {
-                "text": "총 2개의 예약 내역이 있습니다. 취소할 예약을 선택해 주세요."
-            }
-          },
       {
         "carousel": {
-          "type": "itemCard",
+          "type": "listCard",
           "items": [
             {
-              "imageTitle": {
-                "title": "예약 완료",
-                "imageUrl" : "https://t1.kakaocdn.net/openbuilder/docs_image/wine.jpg"
+              "header": {
+                "title": "샌드위치"
               },
-              "itemList": [
+              "items": [
                 {
-                  "title": "매장명",
-                  "description": f"{sun}"
+                  "title": "햄치즈",
+                  "description": f"{sun}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
                 },
                 {
-                  "title": "예약 일시",
-                  "description": f"{sun}"
+                  "title": "베이컨 아보카도",
+                  "description": f"{sun}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_02.jpg"
                 },
                 {
-                  "title" : f"{cloud}",
-                  "description" : f"{cloud}"
+                  "title": "에그 포테이토",
+                  "description": f"{cloud}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_03.jpg"
                 },
                 {
-                  "title" : f"{cloud}",
-                  "description" : "40,000원 (결제 완료)"
+                  "title": "갈릭 베이컨 토마토",
+                  "description": f"{cloud}",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_04.jpg"
                 }
               ],
-              "itemListAlignment": "left",
               "buttons": [
                 {
-                  "label": "예약 정보",
+                  "label": "더보기",
                   "action": "message",
-                  "messageText" : "예약 정보"
-                },
-                {
-                  "label": "예약 취소",
-                  "action": "message",
-                  "messageText": "예약 취소"
+                  "messageText" : "샌드위치 더보기"
                 }
               ]
             },
             {
-              "imageTitle": {
-                "title": "결제 대기",
-                "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/pizza.jpg"
+              "header": {
+                "title": "커피"
               },
-              "itemList": [
+              "items": [
                 {
-                  "title": "매장명",
-                  "description": "정자역점"
+                  "title": "아메리카노",
+                  "description": "1,800원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_05.jpg"
                 },
                 {
-                  "title": "예약 일시",
-                  "description": "2022.12.25, 19:25"
+                  "title": "카페라떼",
+                  "description": "2,000원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_06.jpg"
                 },
                 {
-                  "title" : "예약 인원",
-                  "description" : "3명"
+                  "title": "카페모카",
+                  "description": "2,500원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_07.jpg"
                 },
                 {
-                  "title" : "예약금",
-                  "description" : "30,000원 (결제 대기)"
+                  "title": "소이라떼",
+                  "description": "2,200원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_08.jpg"
                 }
               ],
-              "itemListAlignment": "left",
               "buttons": [
                 {
-                  "label": "예약 취소",
+                  "label": "더보기",
                   "action": "message",
-                  "messageText" : "예약 취소"
-                },
-                {
-                  "label": "결제",
-                  "action": "message",
-                  "messageText": "결제"
+                  "messageText" : "커피 더보기"
                 }
               ]
             }
@@ -295,6 +273,7 @@ def func_9():
     ]
   }
 }
+                
                 return (abc)
 
 #func_9()
