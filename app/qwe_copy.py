@@ -88,7 +88,7 @@ def func_9():
               "items": [
                 {
                   "title": "햄치즈",
-                  "description": f"{sun}",
+                  "description": "베이컨 아보카도",
                   "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
                 },
                 {
