@@ -1,4 +1,4 @@
- from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request
 app = Flask(__name__)
 @app.route('/price', methods=['POST'])
 def func_9():
