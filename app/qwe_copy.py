@@ -85,7 +85,7 @@ def func_9():
         ]
     }
 }
-            return (testa)
+            return jsonify(testa)
         else:
             testb    = {
     "version": "2.0",
@@ -99,7 +99,7 @@ def func_9():
         ]
     }
 }
-        return (testb)
+            return jsonify(testb)
         
                 
 
