@@ -41,7 +41,7 @@ def func_9():
     print(top5_coins)
     #for i in top_5_coin_names:      # 위에꺼랑 합칠수 없나? 될거가튼데
     for i in top5_coins:
-        current_price = (pyupbit.get_current_price(i))
+        current_price =  (pyupbit.get_current_price(i)) #requests.get(f"https://api.upbit.com/v1/ticker?markets={i}")
         time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
@@ -58,9 +58,11 @@ def func_9():
             elif past_time1 != 0:
                 past_d1 = past_time1[6:8]
                 past_H1 = past_time1[8:10]
-                past_price1 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time1}', count=1).open[0])
+                past_price1 = (requests.get(f"https://api.upbit.com/v1/candles/minutes/60?market={i}&to={past_time1}&count=1").open[0])
+                #past_price1 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time1}', count=1).open[0])
                 time.sleep(0.025)
-                past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
+                #past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
+                past_price2 = (requests.get(f"https://api.upbit.com/v1/candles/minutes/60?market={i}&to={past_time2}&count=1").open[0])
                 time.sleep(0.025)
                 if past_price2 >= past_price1:
                     print("testif")

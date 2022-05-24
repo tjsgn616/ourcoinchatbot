@@ -37,6 +37,7 @@ def func_9():
         for num1 in 12,10,8,6,4,2,0 : #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2
             past_time2 = (datetime.datetime.now()+datetime.timedelta(hours=-num1)).strftime('%Y%m%d%H%M')
+            print(past_time2)
             if past_time1 == 0:
                 continue
             elif past_time1 != 0:
