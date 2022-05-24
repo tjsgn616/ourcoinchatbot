@@ -7,7 +7,6 @@ import datetime
 #import schedule
 import time
 from flask import Flask, jsonify, request
-import pandas as pd
 import json
 
 csv_data = pd.read_csv("./app/top5_coin.csv")
@@ -37,14 +36,15 @@ def func_9():
     top5_coins = []
     #for i in csv_data['market']:
     #    top5_coins.append(i)
-    for i in range(5):
-        top5_coins.append(csv_data['market'])
+    for i in csv_data['market']:
+        top5_coins.append(i)
+    print(top5_coins)
     #for i in top_5_coin_names:      # 위에꺼랑 합칠수 없나? 될거가튼데
     for i in top5_coins:
         current_price = (pyupbit.get_current_price(i))
-        time.sleep(0.01)
+        time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
-        time.sleep(0.01)
+        time.sleep(0.05)
         print(i)
         #coin_id = ''.join(i)
         #coin_id_id = coin_id[4:7]
