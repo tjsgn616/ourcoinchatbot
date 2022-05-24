@@ -87,22 +87,22 @@ def func_9():
                                   },
                         "items": [
                     {
-                        "title": "햄치즈",
+                        "title": f"{sun}",
                         "description": "4,500원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
                     },
                     {
-                        "title": "베이컨 아보카도",
+                        "title": f"{sun}",
                         "description": "5,500원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_02.jpg"
                     },
                     {
-                        "title": "에그 포테이토",
+                        "title": f"{cloud}",
                         "description": "5,300원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_03.jpg"
                     },
                     {
-                        "title": "갈릭 베이컨 토마토",
+                        "title": f"{cloud}",
                         "description": "5,800원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_04.jpg"
                     }
@@ -222,22 +222,22 @@ def func_9():
               },
                     "items": [
                     {
-                        "title": "아메리카노",
+                        "title": f"{sun}",
                         "description": "1,800원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_05.jpg"
                     },
                     {
-                        "title": "카페라떼",
+                        "title": f"{sun}",
                         "description": "2,000원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_06.jpg"
                     },
                     {
-                        "title": "카페모카",
+                        "title": f"{cloud}",
                         "description": "2,500원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_07.jpg"
                     },
                     {
-                        "title": "소이라떼",
+                        "title": f"{cloud}",
                         "description": "2,200원",
                         "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_08.jpg"
                     }
