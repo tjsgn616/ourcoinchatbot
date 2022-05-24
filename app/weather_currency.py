@@ -58,6 +58,7 @@ def msg():
     print(full_time_replace)
     print(coin_name)
     print(answer)
+    print(answer[2])
     USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
     USD = USD.json()
     USD = USD[0]['basePrice'] #USDT 가격 조회를 위함.
@@ -67,17 +68,6 @@ def msg():
         if coin_name in name_list[i]:
             coin_now.extend(name_list[i])
     print("---coin_name----",coin_now)
-    j=0
-    for k in name_list:
-        if coin_name in k:
-            coin_id = namedata.iloc[j]['Id']
-            #coin_korea = namedata.iloc[j]['korean_name']
-            break
-        j +=1
-
-
-
-
     #coin_id = ' '.join(coin_now[0])
     #coin_id = ''.join(coin_now[0])
     #print(coin_id)
