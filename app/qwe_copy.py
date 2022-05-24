@@ -64,7 +64,7 @@ def func_9():
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
                 time.sleep(0.05)
                 if past_price2 >= past_price1:
-                    sun = {
+                    {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -76,11 +76,10 @@ def func_9():
                 ]
              }
         }
-                    return (sun)
                     
                     # print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
-                    cloud = {
+                    {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -92,11 +91,10 @@ def func_9():
                 ]
              }
         }
-                    return (cloud)
                     #print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
         
         if current_price >= past_price_20:
-            current = {
+            {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -108,9 +106,8 @@ def func_9():
                 ]
              }
         }
-            return (current)
         else:
-            past = {
+        {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -122,7 +119,7 @@ def func_9():
                 ]
              }
         }
-            return (past)
+
 #func_9()
 #func_14()
 #func_20()
