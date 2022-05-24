@@ -73,7 +73,7 @@ def func_9():
                     print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
         
         if current_price >= past_price_20:
-                qpqwe = {
+            qpqwe = {
   "version": "2.0",
   "template": {
     "outputs": [
