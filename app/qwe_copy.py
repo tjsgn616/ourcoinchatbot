@@ -45,7 +45,6 @@ def func_9():
         time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
-        print(i)
         #coin_id = ''.join(i)
         #coin_id_id = coin_id[4:7]
         past_time2 = 0
@@ -64,40 +63,20 @@ def func_9():
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
                 time.sleep(0.05)
                 if past_price2 >= past_price1:
-                    sun = {
-                        "version": "2.0",
-                        "template": {
-                        "outputs": [
-                        {
-                            "simpleText": {
-                            "text": f"{past_d1}일 {past_H1}시 , {past_price1} {round(100*(past_price2-past_price1)/past_price1,3)}%, 맑음"
-                         }
-                    }
-                ]
-             }
-        }
-                    
+                    sun = round(100*(past_price2-past_price1)/past_price1,3)
+                   
+                    return (sun)
                     # print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
-                    cloud = {
-                        "version": "2.0",
-                        "template": {
-                        "outputs": [
-                        {
-                            "simpleText": {
-                            "text": f"{past_d1}일 {past_H1}시 , {past_price1} {round(100*(past_price2-past_price1)/past_price1,3)}%, 흐림"
-                         }
-                    }
-                ]
-             }
-        }
+                    cloud = round(100*(past_price2-past_price1)/past_price1,3)
+
                     #print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
         
         if current_price >= past_price_20:
                 get = {
-  "version": "2.0",
-  "template": {
-    "outputs": [
+            "version": "2.0",
+            "template": {
+            "outputs": [
         {
             "simpleText": {
                 "text": "총 2개의 예약 내역이 있습니다. 취소할 예약을 선택해 주세요."

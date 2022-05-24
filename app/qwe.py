@@ -36,7 +36,7 @@ def func_9():
         time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
-        print(i)
+        #print(i)
         past_time2 = 0
         for num1 in 12,10,8,6,4,2,0 : #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2 # 1이 과거 값 , 2가 미래 값
@@ -45,13 +45,15 @@ def func_9():
                 continue
             elif past_time1 != 0:
                 past_d1 = past_time1[6:8]
-                print(past_d1)
+                print(i)
+                #print(past_d1)
                 past_H1 = past_time1[8:10]
-                print(past_H1)
-                past_price1 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time1}', count=1).open[0])
+                #print(past_H1)
+                past_price1 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time1}', count=1))
                 time.sleep(0.05)
-                past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
+                past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1))
                 time.sleep(0.05)
+                '''
                 if past_price2 >= past_price1:
                     print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
@@ -60,6 +62,7 @@ def func_9():
             print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[31m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 맑음''\033[0m')
         else:
             print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[34m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 흐림''\033[0m')
+'''
 func_9()
 #func_14()
 #func_20()
