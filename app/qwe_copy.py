@@ -65,7 +65,7 @@ def func_9():
                 if past_price2 >= past_price1:
                     sun = round(100*(past_price2-past_price1)/past_price1,3)
                    
-                    return (sun)
+                    #return (sun)
                     # print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
                     cloud = round(100*(past_price2-past_price1)/past_price1,3)
