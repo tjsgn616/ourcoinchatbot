@@ -37,7 +37,7 @@ def func_9():
     top5_coins = []
     #for i in csv_data['market']:
     #    top5_coins.append(i)
-    for i in range(len(csv_data['market'])):
+    for i in range(5):
         top5_coins.append(csv_data['market'])
     #for i in top_5_coin_names:      # 위에꺼랑 합칠수 없나? 될거가튼데
     for i in top5_coins:
