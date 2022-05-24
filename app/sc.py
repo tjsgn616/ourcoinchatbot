@@ -1,63 +1,105 @@
-responseBody = {"version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                    "carousel": {
-                    "type":"listCard",
-                    "items": [
-                        {
-                        "header": {
-                        "title": "비트코인 뉴스 보러가기"
-                        },
+from flask import Flask, jsonify, request
+app = Flask(__name__)
+@app.route('/price', methods=['POST'])
+def func_9():
+    
+    qpqwe = {
+  "version": "2.0",
+  "template": {
+    "outputs": [
+      {
+        "carousel": {
+          "type": "listCard",
+          "items": [
+            {
+              "header": {
+                "title": "샌드위치"
+              },
               "items": [
                 {
-                "title": f"{title[0]}",
-                "imageUrl": f"{img[0]}",
-                "link": {
-                  "web": f"{url[0]}"
-                        }
+                  "title": "햄치즈",
+                  "description": "4,500원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_01.jpg"
                 },
                 {
-                  "title": f"{title[1]}",
-                  "imageUrl": f"{img[1]}",
-                  "link": {
-                    "web": f"{url[1]}"
-                  }
+                  "title": "베이컨 아보카도",
+                  "description": "5,500원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_02.jpg"
                 },
                 {
-                  "title": f"{title[2]}",
-                 "imageUrl": f"{img[2]}"  ,             
-                  "link": {
-                    "web": f"{url[2]}"
-                  }
+                  "title": "에그 포테이토",
+                  "description": "5,300원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_03.jpg"
                 },
                 {
-                  "title": f"{title[3]}",
-                  "imageUrl": f"{img[3]}",
-                  "link": {
-                    "web": f"{url[3]}"
-                  }
-                },
-                {
-                  "title": f"{title[4]}",
-                  "imageUrl": f"{img[4]}",      
-                  "link": {
-                    "web": f"{url[4]}"
-                  }
-              }
+                  "title": "갈릭 베이컨 토마토",
+                  "description": "5,800원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_04.jpg"
+                }
               ],
-                "buttons": [
-            {
-              "label": "더 보기",
-              "action": "webLink",
-              "webLinkUrl": "https://search.naver.com/search.naver?where=news&sm=tab_jum&query=비트코인"
-            }
-                
+              "buttons": [
+                {
+                  "label": "더보기",
+                  "action": "message",
+                  "messageText" : "샌드위치 더보기"
+                }
               ]
-                  }
-              ]  
-          }
+            },
+            {
+              "header": {
+                "title": "커피"
+              },
+              "items": [
+                {
+                  "title": "아메리카노",
+                  "description": "1,800원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_05.jpg"
+                },
+                {
+                  "title": "카페라떼",
+                  "description": "2,000원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_06.jpg"
+                },
+                {
+                  "title": "카페모카",
+                  "description": "2,500원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_07.jpg"
+                },
+                {
+                  "title": "소이라떼",
+                  "description": "2,200원",
+                  "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/02_img_08.jpg"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "더보기",
+                  "action": "message",
+                  "messageText" : "커피 더보기"
+                }
+              ]
+            }
+          ]
         }
-        ]
-        }
-        }
+      }
+    ],
+    "quickReplies": [
+      {
+        "messageText": "인기 메뉴",
+        "action": "message",
+        "label": "인기 메뉴"
+      },
+      {
+        "messageText": "최근 주문",
+        "action": "message",
+        "label": "최근 주문"
+      },
+      {
+        "messageText": "장바구니",
+        "action": "message",
+        "label": "장바구니"
+      }
+    ]
+  }
+}
+    return (qpqwe)

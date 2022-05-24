@@ -54,7 +54,7 @@ def func_9():
             past_time1 = past_time2
             past_time2 = (datetime.datetime.now()+datetime.timedelta(hours=-num1)).strftime('%Y%m%d%H%M')
             if past_time1 == 0:
-                continue
+                    continue
             elif past_time1 != 0:
                 past_d1 = past_time1[6:8]
                 past_H1 = past_time1[8:10]
@@ -63,45 +63,26 @@ def func_9():
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
                 time.sleep(0.05)
                 if past_price2 >= past_price1:
-                   print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
-                   
-                    #return (sun)
-                    # print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
+                    print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
-                    #cloud = round(100*(past_price2-past_price1)/past_price1,3)
-
                     print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
-        
         if current_price >= past_price_20:
-            testa = {
-    "version": "2.0",
-    "template": {
-        "outputs": [
-            {
-                "simpleText": {
-                    "text": "간단한 텍스트 요소입니if."
-                }
-            }
-        ]
-    }
-}
-            return jsonify(testa)
+            print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[31m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 맑음''\033[0m')
         else:
-            testb = {
+            print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[34m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 흐림''\033[0m')
+    test =  {
     "version": "2.0",
     "template": {
         "outputs": [
             {
                 "simpleText": {
-                    "text": "간단한 텍스트 요소입니else."
+                    "text": "간단한 텍스트 요소입니다."
                 }
             }
         ]
     }
-}
-            return jsonify(testb)
-        
-                
+}   
+    return (test)
 
 #func_9()
 #func_14()
