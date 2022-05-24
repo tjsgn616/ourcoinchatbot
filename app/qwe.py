@@ -45,7 +45,9 @@ def func_9():
                 continue
             elif past_time1 != 0:
                 past_d1 = past_time1[6:8]
+                print(past_d1)
                 past_H1 = past_time1[8:10]
+                print(past_H1)
                 past_price1 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time1}', count=1).open[0])
                 time.sleep(0.05)
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])

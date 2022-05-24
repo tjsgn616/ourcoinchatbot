@@ -64,7 +64,7 @@ def func_9():
                 past_price2 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{past_time2}', count=1).open[0])
                 time.sleep(0.05)
                 if past_price2 >= past_price1:
-                    {
+                    sun = {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -79,7 +79,7 @@ def func_9():
                     
                     # print(past_d1,'일',past_H1,'시: ''\033[31m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 맑음''\033[0m')
                 else:
-                    {
+                    cloud = {
                         "version": "2.0",
                         "template": {
                         "outputs": [
@@ -94,31 +94,229 @@ def func_9():
                     #print(past_d1,'일',past_H1,'시: ''\033[34m',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림''\033[0m')
         
         if current_price >= past_price_20:
-            {
-                        "version": "2.0",
-                        "template": {
-                        "outputs": [
-                        {
-                            "simpleText": {
-                            "text": f"{past_d}, 일, {past_h}, 시 -> {now_d},일 {now_h}시 : {past_price_20} -> {current_price}   {round(100*(current_price-past_price_20)/past_price_20,3)}%, 20~09 날씨 맑음"
-                         }
-                    }
-                ]
-             }
-        }
-        else:
+                get = {
+  "version": "2.0",
+  "template": {
+    "outputs": [
         {
-                        "version": "2.0",
-                        "template": {
-                        "outputs": [
-                        {
-                            "simpleText": {
-                            "text": f"{past_d}, 일, {past_h}, 시 -> {now_d},일 {now_h}시 : {past_price_20} -> {current_price}   {round(100*(current_price-past_price_20)/past_price_20,3)}%, 20~09 날씨 흐림"
-                         }
-                    }
-                ]
-             }
+            "simpleText": {
+                "text": "총 2개의 예약 내역이 있습니다. 취소할 예약을 선택해 주세요."
+            }
+          },
+      {
+        "carousel": {
+          "type": "itemCard",
+          "items": [
+            {
+              "imageTitle": {
+                "title": "예약 완료",
+                "imageUrl" : "https://t1.kakaocdn.net/openbuilder/docs_image/wine.jpg"
+              },
+              "itemList": [
+                {
+                  "title": "매장명",
+                  "description": f"{sun}"
+                },
+                {
+                  "title": "예약 일시",
+                  "description": f"{sun}"
+                },
+                {
+                  "title" : f"{cloud}",
+                  "description" : f"{cloud}"
+                },
+                {
+                  "title" : f"{cloud}",
+                  "description" : "40,000원 (결제 완료)"
+                }
+              ],
+              "itemListAlignment": "left",
+              "buttons": [
+                {
+                  "label": "예약 정보",
+                  "action": "message",
+                  "messageText" : "예약 정보"
+                },
+                {
+                  "label": "예약 취소",
+                  "action": "message",
+                  "messageText": "예약 취소"
+                }
+              ]
+            },
+            {
+              "imageTitle": {
+                "title": "결제 대기",
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/pizza.jpg"
+              },
+              "itemList": [
+                {
+                  "title": "매장명",
+                  "description": "정자역점"
+                },
+                {
+                  "title": "예약 일시",
+                  "description": "2022.12.25, 19:25"
+                },
+                {
+                  "title" : "예약 인원",
+                  "description" : "3명"
+                },
+                {
+                  "title" : "예약금",
+                  "description" : "30,000원 (결제 대기)"
+                }
+              ],
+              "itemListAlignment": "left",
+              "buttons": [
+                {
+                  "label": "예약 취소",
+                  "action": "message",
+                  "messageText" : "예약 취소"
+                },
+                {
+                  "label": "결제",
+                  "action": "message",
+                  "messageText": "결제"
+                }
+              ]
+            }
+          ]
         }
+      }
+    ],
+    "quickReplies": [
+      {
+        "messageText": "인기 메뉴",
+        "action": "message",
+        "label": "인기 메뉴"
+      },
+      {
+        "messageText": "최근 주문",
+        "action": "message",
+        "label": "최근 주문"
+      },
+      {
+        "messageText": "장바구니",
+        "action": "message",
+        "label": "장바구니"
+      }
+    ]
+  }
+}
+                return (get)
+        else:
+    abc = {
+  "version": "2.0",
+  "template": {
+    "outputs": [
+        {
+            "simpleText": {
+                "text": "총 2개의 예약 내역이 있습니다. 취소할 예약을 선택해 주세요."
+            }
+          },
+      {
+        "carousel": {
+          "type": "itemCard",
+          "items": [
+            {
+              "imageTitle": {
+                "title": "예약 완료",
+                "imageUrl" : "https://t1.kakaocdn.net/openbuilder/docs_image/wine.jpg"
+              },
+              "itemList": [
+                {
+                  "title": "매장명",
+                  "description": f"{sun}"
+                },
+                {
+                  "title": "예약 일시",
+                  "description": f"{sun}"
+                },
+                {
+                  "title" : f"{cloud}",
+                  "description" : f"{cloud}"
+                },
+                {
+                  "title" : f"{cloud}",
+                  "description" : "40,000원 (결제 완료)"
+                }
+              ],
+              "itemListAlignment": "left",
+              "buttons": [
+                {
+                  "label": "예약 정보",
+                  "action": "message",
+                  "messageText" : "예약 정보"
+                },
+                {
+                  "label": "예약 취소",
+                  "action": "message",
+                  "messageText": "예약 취소"
+                }
+              ]
+            },
+            {
+              "imageTitle": {
+                "title": "결제 대기",
+                "imageUrl": "https://t1.kakaocdn.net/openbuilder/docs_image/pizza.jpg"
+              },
+              "itemList": [
+                {
+                  "title": "매장명",
+                  "description": "정자역점"
+                },
+                {
+                  "title": "예약 일시",
+                  "description": "2022.12.25, 19:25"
+                },
+                {
+                  "title" : "예약 인원",
+                  "description" : "3명"
+                },
+                {
+                  "title" : "예약금",
+                  "description" : "30,000원 (결제 대기)"
+                }
+              ],
+              "itemListAlignment": "left",
+              "buttons": [
+                {
+                  "label": "예약 취소",
+                  "action": "message",
+                  "messageText" : "예약 취소"
+                },
+                {
+                  "label": "결제",
+                  "action": "message",
+                  "messageText": "결제"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "quickReplies": [
+      {
+        "messageText": "인기 메뉴",
+        "action": "message",
+        "label": "인기 메뉴"
+      },
+      {
+        "messageText": "최근 주문",
+        "action": "message",
+        "label": "최근 주문"
+      },
+      {
+        "messageText": "장바구니",
+        "action": "message",
+        "label": "장바구니"
+      }
+    ]
+  }
+}
+    return (abc)
 
 #func_9()
 #func_14()
