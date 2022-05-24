@@ -206,7 +206,7 @@ def func_9():
 }
                 return (get)
         else:
-    abc = {
+                abc = {
   "version": "2.0",
   "template": {
     "outputs": [
@@ -316,7 +316,7 @@ def func_9():
     ]
   }
 }
-    return (abc)
+                return (abc)
 
 #func_9()
 #func_14()
