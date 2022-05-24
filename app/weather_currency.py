@@ -58,8 +58,10 @@ def msg():
     print(full_time_replace) # 20220520000000
     print(coin_name) # 비트코인
     print(answer) # [['KRW-BTC', 'KRW'], ['USDT-BTC', 'USDT']]
-    print(answer[0][0])
-    print(answer[0])
+    print(answer[0][0]) # KRW-BTC
+    coin_ticker = answer[0][0]
+    coin_id = coin_ticker[4:7] 
+    print(answer[0]) #  ['KRW-BTC', 'KRW']
     USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
     USD = USD.json()
     USD = USD[0]['basePrice'] #USDT 가격 조회를 위함.
