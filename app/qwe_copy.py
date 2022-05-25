@@ -92,9 +92,9 @@ def func_9():
         ]
     }
         }       
-                
+                return (test)
         if current_price >= past_price_20:
-            test =  {
+            tt =  {
                     "version": "2.0",
                     "template": {
                     "outputs": [
@@ -110,7 +110,7 @@ def func_9():
             #print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[31m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 맑음''\033[0m')
         else:
             #print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[34m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 흐림''\033[0m')
-            test = {
+            tt = {
                     "version": "2.0",
                     "template": {
                     "outputs": [
@@ -122,7 +122,7 @@ def func_9():
         ]
     }
         }       
-        return (test)
+        return (tt)
     
 
 #func_9()
