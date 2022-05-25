@@ -61,7 +61,7 @@ def msg():
     print(coin_name) # 비트코인
     print(answer) # [['KRW-BTC', 'KRW'], ['USDT-BTC', 'USDT']]
     print(answer[0][0]) # KRW-BTC
-    print(answer[0][2])
+    print(answer[0][2]) # q
     #print(namedata.korean_name[i])
     coin_ticker = answer[0][0]
     coin_id = coin_ticker[4:7] 
@@ -102,7 +102,7 @@ def msg():
                                 {
                                     "action":"block",
                                     "label":"시점 조회로 돌아가기",
-                                    "blockId": "627a1fd316b99e0c33812774",
+                                    #"blockId": "627a1fd316b99e0c33812774",
                                     "blockId": "6281c5009ac8ed784416bccd",
                                     #"messageText":"짜잔!"
                                 }
@@ -163,7 +163,7 @@ def msg():
                             "title": "가격 상승"
                     },
                     "profile": {
-                        "title": f'{namedata.korean_name[i]}',
+                        "title": f'{answer[0][2]}',
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
@@ -172,7 +172,7 @@ def msg():
                             "description": f'{current_price}'
                         },
                         {
-                            "title": "비교 시간 가격",
+                            "title": "비교 가격",
                             "description": f'{past_price}'
                         },
                         {
@@ -189,7 +189,7 @@ def msg():
                         },
                         {
                             "title": "변동량(%)",
-                            "description": f"{b}"
+                            "description": f"{b}%"
                         }
                     ],
                     "itemListAlignment" : "right",
@@ -219,7 +219,7 @@ def msg():
                             
                     },
                     "profile": {
-                        "title": f'{namedata.korean_name[i]}', 
+                        "title": f'{answer[0][2]}', 
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
@@ -228,7 +228,7 @@ def msg():
                             "description": f'{current_price}'
                         },
                         {
-                            "title": "비교 시간 가격",
+                            "title": "비교 가격",
                             "description": f'{past_price}'
                         },
                         {
@@ -245,7 +245,7 @@ def msg():
                         },
                         {
                             "title": "변동량(%)",
-                            "description": f"{b}"
+                            "description": f"{b}%"
                         }
                     ],
                     "itemListAlignment" : "right",
@@ -277,7 +277,7 @@ def msg():
                            
                     },
                     "profile": {
-                        "title": f'{namedata.korean_name[i]}',
+                        "title": f'{answer[0][2]}',
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
