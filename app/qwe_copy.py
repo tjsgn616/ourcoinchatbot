@@ -19,7 +19,7 @@ csv_data = pd.read_csv("./app/top5_coin.csv")
 app = Flask(__name__) 
 @app.route('/price', methods=['POST'])
 def func_9():
-    print(csv_data)
+    #print(csv_data)
     #dataReceive = request.get_json()
     #full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"]
     #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거
@@ -39,7 +39,7 @@ def func_9():
     #tet = pd.DataFrame(csv_data)
     for i in csv_data['market']:
         top5_coins.append(i)
-    print(top5_coins)
+    #print(top5_coins)
     #for i in top_5_coin_names:      # 위에꺼랑 합칠수 없나? 될거가튼데
     for i in top5_coins:
         current_price =  (pyupbit.get_current_price(i)) #requests.get(f"https://api.upbit.com/v1/ticker?markets={i}")
@@ -84,7 +84,7 @@ def func_9():
                     #print(past_d1,'일',past_H1,'시',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 흐림')
                     cloud5 = (past_d1,'일',past_H1,'시:',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림')
                     sun.append(cloud5)
-
+        print(sun)
         if current_price >= past_price_20:
 
             test =  {
