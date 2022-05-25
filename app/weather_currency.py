@@ -42,7 +42,9 @@ def msg():
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
     coin_n = dataReceive["action"]["params"]["coin"] #.upper.replace(" ","")
-    coin_name = coin_n.upper.replace(" ","")
+    coin_nu = coin_n.upper #.replace(" ","")
+    coin_name = coin_nu.replace(" ","")
+
 
     namedata = marketData() # 에반데
     answer = []
