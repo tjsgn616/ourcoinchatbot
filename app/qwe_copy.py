@@ -84,8 +84,8 @@ def func_9():
                     #print(past_d1,'일',past_H1,'시',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 흐림')
                     cloud5 = (past_d1,'일',past_H1,'시:',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림')
                     sun.append(cloud5)
-        print(sun)
-        sunpd = pd.DataFrame(sun)
+        #print(sun)
+        #sunpd = pd.DataFrame(sun)
         if current_price >= past_price_20:
 
             test =  {
@@ -94,7 +94,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{sunpd}" 
+                    "text": f"{sun}" 
                 }
             }
         ]
@@ -110,7 +110,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{sunpd}"
+                    "text": f"{sun}"
                 }
             }
         ]
