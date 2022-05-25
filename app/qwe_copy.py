@@ -10,13 +10,13 @@ from flask import Flask, jsonify, request
 import json
 
 csv_data = pd.read_csv("./app/top5_coin.csv")
-
+qwe = pd.read_csv(".app/output.csv")
 
 #print(json.dumps(json_data) )
 
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
-app = Flask(__name__)
+app = Flask(__name__) 
 @app.route('/price', methods=['POST'])
 def func_9():
     print(csv_data)
@@ -47,14 +47,6 @@ def func_9():
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
         sun = [] 
-        sun2 = [] 
-        sun3 = [] 
-        sun4 = []
-        cloud = [] 
-        cloud2 = [] 
-        cloud3 = [] 
-        cloud4= []
-        tet = pd.DataFrame({ '날짜':sun, '시간':sun2, '가격':sun3, '퍼센트':sun4})
         #coin_id = ''.join(i)
         #coin_id_id = coin_id[4:7]
         past_time2 = 0
@@ -75,49 +67,33 @@ def func_9():
                 #past_price2 = (requests.get(f"https://api.upbit.com/v1/candles/minutes/60?market={i}&to={past_time2}&count=1").open[0])
                 time.sleep(0.05)
                 if past_price2 >= past_price1:
-                    sun.append(past_d1)
-                    sun2.append(past_H1)
-                    sun3.append(past_price1)
-                    sun4.append(round(100*(past_price2-past_price1)/past_price1,3))
-                    test =  {
-                    "version": "2.0",
-                    "template": {
-                    "outputs": [
-                    {
-                    "simpleText": {
-                    "text": "간단한 텍스트 요소입니다. past_price2 >= past_price1"
-                }
-            }
-        ]
-    }
-        }   
-    
+                    #sun.append(past_d1)
+                    #sun2.append(past_H1)
+                    #sun3.append(past_price1)
+                    #sun4.append(round(100*(past_price2-past_price1)/past_price1,3))
+                    #print(past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 맑음')
+                    sun5 = (past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 맑음')
+                    sun.append(sun5)
+                    
                 else:
-                    cloud.append(past_d1)
-                    cloud2.append(past_H1)
-                    cloud3.append(past_price1)
-                    cloud4.append(round(100*(past_price2-past_price1)/past_price1,3))
-                    test =  {
-                    "version": "2.0",
-                    "template": {
-                    "outputs": [
-                    {
-                    "simpleText": {
-                    "text": f"{tet}"
-                }
-            }
-        ]
-    }
-        }       
-                return (test)
+                    #cloud.append(past_d1)
+                    #cloud2.append(past_H1)
+                    #cloud3.append(past_price1)
+                    #cloud4.append(round(100*(past_price2-past_price1)/past_price1,3))
+
+                    #print(past_d1,'일',past_H1,'시',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 흐림')
+                    cloud5 = (past_d1,'일',past_H1,'시:',past_price1,round(100*(past_price2-past_price1)/past_price1,3),'%, 흐림')
+                    sun.append(cloud5)
+
         if current_price >= past_price_20:
-            tt =  {
+
+            test =  {
                     "version": "2.0",
                     "template": {
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": "간단한 텍스트 요소입니다. current_price >= past_price_20: "
+                    "text": "간단한 텍스트 요소입니다 f{sun} "
                 }
             }
         ]
@@ -127,19 +103,19 @@ def func_9():
             #print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[31m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 맑음''\033[0m')
         else:
             #print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시 :',past_price_20,'->''\033[34m',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'% 20~ 09 날씨는 흐림''\033[0m')
-            tt = {
+            test = {
                     "version": "2.0",
                     "template": {
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": "간단한 텍스트 요소입니다. else2 "
+                    "text": "간단한 텍스트 요소입니다 f{sun}"
                 }
             }
         ]
     }
         }       
-        return (tt)
+        return (test)
     
 
 #func_9()
