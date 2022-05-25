@@ -24,7 +24,7 @@ def func_9():
     past_d = pastDatetime_md[2:4]
     pastDatetime_HM = pastDatetime.split(',')[2]
     past_h = pastDatetime_HM[0:2]
-    
+    sun = []
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
     for i in pd.read_csv('top5_coin.csv')['market']:
@@ -38,7 +38,7 @@ def func_9():
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
         print(i)
-        sun = [] 
+         
         #sun2 = [] 
         #sun3 = [] 
         #sun4 = []
@@ -91,7 +91,7 @@ def func_9():
             
             print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시',past_price_20,'->',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'%,20 ~ 09 날씨는 흐림')
     print("테스트")
-    #print(qwe)
+    print(sun)
 func_9()
 #func_14()
 #func_20()

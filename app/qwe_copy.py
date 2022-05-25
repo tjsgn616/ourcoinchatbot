@@ -34,6 +34,7 @@ def func_9():
     #past_h = pastDatetime_HM[0:2]
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
+    sun = []
     #for i in csv_data['market']:
     #    top5_coins.append(i)
     #tet = pd.DataFrame(csv_data)
@@ -42,17 +43,17 @@ def func_9():
     #print(top5_coins)
     #for i in top_5_coin_names:      # 위에꺼랑 합칠수 없나? 될거가튼데
     for i in top5_coins:
-        current_price =  (pyupbit.get_current_price(i)) #requests.get(f"https://api.upbit.com/v1/ticker?markets={i}")
+        current_price = (pyupbit.get_current_price(i)) #requests.get(f"https://api.upbit.com/v1/ticker?markets={i}")
         time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
-        sun = [] 
+         
         #coin_id = ''.join(i)
         #coin_id_id = coin_id[4:7]
         past_time2 = 0
         #past_price3 = round(100*(past_price2-past_price1)/past_price1,3)
         #past_price4 = round(100*(current_price-past_price_20)/past_price_20,3)
-        for num1 in range(0,26): #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
+        for num1 in 12,10,8,6,4,2,0: #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2
             past_time2 = (datetime.datetime(2022, 5, 25, 8, 00, 00) +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
             if past_time1 == 0:
