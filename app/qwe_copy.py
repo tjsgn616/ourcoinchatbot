@@ -10,7 +10,7 @@ from flask import Flask, jsonify, request
 import json
 
 csv_data = pd.read_csv("./app/top5_coin.csv")
-qwe = pd.read_csv(".app/output.csv")
+#qwe = pd.read_csv(".app/output.csv")
 
 #print(json.dumps(json_data) )
 
@@ -93,7 +93,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": "간단한 텍스트 요소입니다 f{sun} "
+                    "text": "간단한 텍스트 요소입니다 f{sun}"
                 }
             }
         ]
