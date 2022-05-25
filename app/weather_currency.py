@@ -41,7 +41,7 @@ def msg():
     
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
-    coin_name = dataReceive["action"]["params"]["coin"] #.upper.replace(" ","")
+    coin_name = dataReceive["action"]["params"]["coin"].upper.replace(" ","")
 
 
     namedata = marketData() # 에반데
@@ -260,8 +260,8 @@ def msg():
 }
         return  jsonify(price_now)
     else:
-        a = current_price - past_price
-        b = round((current_price-past_price)*100/past_price, 2)
+        a = abs(current_price - past_price)
+        b = abs(round((current_price-past_price)*100/past_price, 2))
         price_down =  {
                     "version": "2.0",
                     "template": {
