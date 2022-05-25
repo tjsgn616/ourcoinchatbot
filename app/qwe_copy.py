@@ -36,7 +36,7 @@ def func_9():
     top5_coins = []
     #for i in csv_data['market']:
     #    top5_coins.append(i)
-    tet = pd.DataFrame(csv_data)
+    #tet = pd.DataFrame(csv_data)
     for i in csv_data['market']:
         top5_coins.append(i)
     print(top5_coins)
@@ -46,6 +46,15 @@ def func_9():
         time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
+        sun = [] 
+        sun2 = [] 
+        sun3 = [] 
+        sun4 = []
+        cloud = [] 
+        cloud2 = [] 
+        cloud3 = [] 
+        cloud4= []
+        tet = pd.DataFrame({ '날짜':sun, '시간':sun2, '가격':sun3, '퍼센트':sun4})
         #coin_id = ''.join(i)
         #coin_id_id = coin_id[4:7]
         past_time2 = 0
@@ -66,6 +75,10 @@ def func_9():
                 #past_price2 = (requests.get(f"https://api.upbit.com/v1/candles/minutes/60?market={i}&to={past_time2}&count=1").open[0])
                 time.sleep(0.05)
                 if past_price2 >= past_price1:
+                    sun.append(past_d1)
+                    sun2.append(past_H1)
+                    sun3.append(past_price1)
+                    sun4.append(round(100*(past_price2-past_price1)/past_price1,3))
                     test =  {
                     "version": "2.0",
                     "template": {
@@ -80,13 +93,17 @@ def func_9():
         }   
     
                 else:
+                    cloud.append(past_d1)
+                    cloud2.append(past_H1)
+                    cloud3.append(past_price1)
+                    cloud4.append(round(100*(past_price2-past_price1)/past_price1,3))
                     test =  {
                     "version": "2.0",
                     "template": {
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{tet}. else 1"
+                    "text": f"{tet}"
                 }
             }
         ]
