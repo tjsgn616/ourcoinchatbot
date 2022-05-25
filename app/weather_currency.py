@@ -50,7 +50,7 @@ def msg():
     answer = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
-            answer.append([namedata.market[i],namedata.currency[i]])
+            answer.append([namedata.market[i],namedata.currency[i],namedata.korean_name[i]])
 
 
 
@@ -61,7 +61,8 @@ def msg():
     print(coin_name) # 비트코인
     print(answer) # [['KRW-BTC', 'KRW'], ['USDT-BTC', 'USDT']]
     print(answer[0][0]) # KRW-BTC
-    print(namedata.korean_name[i])
+    print(answer[0][2])
+    #print(namedata.korean_name[i])
     coin_ticker = answer[0][0]
     coin_id = coin_ticker[4:7] 
     print(answer[0]) #  ['KRW-BTC', 'KRW']
