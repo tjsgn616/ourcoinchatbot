@@ -23,15 +23,15 @@ def func_9():
     #dataReceive = request.get_json()
     #full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"]
     #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거
-    nowDatetime = datetime.datetime.now().strftime('%d,%H')
-    now_d = nowDatetime.split(',')[0]
-    now_h = nowDatetime.split(',')[1]
+    #nowDatetime = datetime.datetime.now().strftime('%d,%H')
+    #now_d = nowDatetime.split(',')[0]
+    #now_h = nowDatetime.split(',')[1]
     pastDatetime = (datetime.datetime.now()+datetime.timedelta(hours=-13)).strftime('%Y,%m%d,%H%M') # -13?
     pastDatetime_YYYY = pastDatetime.split(',')[0]
     pastDatetime_md = pastDatetime.split(',')[1]
-    past_d = pastDatetime_md[2:4]
+    #past_d = pastDatetime_md[2:4]
     pastDatetime_HM = pastDatetime.split(',')[2]
-    past_h = pastDatetime_HM[0:2]
+    #past_h = pastDatetime_HM[0:2]
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
     #for i in csv_data['market']:
@@ -87,14 +87,13 @@ def func_9():
         #print(sun)
         #sunpd = pd.DataFrame(sun)
         if current_price >= past_price_20:
-
             test =  {
                     "version": "2.0",
                     "template": {
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{sun}" 
+                    "text": f"{sun}" "test"
                 }
             }
         ]
@@ -110,7 +109,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{sun}"
+                    "text": f"{sun}" "test"
                 }
             }
         ]

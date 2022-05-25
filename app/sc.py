@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 app = Flask(__name__)
-@app.route('/price', methods=['POST'])
+@app.route('/pric', methods=['POST'])
 def Message():
     content = request.get_json()
     content = content['userRequest']['utterance']
