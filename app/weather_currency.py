@@ -41,8 +41,8 @@ def msg():
     
     #coin_name = dataReceive["action"]["detailParams"]["coi
     #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
-    coin_name = dataReceive["action"]["params"]["coin"].upper.replace(" ","")
-
+    coin_n = dataReceive["action"]["params"]["coin"] #.upper.replace(" ","")
+    coin_name = coin_n.upper.replace(" ","")
 
     namedata = marketData() # 에반데
     answer = []
@@ -160,7 +160,7 @@ def msg():
                             "title": "가격 상승"
                     },
                     "profile": {
-                        "title": f'{ticker}',
+                        "title": f'{namedata.korean_name[i]}',
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
@@ -216,7 +216,7 @@ def msg():
                             
                     },
                     "profile": {
-                        "title": f'{ticker}',
+                        "title": f'{namedata.korean_name[i]}', 
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
@@ -274,7 +274,7 @@ def msg():
                            
                     },
                     "profile": {
-                        "title": f'{ticker}',
+                        "title": f'{namedata.korean_name[i]}',
                         "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                     },
                     "itemList": [
