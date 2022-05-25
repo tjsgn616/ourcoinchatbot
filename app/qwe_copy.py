@@ -93,7 +93,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{sun}" "test"
+                    "text": "test"
                 }
             }
         ]
@@ -109,7 +109,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": f"{sun}" "test"
+                    "text":  "test ese"
                 }
             }
         ]
