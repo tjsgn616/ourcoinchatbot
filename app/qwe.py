@@ -37,12 +37,13 @@ def func_9():
         time.sleep(0.05)
         past_price_20 = (pyupbit.get_ohlcv(f'{i}', interval="minute60", to=f'{pastDatetime_YYYY}{pastDatetime_md}{pastDatetime_HM}', count=1).open[0])
         time.sleep(0.05)
-        print(i)
-         
-        #sun2 = [] 
-        #sun3 = [] 
-        #sun4 = []
-        #cloud = [] 
+        #print(i)
+        sun.append(i)
+        sun2 = [] 
+        sun3 = [] 
+        sun4 = []
+        sun5 = [] 
+        sun6 = []
         #cloud2 = [] 
         #cloud3 = [] 
         #cloud4= []
@@ -64,34 +65,46 @@ def func_9():
                 time.sleep(0.05)
                 
                 if past_price2 >= past_price1:
-                    #sun.append(past_d1)
-                    #sun2.append(past_H1)
-                    #sun3.append(past_price1)
-                    #sun4.append(round(100*(past_price2-past_price1)/past_price1,3))
+                    sun2.append(past_d1)
+                    sun3.append(past_H1)
+                    sun4.append(past_price1)
+                    sun5.append(round(100*(past_price2-past_price1)/past_price1,3))
+                    sun6.append('맑음')
+                    
                     #print(past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 맑음')
-                    sun5 = (past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 맑음')
-                    sun.append(sun5)
+                    sun10 = i,past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 맑음'
+                    sun.append(sun10)
                     
                 else:
-                    #cloud.append(past_d1)
-                    #cloud2.append(past_H1)
-                    #cloud3.append(past_price1)
-                    #cloud4.append(round(100*(past_price2-past_price1)/past_price1,3))
+                    sun2.append(past_d1)
+                    sun3.append(past_H1)
+                    sun4.append(past_price1)
+                    sun5.append(round(100*(past_price2-past_price1)/past_price1,3))
+                    sun6.append('흐림')
 
                     #print(past_d1,'일',past_H1,'시',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 흐림')
-                    cloud5 = (past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 흐림')
+                    cloud5 = i,past_d1,'일',past_H1,'시: ',past_price1,round(100*(past_price2-past_price1)/past_price1,3), '%, 흐림'
                     sun.append(cloud5)
                     
             #print(sun2)
             #print(cloud2)
         if current_price >= past_price_20:
             
-            print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시',past_price_20,'->',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'%, 20 ~ 09 날씨는 맑음')
+            sun7 = past_d,'일',past_h,'시', '->',now_d,'일',now_h,'시',past_price_20,'->',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'%, 20 ~ 09 날씨는 맑음'
+            sun.append(sun7)
         else:
             
-            print(past_d,'일',past_h,'시 ->',now_d,'일',now_h,'시',past_price_20,'->',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'%,20 ~ 09 날씨는 흐림')
-    print("테스트")
-    print(sun)
+            sun8 = past_d,'일',past_h,'시','->',now_d,'일',now_h,'시',past_price_20,'->',current_price, round(100*(current_price-past_price_20)/past_price_20,3),'%,20 ~ 09 날씨는 흐림'
+            sun.append(sun8)
+    #print("테스트")
+    #print(sun[1][0])
+    #print(sun[1][1])
+    #print(sun[1][2])
+    #print(sun[1][9])
+    #
+    print(sun[133][3]) # 데이터를 가져오는데 시간이 오래걸림.. 리스트 셀렉션 + 터플 셀렉션 조합 + 파이썬 파일 불러오기 조합으로 가면 되지 않을까
+    # 생각함  # 데이터 파일을 주기적으로 만드는 것은 heroku 서버의 스케줄러를 이용하면 가능할 것으로 보임
+    # 어떻게 JSON 형태를 스케줄러로 출력하는거지? 그것만 따로 다른 언어로 만들어야 하나 고민됨
 func_9()
 #func_14()
 #func_20()
