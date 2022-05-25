@@ -59,6 +59,7 @@ def msg():
     print(coin_name) # 비트코인
     print(answer) # [['KRW-BTC', 'KRW'], ['USDT-BTC', 'USDT']]
     print(answer[0][0]) # KRW-BTC
+    print(namedata.korean_name[i])
     coin_ticker = answer[0][0]
     coin_id = coin_ticker[4:7] 
     print(answer[0]) #  ['KRW-BTC', 'KRW']
