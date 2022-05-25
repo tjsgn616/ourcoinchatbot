@@ -36,6 +36,7 @@ def func_9():
     top5_coins = []
     #for i in csv_data['market']:
     #    top5_coins.append(i)
+    tet = pd.DataFrame(csv_data)
     for i in csv_data['market']:
         top5_coins.append(i)
     print(top5_coins)
@@ -85,7 +86,7 @@ def func_9():
                     "outputs": [
                     {
                     "simpleText": {
-                    "text": "간단한 텍스트 요소입니다. else 1"
+                    "text": f"{tet}. else 1"
                 }
             }
         ]

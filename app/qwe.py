@@ -20,6 +20,7 @@ def func_9():
     past_d = pastDatetime_md[2:4]
     pastDatetime_HM = pastDatetime.split(',')[2]
     past_h = pastDatetime_HM[0:2]
+    test = pd.DataFrame(csv_data)
     # timedelta =() 만큼 이전의 시간 출력
     top5_coins = []
     for i in pd.read_csv('top5_coin.csv')['market']:
