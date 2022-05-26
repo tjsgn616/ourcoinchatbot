@@ -151,7 +151,7 @@ def msg():
     
     #nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     tz= pytz.timezone('Asia/Seoul')
-    time_now = datetime.now(tz)
+    time_now = datetime.datetime.now(tz)
     nowDatetime = time_now.strftime('%Y-%m-%d %H:%M:%S')
     #print(time_now)
     
