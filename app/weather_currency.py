@@ -3,6 +3,7 @@ import pandas as pd
 import pyupbit
 import requests
 import datetime
+import pytz
 def marketData():
      # 사용자가 입력한 데이터
     #print(dataReceive)
@@ -148,7 +149,11 @@ def msg():
          #   print("해당 시점에 해당 코인이 존재하지 않았거나 기록이 없습니다.")
     
     
-    nowDatetime = datetime.datetime.now()+ datetime.timedelta(hours = 9).strftime('%Y-%m-%d %H:%M:%S') 
+    #nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    nowDatetime= pytz.timezone('Asia/Seoul')
+    time_now = datetime.now(nowDatetime)
+    time_now = time_now.strftime('%Y-%m-%d %H:%M:%S')
+    print(time_now)
     
     if current_price > past_price:
         a = abs(current_price - past_price)
