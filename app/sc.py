@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 app = Flask(__name__)
-@app.route('/pric', methods=['POST'])
+@app.route('/price', methods=['POST'])
 def Message():
     content = request.get_json()
     content = content['userRequest']['utterance']
@@ -33,3 +33,5 @@ def Message():
             }
         }
     return jsonify(dataSend)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, threaded=True)
