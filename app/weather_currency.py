@@ -152,7 +152,7 @@ def msg():
     
     if current_price > past_price:
         a = abs(current_price - past_price)
-        b = abs(round((current_price-past_price)*100/past_price, 2))
+        b = (round((current_price-past_price)*100/past_price, 2))
         price_up =  {
                     "version": "2.0",
                     "template": {
@@ -266,7 +266,7 @@ def msg():
         return  jsonify(price_now)
     else:
         a = abs(current_price - past_price)
-        b = abs(round((current_price-past_price)*100/past_price, 2))
+        b = (round((current_price-past_price)*100/past_price, 2))
         price_down =  {
                     "version": "2.0",
                     "template": {

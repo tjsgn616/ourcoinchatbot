@@ -51,7 +51,8 @@ def func_9():
         for num1 in range(0,26): #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2
             #test = datetime(2022, 5, 25, 9, 00, 00)
-            past_time2 = (datetime.datetime(2022, 5, 25, 8, 00, 00) +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
+            past_time2 = datetime.datetime.now() +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
+            #past_time2 = (datetime.datetime(2022, 5, 25, 8, 00, 00) +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
             #print(past_time2)
             
             if past_time1 == 0:
