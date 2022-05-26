@@ -139,8 +139,9 @@ test =[
 
 ]
 
-
-print(test[133][3]) # 마지막이 134
+for i in range(1,26) :
+    print(test[i][3])
+#print(test[133][3]) # 마지막이 134
 
 #https://prettydiff.com/?m=beautify
 

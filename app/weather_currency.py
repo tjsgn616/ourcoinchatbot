@@ -161,6 +161,7 @@ def msg():
                         "itemCard": {
                             "imageTitle": {
                             "title": "가격 상승"
+                            
                     },
                     "profile": {
                         "title": f'{answer[0][2]}',
@@ -321,5 +322,3 @@ def msg():
     }
 }
         return  jsonify(price_down)
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, threaded=True)
