@@ -148,7 +148,7 @@ def msg():
          #   print("해당 시점에 해당 코인이 존재하지 않았거나 기록이 없습니다.")
     
     
-    nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    nowDatetime = datetime.datetime.now()+ datetime.timedelta(hours = 9).strftime('%Y-%m-%d %H:%M:%S') 
     
     if current_price > past_price:
         a = abs(current_price - past_price)

@@ -1,21 +1,20 @@
 import pyupbit
-import requests
+#import requests
 import pandas as pd
-import json
+#import json
 import datetime 
-import project_def as pr_d
+#import project_def as pr_d
 import time
-import test as ts
-import csv
-import sys
+#import test as ts
+#import csv
+#import sys
 ## 9시 , 2시 , 8시
 # https://ddolcat.tistory.com/660
 #sys.stdout = open('output.csv','w')
 #qwe = pd.read_csv('output.csv')
 def func_9():
-    
-    #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거
     nowDatetime = datetime.datetime.now().strftime('%d,%H')
+    #top5_coin = 가영이가 만든 젤 많이 거래된 코인 5개 종류 불러오는거  nowDatetime = datetime.datetime.now()
     now_d = nowDatetime.split(',')[0]
     now_h = nowDatetime.split(',')[1]
     pastDatetime = (datetime.datetime.now()+datetime.timedelta(hours=-13)).strftime('%Y,%m%d,%H%M')
@@ -51,8 +50,8 @@ def func_9():
         for num1 in range(0,26): #[(12,10),(10,8),(8,6),(6,4),(4,2),(2,0)]:#([2,4,6,8,10,12], [0,2,4,6,8,10]:)]
             past_time1 = past_time2
             #test = datetime(2022, 5, 25, 9, 00, 00)
-            past_time2 = datetime.datetime.now() +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
-            #past_time2 = (datetime.datetime(2022, 5, 25, 8, 00, 00) +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
+            #past_time2 = dat +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
+            past_time2 = (datetime.datetime(2022, 5, 25, 8, 00, 00) +datetime.timedelta(hours=+num1) - datetime.timedelta(days = 1)).strftime('%Y%m%d%H%M')
             #print(past_time2)
             
             if past_time1 == 0:
