@@ -150,10 +150,10 @@ def msg():
     
     
     #nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    nowDatetime= pytz.timezone('Asia/Seoul')
-    time_now = datetime.now(nowDatetime)
-    time_now = time_now.strftime('%Y-%m-%d %H:%M:%S')
-    print(time_now)
+    tz= pytz.timezone('Asia/Seoul')
+    time_now = datetime.now(tz)
+    nowDatetime = time_now.strftime('%Y-%m-%d %H:%M:%S')
+    #print(time_now)
     
     if current_price > past_price:
         a = abs(current_price - past_price)
