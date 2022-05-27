@@ -33,6 +33,7 @@ def marketData():
             currency.append("USDT")
     namedata['currency'] = currency
     return namedata
+
 app = Flask(__name__) 
 @app.route('/msg5', methods=['POST'])
 def msg():
@@ -79,7 +80,7 @@ def msg():
                 ]
             }
         }
-            return coin_error
+        return coin_error
 
 
 
