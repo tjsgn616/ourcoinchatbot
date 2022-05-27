@@ -26,6 +26,6 @@ def si():
     time.sleep(0.1)
     top_acc_val = pd.DataFrame(all_response)
     #top_acc_val.columns=['market','acc_trade_volume','change_rate']
-    top_acc_val.to_csv("./app/data/top_acc.csv",index=True, header = True)
+    top_acc_val.to_csv("./app/top_acc.csv",index=True, header = True)
     # 전체 코인의 현재 시세 변동률 (현재 조회)
 si()
