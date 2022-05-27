@@ -52,7 +52,8 @@ def msg():
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
             answer.append([namedata.market[i],namedata.currency[i],namedata.korean_name[i]])
-        else :
+        
+        else :    
             coin_error = {
             "version":"2.0",
             "template":{
@@ -79,7 +80,6 @@ def msg():
             }
         }
             return coin_error
-
 
 
 
@@ -114,7 +114,7 @@ def msg():
     selection = []
     for i in range(len(answer)):
         selection.append(answer[i][1])
-    '''
+
     if coin_name not in coin_now:
         coin_error = {
             "version":"2.0",
@@ -142,11 +142,11 @@ def msg():
             }
         }
         return coin_error
-        '''
-    #else:
+
+    else:
         #KRW가 없을 때
-    if "KRW" not in selection :
-        if "BTC" in selection :
+        if "KRW" not in selection :
+            if "BTC" in selection :
                 #BITCOIN = pyupbit.get_current_price("KRW-BTC")
                 BTC = selection.index("BTC")
                 ticker = answer[BTC][0]
@@ -155,14 +155,14 @@ def msg():
                 past_price = pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
                 #coin_money = pyupbit.get_current_price(ticker)
                 #coin_price = (BITCOIN * coin_money)
-        else:
+            else:
                 ticker = answer[0][0]
                 current_price = pyupbit.get_current_price(ticker)
                 past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
                 #coin_money = pyupbit.get_current_price(ticker)
                 #coin_price = (USD * coin_money)
                 #print("한국 돈 변환 값 USDT : ",coin_price)
-    else:
+        else:
             print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
             KRW = selection.index("KRW")
             ticker = answer[KRW][0]
