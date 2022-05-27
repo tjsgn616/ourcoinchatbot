@@ -99,4 +99,4 @@ def si():
     top_change_val = pd.DataFrame(top_change_val)
     top_change_val.columns=['market','change','change_str']
     top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
-#si()
+si()
