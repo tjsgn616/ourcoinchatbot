@@ -6,7 +6,9 @@ import time
 #import schedule
 def si():
     # 누적 거래량 탑 5 구하기 위해 market id 불러오기
-    market_list = pd.read_csv("./app/market_list.csv")
+    market_list = pd.read_csv("market_list.csv")
+
+    #market_list = pd.read_csv("./app/market_list.csv")
     market_list = market_list['market']
     market_list = market_list.values.tolist()
     c = len(market_list)
@@ -26,6 +28,7 @@ def si():
     time.sleep(0.1)
     top_acc_val = pd.DataFrame(all_response)
     #top_acc_val.columns=['market','acc_trade_volume','change_rate']
-    top_acc_val.to_csv("./app/top_acc.csv",index=True, header = True)
+    top_acc_val.to_csv("top_acc.csv",index=True, header = True)
+    print(time.strftime("%H:%M:%S"))
     # 전체 코인의 현재 시세 변동률 (현재 조회)
 si()
