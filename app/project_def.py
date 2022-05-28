@@ -12,7 +12,7 @@ def job1():
 
 
 # 매일 12시 30분에 실행
-@sched.scheduled_job('interval', minutes=1, id='test_2')
+@sched.scheduled_job('interval', seconds=10, id='test_2')
 def job2():
     jobs.func_11()
     #print(f'job2 : {time.strftime("%H:%M:%S")}')
