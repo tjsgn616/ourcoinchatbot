@@ -1,6 +1,7 @@
 import time
 from apscheduler.schedulers.blocking import BlockingScheduler
 import KRW
+import jobs
 sched = BlockingScheduler()
 
 # 매일 12시 30분에 실행
@@ -11,13 +12,14 @@ def job1():
 
 
 # 매일 12시 30분에 실행
-@sched.scheduled_job('cron', hour='12', minute='30', id='test_2')
+@sched.scheduled_job('interval', minutes=1, id='test_2')
 def job2():
-    print(f'job2 : {time.strftime("%H:%M:%S")}')
+    jobs.func_11()
+    #print(f'job2 : {time.strftime("%H:%M:%S")}')
 
 # 이런식으로 추가도 가능. 매분에 실행
 
-sched.add_job(job2, 'cron', second='0', id="test_3")
+#sched.add_job(job2, 'cron', second='0', id="test_3")
 
 
 print('sched before~')
