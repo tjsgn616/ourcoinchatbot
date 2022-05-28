@@ -7,6 +7,7 @@ app = Flask(__name__)
 '''
 import requests
 import csv
+import jobs
 def func_9():
     
 
@@ -20,5 +21,6 @@ def func_9():
     with open("filename.csv", 'w') as file:
         writer = csv.writer(file)
         writer.writerow(response)
-    print("ㅅㄷㄴㅅ ㅁㄴㅇ")      
+    print("ㅅㄷㄴㅅ ㅁㄴㅇ")     
+    print(jobs.func_11) 
 func_9()
