@@ -1,13 +1,13 @@
 import time
 from apscheduler.schedulers.blocking import BlockingScheduler
-#import KRW
+from . import KRW
 from . import jobs 
 sched = BlockingScheduler(timezone='Asia/Seoul')
 
 # 매일 12시 30분에 실행
-#@sched.scheduled_job('interval', seconds=5, id='test_1')
-#def job1():
-    #KRW.func_9()
+@sched.scheduled_job('interval', seconds=10, id='test_1')
+def job1():
+    KRW.func_9()
     #print(f'job1 : {time.strftime("%H:%M:%S")}')
 
 
