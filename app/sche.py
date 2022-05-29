@@ -1,7 +1,7 @@
 import time
 from apscheduler.schedulers.blocking import BlockingScheduler
 #import KRW
-import jobs
+from . import jobs 
 sched = BlockingScheduler(timezone='Asia/Seoul')
 
 # 매일 12시 30분에 실행
