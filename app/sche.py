@@ -17,9 +17,7 @@ def job1():
 def job2():
     jobs.func_11()
     #print(f'job2 : {time.strftime("%H:%M:%S")}')
-@sched.scheduled_job('cron', second='10', id='test_3')
-def job3():
-    print(time.strftime("%H:%M:%S"))
+
 # 이런식으로 추가도 가능. 매분에 실행
 
 #sched.add_job(job2, 'cron', second='0', id="test_3")

@@ -5,9 +5,11 @@ weather_currency.marketData
 app = Flask(__name__)
 @app.route('/price', methods=['POST'])
 '''
+from cgi import test
 import requests
 import csv
-import time 
+#import time 
+import pandas as pd
 #import jobs
 def func_9():
     
@@ -22,6 +24,7 @@ def func_9():
     with open("filename.csv", 'w') as file:
         writer = csv.writer(file)
         writer.writerow(response)
-    print(time.strftime("%H:%M:%S"))     
+    test = pd.read_csv("./app/filename.csv")  
+    print(test)
     #print(jobs.func_11) 
 func_9()
