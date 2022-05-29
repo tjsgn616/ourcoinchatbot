@@ -28,5 +28,3 @@ beautifulsoup4==4.11.1
 soupsieve==2.3.2
 APScheduler==3.9.1
 helper==2.5.0
-csv
-time
