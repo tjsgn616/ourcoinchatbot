@@ -63,7 +63,7 @@ def marketData():
 
 
 
-## 시세 조회1
+## 대표 코인 시세 조회
 @app.route('/now', methods=['POST'])
 def now():
     best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
@@ -110,7 +110,7 @@ def now():
                         }
                     }
     return current_price
-## 시세 조회2
+## 그 외 코인 시세 조회
 @app.route('/more',methods=['POST'])
 def test():
     # 마켓 이름 데이터, 환율값, 발화 값 가져오기
@@ -297,7 +297,7 @@ def test():
 
 #####
 
-## 시세 상세 조회
+## 실시간 상세 조회
 @app.route("/sang",methods=['POST'])
 def sang():
     
@@ -607,7 +607,7 @@ def hope_pirce():
 
 
 ## 원하는 시점의 코인 가격 비교
-@app.route('/msg5', methods=['POST'])
+@app.route('/seejum', methods=['POST'])
 def msg():
     dataReceive = request.get_json()
     
@@ -928,6 +928,8 @@ def msg():
 }
         return  jsonify(price_down)
 
+
+## sunhoo_news
 @app.route('/searchnews',methods=['POST'])
 def searchnews():
     
@@ -1072,7 +1074,7 @@ def searchnews():
 
 
 
-
+## sunhoo_news_all
 @app.route('/basic',methods=['POST'])
 def sayHello():
     #body = request.get_json()
@@ -1209,7 +1211,7 @@ def sayHello():
 
 
 
-
+## sunhoo_youtube
 @app.route('/youtube',methods=['POST'])
 # 모듈 설치
 #pip install --upgrade google_api_python_client
