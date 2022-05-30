@@ -1,119 +1,3 @@
-from re import template
-from flask import Flask, make_response, jsonify, request, g
-import pandas as pd
-import pyupbit
-import requests
-from datetime import datetime
-import pytz
-from bs4 import BeautifulSoup
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from oauth2client.tools import argparser
-from bs4 import BeautifulSoup
-from pandas import DataFrame
-import re
-import urllib.request
-from urllib.parse import quote
-
-
-app = Flask(__name__)
-
-
-tz = pytz.timezone('Asia/Seoul')
-time_now = datetime.now(tz)
-time_now = time_now.strftime('%Y-%m-%d %H:%M')
-print(time_now)
-
-def marketData():
-    # 마켓 데이터 불러오기
-    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-
-    if marketData.status_code == 200 :
-        marketData = marketData.json()
-
-    # 마켓 코드, 한글, 영어 df로 정리
-    market = []
-    korean_name = []
-    english_name = []
-    for i in range(len(marketData)) :
-        namedata = marketData[i]
-        market.append(namedata['market'])
-        korean_name.append(namedata['korean_name'])
-        english_name.append(namedata['english_name'].upper().replace(" ",""))
-
-    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
-    
-    # 코인 종류 분할
-    currency = []
-    for i in namedata.loc[:,'market']:
-        if i.split('-')[0] == "KRW":
-            currency.append("KRW")
-        elif i.split('-')[0] == "BTC":
-            currency.append("BTC")
-        else:
-            currency.append("USDT")
-    namedata['currency'] = currency
-    coinId = []
-    for i in namedata.loc[:,"market"]:
-        coinId.append(i.split('-')[1])
-    namedata['Id'] = coinId
-    return namedata
-
-
-
-
-
-@app.route('/now', methods=['POST'])
-def now():
-    best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
-    current_price =  {  "version": "2.0",
-                        "template": {
-                            "outputs": [
-                            {
-                                "carousel": {
-                                "type": "listCard",
-                                "items": [
-                                    {
-                                    "header": {
-                                        "title": "현재 시세 조회"
-                                    },
-                                    "items": [
-                                        {
-                                        "title": "비트코인",
-                                        "description" : f"{pyupbit.get_current_price(best_Id[0]):.2f}원",
-                                        "imageUrl": "https://static.upbit.com/logos/BTC.png"
-                                        },
-                                        {
-                                        "title": "이더리움",
-                                        "description": f"{pyupbit.get_current_price(best_Id[1]):.2f}원",
-                                        "imageUrl": "https://static.upbit.com/logos/ETH.png"
-                                        },
-                                        {
-                                        "title": "도지코인",
-                                        "description": f"{pyupbit.get_current_price(best_Id[2]):.2f}원",
-                                        "imageUrl": "https://static.upbit.com/logos/DOGE.png"
-                                        }],
-                                    "buttons": [
-                                        {
-                                        "label": "더 많은 코인 보러가기",
-                                        "action": "block",
-                                        "blockId": "628d8ff47bd2fd433357e2ee"
-                                        }
-                                    ]
-                                    }
-                                ]
-                                }
-                            }
-                        
-                            ]
-                        }
-                    }
-    return current_price
-
-
-
-
-
 @app.route('/more',methods=['POST'])
 def test():
     # 마켓 이름 데이터, 환율값, 발화 값 가져오기
@@ -123,8 +7,9 @@ def test():
     USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
     USD = USD.json()
     USD = USD[0]['basePrice']
+    print(coin)
 
-    # 
+    
     answer = []
     for i in nameData.index:
         if coin == nameData.korean_name[i] or coin == nameData.english_name[i] or coin == nameData.market[i]:
@@ -186,39 +71,67 @@ def test():
                 break
             j +=1
         
-        # print("aaaaaaaaaaaaaaaaaaa",coin_korea)
 
         # 첫 배포 -> KRW 기준의 시세조회
         # KRW 시장이 없는 코인의 경우 -> 해당 시장 값 * btc로 원화 값 반환
         # KRW 시장이 있는 경우 그대로 현재 시세 조회
-        if "KRW" not in selection:
-            # print("KRW 없음")
-            if "BTC" in selection:
+        market_or_name =[]
+        for i in range (len(name_list)):
+            market_or_name.append(nameData.market[i])
+        # print(market_or_name)
+
+        # market code로 입력할 경우 그대로 코인 값 출력
+        # 한글 또는 영어 이름 입력할 경우 -> KRW,BTC,USDT순으로 첫번째로 존재하는 값 출력
+        if coin in market_or_name:
+            print("market 인지")
+            print(coin)
+            ticker = coin
+            # coin_price = pyupbit.get_current_price(coin)
+            coin_code = coin.split('-')[0]
+            if coin_code == "KRW":
+                coin_price = pyupbit.get_current_price(coin)
+            elif coin_code == "BTC":
                 BITCOIN = pyupbit.get_current_price("KRW-BTC")
-                BTC = selection.index("BTC")
-                ticker = answer[BTC][0]
-                coin_money = pyupbit.get_current_price(ticker)
-                coin_price = (BITCOIN * coin_money)
-                # print("한국 돈 변환 값 BTC : ",coin_price)
-            else : 
-                ticker = answer[0][0]
-                coin_money = pyupbit.get_current_price(ticker)
-                coin_price = (USD * coin_money)
-                # print("한국 돈 변환 값 USDT : ",coin_price)
-        else:
-            # print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
-            KRW = selection.index("KRW")
-            ticker = answer[KRW][0]
-            coin_price = pyupbit.get_current_price(ticker)
+                coin_price = pyupbit.get_current_price(coin) * BITCOIN
+            else:
+                coin_price = pyupbit.get_current_price(coin) * USD
+        else : 
+            print("한글 또는 영어입니다.")
+            print(coin)
+            if "KRW" not in selection:
+                # print("KRW 없음")
+                if "BTC" in selection:
+                    BITCOIN = pyupbit.get_current_price("KRW-BTC")
+                    BTC = selection.index("BTC")
+                    ticker = answer[BTC][0]
+                    coin_money = pyupbit.get_current_price(ticker)
+                    coin_price = (BITCOIN * coin_money)
+                    # print("한국 돈 변환 값 BTC : ",coin_price)
+                else : 
+                    ticker = answer[0][0]
+                    coin_money = pyupbit.get_current_price(ticker)
+                    coin_price = (USD * coin_money)
+                    # print("한국 돈 변환 값 USDT : ",coin_price)
+            else:
+                # print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
+                KRW = selection.index("KRW")
+                ticker = answer[KRW][0]
+                coin_price = pyupbit.get_current_price(ticker)
+
+        tz = pytz.timezone('Asia/Seoul')
+        time_now = datetime.datetime.now(tz)
+        time_now = time_now.strftime('%Y-%m-%d %H:%M')
+        print(time_now)
 
         coin_price_now = {
                     "version": "2.0",
                     "template": {
                         "outputs": [
                             {
-                            "itemCard": {
-                            
-                            
+                            "carousel": {
+                            "type": "itemCard",
+                            "items": [
+                                {
                                 "imageTitle": {
                                     "title": "현재 시세 조회",
                                     "imageUrl" : f"https://static.upbit.com/logos/{coin_id}.png"
@@ -238,7 +151,7 @@ def test():
                                     },
                                     {
                                     "title" : "현재 시세",
-                                    "description" : f"{coin_price:.2f}원"
+                                    "description" : f"{coin_price:,}원"
                                     }
                                 ],
                                 "itemListAlignment": "left",
@@ -254,19 +167,406 @@ def test():
                                     "action": "webLink",
                                     "messageText": "업비트 보러가기",
                                     "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
-                                    },
-                                    
-                                ],
-                                
-                            }
+                                    }
+                                ]
                             }
                         ]
                     }
                 }
-            
-        
-        
+            ]
+        }
+        }
         return coin_price_now
+
+@app.route('/acc',methods=['POST'])
+def acc():
+    # market 한국 이름 뽑아내기
+    nameData = marketData()
+    # -------------------------------------------------if문 top_market_list nameData로 바꾸기
+    top_acc_kor = []
+    top_change_kor = []
+    top_live_kor = []
+    top_acc_id = []
+    top_change_id = []
+    top_live_id = []
+    for i in range(5):
+        for j in range(len(top_market_list)):
+            if top_market_list.iloc[j]['market'] == top_acc.iloc[i]['market']:
+                # top_acc_kor.append(top_market_list.iloc[j]['korean_name'])
+                top_acc_kor.append(nameData.iloc[j]['korean_name'])
+                top_acc_id.append(nameData.iloc[j]['Id'])
+            if top_change.iloc[i]['market'] == top_market_list.iloc[j]['market']:
+                top_change_kor.append(nameData.iloc[j]['korean_name'])
+                top_change_id.append(nameData.iloc[j]['Id'])
+            if top_live.iloc[i]['market'] == top_market_list.iloc[j]['market']:
+                top_live_kor.append(nameData.iloc[j]['korean_name'])
+                top_live_id.append(nameData.iloc[j]['Id'])
+
+
+
+    live_coin = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText" : {
+                            "text":"'실시간 TOP5 코인'에서는 1시간 기준 실시간 거래량과 변동량을 확인 할 수 있는 곳입니다."
+                        }
+                    },
+                {
+                    "carousel": {
+                    "type": "listCard",
+                    "items": [
+                        {
+                        "header": {
+                            "title": "실시간 누적 거래량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_acc_kor[0]} ({top_acc.iloc[0]['market']})",
+                            "description": f"{top_acc.iloc[0]['change_rate']:,}-{top_acc.iloc[0]['change_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_acc_kor[0]}",
+                                "key2": f"{top_acc.iloc[0]['market']}",
+                                "key3": f"{top_acc_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_acc_kor[1]} ({top_acc.iloc[1]['market']})",
+                            "description": f"{top_acc.iloc[1]['change_rate']:,}-{top_acc.iloc[1]['change_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_acc_kor[1]}",
+                                "key2": f"{top_acc.iloc[1]['market']}",
+                                "key3": f"{top_acc_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_acc_kor[2]} ({top_acc.iloc[2]['market']})",
+                            "description": f"{top_acc.iloc[2]['change_rate']:,}-{top_acc.iloc[2]['change_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_acc_kor[2]}",
+                                "key2": f"{top_acc.iloc[2]['market']}",
+                                "key3": f"{top_acc_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_acc_kor[3]} ({top_acc.iloc[3]['market']})",
+                            "description": f"{top_acc.iloc[3]['change_rate']:,}-{top_acc.iloc[3]['change_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_acc_kor[3]}",
+                                "key2": f"{top_acc.iloc[3]['market']}",
+                                "key3": f"{top_acc_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_acc_kor[4]} ({top_acc.iloc[4]['market']})",
+                            "description": f"{top_acc.iloc[4]['change_rate']:,}-{top_acc.iloc[4]['change_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_acc_kor[4]}",
+                                "key2": f"{top_acc.iloc[4]['market']}",
+                                "key3": f"{top_acc_id[4]}"
+                            }
+                            }
+                        ]
+                        },
+                        {
+                        "header": {
+                            "title": "정각 기준 실시간 변동량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_live_kor[0]} ({top_live.iloc[0]['market']})",
+                            "description": f"{top_live.iloc[0]['live_rate']}-{top_live.iloc[0]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[0]}",
+                                "key2": f"{top_live.iloc[0]['market']}",
+                                "key3": f"{top_live_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[1]} ({top_live.iloc[1]['market']})",
+                            "description": f"{top_live.iloc[1]['live_rate']}-{top_live.iloc[1]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[1]}",
+                                "key2": f"{top_live.iloc[1]['market']}",
+                                "key3": f"{top_live_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[2]} ({top_live.iloc[2]['market']})",
+                            "description": f"{top_live.iloc[2]['live_rate']}-{top_live.iloc[2]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[2]}",
+                                "key2": f"{top_live.iloc[2]['market']}",
+                                "key3": f"{top_live_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[3]} ({top_live.iloc[3]['market']})",
+                            "description": f"{top_live.iloc[3]['live_rate']}-{top_live.iloc[3]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[3]}",
+                                "key2": f"{top_live.iloc[3]['market']}",
+                                "key3": f"{top_live_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[4]} ({top_live.iloc[4]['market']})",
+                            "description": f"{top_live.iloc[4]['live_rate']}-{top_live.iloc[4]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[4]}",
+                                "key2": f"{top_live.iloc[4]['market']}",
+                                "key3": f"{top_live_id[4]}"
+                            }
+                            }
+                        ]
+                        },
+                        {
+                        "header": {
+                            "title": "전일 대비 실시간 변동량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_change_kor[0]} ({top_change.iloc[0]['market']})",
+                            "description": f"{top_change.iloc[0]['change']}-{top_change.iloc[0]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[0]}",
+                                "key2": f"{top_change.iloc[0]['market']}",
+                                "key3": f"{top_change_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[1]} ({top_change.iloc[1]['market']})",
+                            "description": f"{top_change.iloc[1]['change']}-{top_change.iloc[1]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[1]}",
+                                "key2": f"{top_change.iloc[1]['market']}",
+                                "key3": f"{top_change_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[2]} ({top_change.iloc[2]['market']})",
+                            "description": f"{top_change.iloc[2]['change']}-{top_change.iloc[2]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[2]}",
+                                "key2": f"{top_change.iloc[2]['market']}",
+                                "key3": f"{top_change_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[3]} ({top_change.iloc[3]['market']})",
+                            "description": f"{top_change.iloc[3]['change']}-{top_change.iloc[3]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[3]}",
+                                "key2": f"{top_change.iloc[3]['market']}",
+                                "key3": f"{top_change_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[4]} ({top_change.iloc[4]['market']})",
+                            "description": f"{top_change.iloc[4]['change']}-{top_change.iloc[4]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[4]}",
+                                "key2": f"{top_change.iloc[4]['market']}",
+                                "key3": f"{top_change_id[4]}"
+                            }
+                            }
+                        ],
+                        "buttons": [
+                            {
+                            "label": "처음으로 돌아가기",
+                            "action": "block",
+                            "blockId":"627a3d5745b5fc3106459c56",
+                            "messageText" : "처음으로 돌아가기"
+                            }
+                        ]
+                        }
+                    ]
+                    }
+                }
+                ]
+            }
+        }
+    return live_coin
+
+
+
+# --------------------------------- 실시간 상세 조회  -------------------------------------
+@app.route("/sang",methods=['POST'])
+def sang():
+    
+    dataRecive = request.get_json()
+    # print(dataRecive)
+    coin_korea = dataRecive['action']['clientExtra']['key1']
+    coin_market = dataRecive['action']['clientExtra']['key2']
+    coin_id = dataRecive['action']['clientExtra']['key3']
+    print(coin_korea,coin_market,coin_id)
+
+    # 현재가 정보 불러오기
+    url = f"https://api.upbit.com/v1/ticker?markets={coin_market}"
+    headers = {"Accept": "application/json"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+    res = res[0]
+
+    # KRW로 값 표시하기
+    coin_kind = coin_market.split('-')[0]
+    print(coin_kind)
+
+    if "KRW" not in coin_kind:
+        if "BTC" in coin_kind:
+            toKRW = pyupbit.get_current_price("KRW-BTC")
+        else : 
+            USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
+            USD = USD.json()
+            USD = USD[0]['basePrice']
+            toKRW = USD
+    else:
+        toKRW = 1
+
+    
+
+    # 시간 
+    tz = pytz.timezone('Asia/Seoul')
+    time_now = datetime.datetime.now(tz)
+    time_now = time_now.strftime('%Y-%m-%d %H:%M')
+    
+    information = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "itemCard": {
+                        "imageTitle": {
+                            "title": f"{coin_market}",
+                            "description": f"{time_now}"
+                        },
+                        "title": "BTC, USDT는 KRW로 환산된 값.",
+                        "description": "52주 신고가/신저가 - ",
+                        "thumbnail": {
+                            "imageUrl": "https://user-images.githubusercontent.com/101306637/170913204-78700f45-1092-460d-a8c6-ef1d493b3bff.png",
+                            "width": 800,
+                            "height": 800
+                        },
+                        "profile": {
+                            "title": f"{coin_korea}",
+                            "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
+                        },
+                        "itemList": [
+                            {
+                                "title": "시가",
+                                "description": f"{res['opening_price'] * toKRW:,}"
+                            },
+                            {
+                                "title": "고가",
+                                "description": f"{res['high_price'] * toKRW:,}"
+                            },
+                            {
+                                "title": "저가",
+                                "description": f"{res['low_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "전일 종가",
+                                "description": f"{res['prev_closing_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "변동률",
+                                "description": f"{res['signed_change_rate']*100:,.2f}"
+                            },
+                            {
+                                "title": "최근 거래량",
+                                "description": f"{res['trade_volume']:,}"
+                            },
+                            {
+                                "title": "신고가",
+                                "description": f"{res['highest_52_week_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "신고가 달성",
+                                "description": f"{res['highest_52_week_date']}"
+                            },
+                            {
+                                "title": "신저가",
+                                "description": f"{res['lowest_52_week_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "신저가 달성",
+                                "description": f"{res['lowest_52_week_date']}"
+                            }
+                        ],
+                        "itemListAlignment" : "right",
+                        "itemListSummary": {
+                            "title": "종가",
+                            "description": f"{res['trade_price']*toKRW:,}"
+                        },
+                        "buttons": [
+                            {
+                                "label": "관련 뉴스 보러가기",
+                                "action": "block",
+                                "blockId": "6290494c51c40d32c6d8de9c",
+                                "extra":{
+                                "key": f"{coin_korea}"
+                            }
+                            },
+                            {
+                                "label": "업비트로 바로 가기",
+                                "action": "webLink",
+                                "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{coin_market}"
+                            }
+                        ],
+                        "buttonLayout" : "vertical"
+                    }
+                }
+            ]
+        }
+    }
+    return information
+
 @app.route('/hopeprice',methods=['POST'])
 def hope_pirce():
     nameData = marketData()
@@ -441,17 +741,328 @@ def hope_pirce():
         
         
         return coin_price_now
-    
-    '''
-    goal_price = ((answer2 + 100)/100)* answer
-  goal_price = round(goal_price)
-  current_price = pyupbit.get_current_price(coin)
-  income = (current_price/answer)*100 - 100
-  print(f"나의 매도 타이밍은 수익율이 {answer2}% 오른 {goal_price}원이 됐을 때입니다.")
-  print(f"현재 수익률은 {income}%입니다.")
-    '''
-    
 
+@app.route('/msg5', methods=['POST'])
+def msg():
+    dataReceive = request.get_json()
+    
+    #namedata2 = namedata
+    
+    #coin_name = dataReceive["action"]["detailParams"]["coi
+    #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","") # 코인 이름 받기
+    coin_name = dataReceive['action']['params']['coin'].upper().replace(" ","") #.upper.replace(" ","")
+    #coin_nu = coin_n.upper #.replace(" ","")
+    #coin_name = coin_nu.replace(" ","")
+
+
+    namedata = marketData() 
+    answer = []
+    for i in namedata.index:
+        if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
+            answer.append([namedata.market[i],namedata.currency[i],namedata.korean_name[i]])
+        '''
+        else :    
+            coin_error = {
+            "version":"2.0",
+            "template":{
+                "outputs":[
+                    {
+                        "basicCard":{
+                            "title":"입력 오류",
+                            "description":"존재하지 않는 가상 화폐이거나 입력 오류입니다",
+                            "thumbnail":{
+                                "imageUrl":"https://user-images.githubusercontent.com/65166786/169485601-ea315e41-4b3c-4520-b11a-6461d3e3233e.jpg"
+                            },
+                            "buttons":[
+                                {
+                                    "action":"block",
+                                    "label":"시점 조회로 돌아가기",
+                                    #"blockId": "627a1fd316b99e0c33812774",
+                                    "blockId": "6281c5009ac8ed784416bccd",
+                                    #"messageText":"짜잔!"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+        return coin_error
+        '''
+
+
+    full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
+    full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
+    full_time_T = full_time.replace("T"," ")
+    #print(full_time_replace) # 20220520000000
+    #print(coin_name) # 비트코인
+    #print(answer) # [['KRW-BTC', 'KRW'], ['USDT-BTC', 'USDT']]
+    #print(answer[0][0]) # KRW-BTC
+    #print(answer[0][2]) # q
+    #print(namedata.korean_name[i])
+    coin_ticker = answer[0][0]
+    coin_id = coin_ticker[4:7] 
+    #print(answer[0]) #  ['KRW-BTC', 'KRW']
+    USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
+    USD = USD.json()
+    USD = USD[0]['basePrice'] #USDT 가격 조회를 위함.
+    name_list = namedata.values.tolist()
+    coin_now = []
+    for i in range(len(name_list)):
+        if coin_name in name_list[i]:
+            coin_now.extend(name_list[i])
+    print("---coin_name----",coin_now)
+    #coin_id = ' '.join(coin_now[0])
+    #coin_id = ''.join(coin_now[0])
+    #print(coin_id)
+    #coin_id_id = coin_id[4:7]
+    #print(coin_id_id)
+    coin_now = set(coin_now)
+    print("----no 중복 코인 ----",coin_now)
+    selection = []
+    for i in range(len(answer)):
+        selection.append(answer[i][1])
+
+    if coin_name not in coin_now:
+        coin_error = {
+            "version":"2.0",
+            "template":{
+                "outputs":[
+                    {
+                        "basicCard":{
+                            "title":"입력 오류",
+                            "description":"존재하지 않는 가상 화폐이거나 입력 오류입니다",
+                            "thumbnail":{
+                                "imageUrl":"https://user-images.githubusercontent.com/65166786/169485601-ea315e41-4b3c-4520-b11a-6461d3e3233e.jpg"
+                            },
+                            "buttons":[
+                                {
+                                    "action":"block",
+                                    "label":"시점 조회로 돌아가기",
+                                    "blockId": "6281c5009ac8ed784416bccd",
+                                    "messageText":"짜잔!"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+        return coin_error
+
+    else:
+        #KRW가 없을 때
+        if "KRW" not in selection :
+            if "BTC" in selection :
+                #BITCOIN = pyupbit.get_current_price("KRW-BTC")
+                BTC = selection.index("BTC")
+                ticker = answer[BTC][0]
+                print(ticker)
+                current_price = pyupbit.get_current_price(ticker)
+                past_price = pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
+                #coin_money = pyupbit.get_current_price(ticker)
+                #coin_price = (BITCOIN * coin_money)
+            else:
+                ticker = answer[0][0]
+                current_price = pyupbit.get_current_price(ticker)
+                past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
+                #coin_money = pyupbit.get_current_price(ticker)
+                #coin_price = (USD * coin_money)
+                #print("한국 돈 변환 값 USDT : ",coin_price)
+        else:
+            print("KRW 인덱스 값 KRW:" , selection.index("KRW"))
+            KRW = selection.index("KRW")
+            ticker = answer[KRW][0]
+            current_price = pyupbit.get_current_price(ticker)
+            past_price =pyupbit.get_ohlcv(ticker, interval="minute1", to=full_time_replace, count=1).open[0]
+            #coin_price = pyupbit.get_current_price(ticker)
+    #while True:
+     #   try:
+      #      past_price =pyupbit.get_ohlcv(answer, interval="minute1", to=full_time_replace, count=1).open[0]
+       #     break 
+        #except AttributeError:
+         #   print("해당 시점에 해당 코인이 존재하지 않았거나 기록이 없습니다.")
+    
+    
+    #nowDatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    tz= pytz.timezone('Asia/Seoul')
+    time_now = datetime.datetime.now(tz)
+    nowDatetime = time_now.strftime('%Y-%m-%d %H:%M:%S')
+    #print(time_now)
+    
+    if current_price > past_price:
+        a = abs(current_price - past_price)
+        b = (round((current_price-past_price)*100/past_price, 2))
+        price_up =  {
+                    "version": "2.0",
+                    "template": {
+                    "outputs": [
+                         {
+                        "itemCard": {
+                            "imageTitle": {
+                            "title": "가격 상승"
+                            
+                    },
+                    "profile": {
+                        "title": f'{answer[0][2]}',
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
+                    },
+                    "itemList": [
+                        {
+                            "title": "현재 가격",
+                            "description": f'{current_price}'
+                        },
+                        {
+                            "title": "비교 가격",
+                            "description": f'{past_price}'
+                        },
+                        {
+                            "title": "현재 시간",
+                            "description": f'{nowDatetime}'
+                        },
+                        {
+                            "title": "비교 시간",
+                            "description": f'{full_time_T}'
+                        },
+                        {
+                            "title": "변동량",
+                            "description": f"{a}"
+                        },
+                        {
+                            "title": "변동량(%)",
+                            "description": f"{b}%"
+                        }
+                    ],
+                    "itemListAlignment" : "right",
+                    "buttons": [
+                        {
+                            "label": "업비트 차트 보기",
+                            "action": "webLink",
+                            "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                        }
+                    ],
+                    "buttonLayout" : "vertical"
+                }
+            }
+        ]
+    }
+}
+        return  jsonify(price_up)
+    elif current_price == past_price:
+        price_now =  {
+                    "version": "2.0",
+                    "template": {
+                    "outputs": [
+                         {
+                        "itemCard": {
+                            "imageTitle": {
+                            "title": "가격 변동 없음 "
+                            
+                    },
+                    "profile": {
+                        "title": f'{answer[0][2]}', 
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
+                    },
+                    "itemList": [
+                        {
+                            "title": "현재 가격",
+                            "description": f'{current_price}'
+                        },
+                        {
+                            "title": "비교 가격",
+                            "description": f'{past_price}'
+                        },
+                        {
+                            "title": "현재 시간",
+                            "description": f'{nowDatetime}'
+                        },
+                        {
+                            "title": "비교 시간",
+                            "description": f'{full_time_T}'
+                        },
+                        {
+                            "title": "변동량",
+                            "description": f"{a}"
+                        },
+                        {
+                            "title": "변동량(%)",
+                            "description": f"{b}%"
+                        }
+                    ],
+                    "itemListAlignment" : "right",
+                    "buttons": [
+                        {
+                            "label": "업비트 차트 보기",
+                            "action": "webLink",
+                            "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                        }
+                    ],
+                    "buttonLayout" : "vertical"
+                }
+            }
+        ]
+    }
+}
+        return  jsonify(price_now)
+    else:
+        a = abs(current_price - past_price)
+        b = (round((current_price-past_price)*100/past_price, 2))
+        price_down =  {
+                    "version": "2.0",
+                    "template": {
+                    "outputs": [
+                         {
+                        "itemCard": {
+                            "imageTitle": {
+                            "title": "가격 하락"
+                           
+                    },
+                    "profile": {
+                        "title": f'{answer[0][2]}',
+                        "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
+                    },
+                    "itemList": [
+                        {
+                            "title": "현재 가격",
+                            "description": f'{current_price}'
+                        },
+                        {
+                            "title": "비교 가격",
+                            "description": f'{past_price}'
+                        },
+                        {
+                            "title": "현재 시간",
+                            "description": f'{nowDatetime}'
+                        },
+                        {
+                            "title": "비교 시간",
+                            "description": f'{full_time_T}'
+                        },
+                        {
+                            "title": "변동량",
+                            "description": f"{a}"
+                        },
+                        {
+                            "title": "변동량(%)",
+                            "description": f"{b}"
+                        }
+                    ],
+                    "itemListAlignment" : "right",
+                    "buttons": [
+                        {
+                            "label": "업비트 바로가기",
+                            "action": "webLink",
+                            "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{ticker}"
+                        }
+                    ],
+                    "buttonLayout" : "vertical"
+                }
+            }
+        ]
+    }
+}
+        return  jsonify(price_down)
+    
 
 @app.route('/searchnews',methods=['POST'])
 def searchnews():
@@ -632,22 +1243,7 @@ def sayHello():
                               'url' : n.get('href') }
             idx += 1
 
-        #cur_page += 1
-        #print(cur_page)
-        #pages = soup.find('div', {'class' : 'sc_page_inner'})
-        #print(pages)
-        #print(pages.find_all('a'))
-        #what = (p for p in pages.find_all('a') if p.text == cur_page)
-        #print(what)
-        #for p in pages.find_all('a'):
-            #print(p)
-            #if p.text == cur_page:
-            #    next_page_url = p.get('href')
-            #    print(next_page_url)
-        #next_page_url = [p for p in pages.find_all('a') if p.text == cur_page][0].encode('utf-8').get('href')
         
-        #req = requests.get('https://search.naver.com/search.naver' + next_page_url)
-        #soup = BeautifulSoup(req.text, 'html.parser')
 
 
     news_df = DataFrame(news_dict)
@@ -864,466 +1460,4 @@ def sayHello1():
 
 
 
-    '''
     
-    responseBody1 = {"version": "2.0",
-                    "template": {
-                    "outputs": [
-                    {
-                        "carousel": {
-                        "type":"listCard",
-                        "items": [
-                            {
-                            "header": {
-                            "title": "비트코인 영상 보러가기"
-                            },
-                  "items": [
-                    {
-                    "title": f"{search_title[0]}",
-
-                    "link": {
-                      "web": f"{search_url[0]}"
-                            }
-                    },
-                    {
-                      "title": f"{search_title[1]}",
-
-                      "link": {
-                        "web": f"{search_url[1]}"
-                      }
-                    },
-                    {
-                      "title": f"{search_title[2]}",
-
-                      "link": {
-                        "web": f"{search_url[2]}"
-                      }
-                    },
-                    {
-                      "title": f"{search_title[3]}",
-
-                      "link": {
-                        "web": f"{search_url[3]}"
-                      }
-                    },
-                    {
-                      "title": f"{search_title[4]}",
-      
-                      "link": {
-                        "web": f"{search_url[4]}"
-                      }
-                  }
-                  ],
-                    "buttons": [
-                {
-                  "label": "더 보기",
-                  "action": "webLink",
-                  "webLinkUrl": "https://www.youtube.com/results?search_query=비트코인"
-                }
-                    
-                  ]
-                      }
-                  ]  
-              }
-            }
-            ]
-            }
-            }
-    return responseBody1
-
-
-@app.route('/youtube',methods=['POST'])
-
-def sayHello1():
-    body1 = request.get_json()
-    print(body1)
-    print(body1['userRequest']['utterance'])
-
-# https://console.cloud.google.com/apis/credentials 여기서 API발급받아 사용
-    DEVELOPER_KEY='AIzaSyBa_S65tRPb1mALqTtsDB1e9p6s-7kshJA' # 내 API 키값 입력
-    YOUTUBE_API_SERVICE_NAME='youtube'
-    YOUTUBE_API_VERSION='v3'
-
-    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-                                            developerKey = DEVELOPER_KEY)
-
-    search_response=youtube.search().list(
-        q="비트코인",
-        
-        part='id, snippet',
-        maxResults=5,
-        ).execute()
-
-    search_title = []
-    search_url = []
-    for i in range (5):
-        search_title.append(search_response['items'][i]['snippet']['title'])
-        search_url.append('https://youtube.com/watch?v='+ search_response['items'][i]['id']['videoId'])
-    
-    img = []
-    for thumbnail in search_response['thumbnail']:
-        img.append(thumbnail['snippet']['channelId'])
-      
-   
-    responseBody1 = {"version": "2.0",
-                      "template": {
-                      "outputs": [
-                      {
-                          "carousel": {
-                          "type":"listCard",
-                          "items": [
-                              {
-                              "header": {
-                              "title": "비트코인 영상 보러가기"
-                              },
-                    "items": [
-                      {
-                      "title": f"{search_title[0]}",
-                      "imageUrl": f"{img[0]}",  
-                      "link": {
-                        "web": f"{search_url[0]}"
-                              }
-                      },
-                      {
-                        "title": f"{search_title[1]}",
-                       "imageUrl": f"{img[1]}", 
-                        "link": {
-                          "web": f"{search_url[1]}"
-                        }
-                      },
-                      {
-                        "title": f"{search_title[2]}",
-                      "imageUrl": f"{img[2]}", 
-                        "link": {
-                          "web": f"{search_url[2]}"
-                        }
-                      },
-                      {
-                        "title": f"{search_title[3]}",
-                        "imageUrl": f"{img[3]}", 
-                        "link": {
-                          "web": f"{search_url[3]}"
-                        }
-                      },
-                      {
-                        "title": f"{search_title[4]}",
-                        "imageUrl": f"{img[4]}", 
-                        "link": {
-                          "web": f"{search_url[4]}"
-                        }
-                    }
-                    ],
-                      "buttons": [
-                  {
-                    "label": "더 보기",
-                    "action": "webLink",
-                    "webLinkUrl": "https://www.youtube.com/results?search_query=비트코인"
-                  }
-                      
-                    ]
-                        }
-                    ]  
-                }
-              }
-              ]
-              }
-              }
-    return responseBody1
-
-
-
-
-
-
-
-'''
-
-
-
-
-'''
-@app.route('/msg1', methods=['POST'])
-def msg1():
-    simple = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "test 현 시세 조회를 원하는 가상 화폐의 종류를 선택해주세요.\n그 외의 경우, 가상 화폐 명을 입력해 주세요.\n(ex: 니어프로토콜) " # f-string 수정
-                    }
-                
-                }
-            ]
-            }
-    }
-    return(simple)
-'''
-
-'''
-@app.route('/msg1', methods=['POST'])
-def msg1():
-    global selection
-    global answer
-    coin_name = request.get_json()
-    print(coin_name)
-    #dataReceive = request.get_json() # 사용자가 입력한 데이터
-    #print(dataReceive)
-    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-    if marketData.status_code == 200 :
-        jsonMarket = marketData.json()
-    market = []
-    korean_name = []
-    english_name = []
-    for i in range(len(jsonMarket)) :
-        namedata = jsonMarket[i]
-        market.append(namedata['market'])
-        korean_name.append(namedata['korean_name'])
-        english_name.append(namedata['english_name'].lower().replace(" ",""))
-    #tickers=pyupbit.get_tickers()
-    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
-    currency = []
-    for i in namedata.loc[:,'market']:
-        if i.split('-')[0] == "KRW":
-            currency.append("KRW")
-        elif i.split('-')[0] == "BTC":
-            currency.append("BTC")
-        else:
-            currency.append("USDT")
-    namedata['currency'] = currency # currency column을 새로 추가
-    namedata2 = namedata
-    #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-    #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
-#print(namedata2['korean_name'])
-    answer = []
-#print(namedata2.korean_name[0])
-    for i in namedata2.index:
-        if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-            answer.append([namedata2.market[i],namedata2.currency[i]])
-# answer[여럿나온 답의 순서][0=market code, 1= currency]
-#print(answer[:len(answer)][:len(answer)])
-    while len(answer) == 0:
-        #coin_name = dataReceive["userRequest"]["utterance"].lower().replace(" ","")
-        #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value']
-        #coin_name = dataReceive["content"]
-        def zero_ticker():
-            none_ticker = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "일치하는 가상화폐가 존재하지 않습니다. 이름을 다시 확인해주세요 " # f-string 수정
-                    }
-                }
-            ],
-                "buttons":[{
-                "action": "block",
-                "label": "처음으로",
-                "blockID": '62849fe8ee59237543308cef'
-                }]
-            }
-            }
-            return jsonify(none_ticker)
-        zero_ticker()
-#print(namedata2['korean_name'])
-        #answer = []
-#print(namedata2.korean_name[0])
-        #for i in namedata2.index:
-            #if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-                #answer.append([namedata2.market[i],namedata2.currency[i]])
-    if len(answer) == 1: # 화폐 단위 하나만 있을 때
-    #print(answer)
-        ticker = answer[0][0]
-        now_price = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": f"{coin_name}" "의 현재 가격은" f"{answer[0][1]}" "기준" f"{pyupbit.get_current_price(ticker):.3f}" "입니다" # f-string 수정
-                    }
-                }
-            ]
-                }
-            }
-        
-        return  jsonify(now_price) # 문제점 : BTC는 소수점을 엄청 길게 표시하는데, 원화와 같은 소수점으로 표시하면 안된다.
-
-@app.route('/msg0', methods=['POST'])
-def msg0():
-    dataReceive = request.get_json()
-    ask_ticker = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "test 현 시세 조회를 원하는 가상 화폐의 종류를 선택해주세요.\n그 외의 경우, 가상 화폐 명을 입력해 주세요.\n(ex: 니어프로토콜) " # f-string 수정
-                    }
-                
-                }
-            ],
-                "quickReplies": [
-           {    
-                "messageText":"이더리움",
-                "action":"block",
-                "label": "이더리움",
-                "blockid":"62849fe8ee59237543308cef"}
-                ]
-                
-                #"action": "message",
-                
-                
-                
-                
-                }
-    }
-    return jsonify(ask_ticker)
-
-
-
-
-
-
-@app.route('/msg0', methods=['POST'])
-def msg0():
-    dataReceive = request.get_json()
-    ask_ticker = {
-                "version": "2.0",
-                "template": {
-                "outputs": [
-                {
-                "simpleText": {
-                "text": "현 시세 조회를 원하는 가상 화폐의 종류를 선택해주세요.\n그 외의 경우, 가상 화폐 명을 입력해 주세요.\n(ex: 니어프로토콜) " # f-string 수정
-                    }
-                
-                }
-            ],
-                "quickReplies": [
-          {
-                "action":"message",
-                "label": "이더리움",
-                "message": "이더리움"
-                
-                #"action": "message",
-                
-                
-                
-                
-                },
-          {
-                "messageText": "비트코인",
-                "action": "message",
-                "label": "비트코인"
-          },
-          {
-                "messageText": "도지코인",
-                "action": "message",
-                "label": "도지코인" # 비트코인의 경우 BTC를 어떻게 처리하지
-                }
-                ],
-                "buttons":[{
-                "action": "block",
-                "label": "처음으로",
-                "blockID":'62849af133d26f492e9e74af'}],
-
-                "context": {
-                "values": [{
-                "name": 'coin_name',
-                "lifespan": 3,
-                "params": f'{dataReceive["userRequest"]["utterance"].lower().replace(" ","")}'}
-                ]},
-                
-                }
-                
-                }                
-            
-                
-                
-    #print(ask_ticker[template])
-    return jsonify(ask_ticker)
-
-
-@app.route('/msg', methods=['POST'])
-def msg():
-    
-    marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-    if marketData.status_code == 200 :
-        jsonMarket = marketData.json()
-    market = []
-    korean_name = []
-    english_name = []
-    for i in range(len(jsonMarket)) :
-        namedata = jsonMarket[i]
-        market.append(namedata['market'])
-        korean_name.append(namedata['korean_name'])
-        english_name.append(namedata['english_name'].lower().replace(" ",""))
-    #tickers=pyupbit.get_tickers()
-    namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
-    currency = []
-    for i in namedata.loc[:,'market']:
-        if i.split('-')[0] == "KRW":
-            currency.append("KRW")
-        elif i.split('-')[0] == "BTC":
-            currency.append("BTC")
-        else:
-            currency.append("USDT")
-    namedata['currency'] = currency # currency column을 새로 추가
-    namedata2 = namedata
-    
-    #coin_name = dataReceive["action"]["detailparams"]["koreanname"]['value'] # 에반데
-#print(namedata2['korean_name'])
-    answer = []
-#print(namedata2.korean_name[0])
-    for i in namedata2.index:
-        if coin_name == namedata2.korean_name[i] or coin_name == namedata2.english_name[i]:
-            answer.append([namedata2.market[i],namedata2.currency[i]])
-    return responseBody
-
-## 카카오톡 텍스트형 응답
-@app.route('/api/sayHello', methods=['POST'])
-def sayHello():
-    body = request.get_json()
-    print(body)
-    print(body['userRequest']['utterance'])
-
-    responseBody = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": "안녕 hello I'm Ryan"
-                    }
-                }
-            ]
-        }
-    }
-
-    return responseBody
-
-
-## 카카오톡 이미지형 응답
-@app.route('/api/showHello', methods=['POST'])
-def showHello():
-    body = request.get_json()
-    print(body)
-    print(body['userRequest']['utterance'])
-
-    responseBody = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleImage": {
-                        "imageUrl": "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
-                        "altText": "hello I'm Ryan"
-                    }
-                }
-            ]
-        }
-    }
-
-    return responseBody
-'''
