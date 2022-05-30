@@ -1,5 +1,5 @@
-from re import template
-from flask import Flask, make_response, jsonify, request, g
+#from re import template
+from flask import Flask, jsonify, request #, g ,make_response
 import pandas as pd
 import pyupbit
 import requests
@@ -11,7 +11,7 @@ from googleapiclient.errors import HttpError
 from oauth2client.tools import argparser
 from bs4 import BeautifulSoup
 from pandas import DataFrame
-import re
+#import re
 import urllib.request
 from urllib.parse import quote
 
