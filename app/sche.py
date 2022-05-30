@@ -14,9 +14,9 @@ def job1():
 
 
 # 매일 12시 30분에 실행
-#@sched.scheduled_job('interval', seconds=10, id='test_2')
+@sched.scheduled_job('interval', minutes=3, id='test_2')
 #@sched.scheduled_job('cron', minute='2', id='test_2')
-@sched.scheduled_job('cron', minute='5', id='test_2')
+#@sched.scheduled_job('cron', minute='5', id='test_2')
 def job2():
     top5.si()
     #print(f'job2 : {time.strftime("%H:%M:%S")}')
