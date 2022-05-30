@@ -3,7 +3,7 @@ from flask import Flask, make_response, jsonify, request, g
 import pandas as pd
 import pyupbit
 import requests
-from datetime import datetime
+import datetime
 import pytz
 from bs4 import BeautifulSoup
 from googleapiclient.discovery import build
