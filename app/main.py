@@ -24,7 +24,7 @@ top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
 
-
+## 데이터 가져오기
 def marketData():
     # 마켓 데이터 불러오기
     marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
@@ -63,7 +63,7 @@ def marketData():
 
 
 
-
+## 시세 조회1
 @app.route('/now', methods=['POST'])
 def now():
     best_Id = ['KRW-BTC', 'KRW-ETH','KRW-DOGE']
@@ -110,7 +110,7 @@ def now():
                         }
                     }
     return current_price
-
+## 시세 조회2
 @app.route('/more',methods=['POST'])
 def test():
     # 마켓 이름 데이터, 환율값, 발화 값 가져오기
@@ -297,7 +297,7 @@ def test():
 
 #####
 
-
+## 시세 상세 조회
 @app.route("/sang",methods=['POST'])
 def sang():
     
@@ -428,6 +428,8 @@ def sang():
     }
     return information
 
+
+## 희망 매도가 조회
 @app.route('/hopeprice',methods=['POST'])
 def hope_pirce():
     nameData = marketData()
@@ -603,6 +605,8 @@ def hope_pirce():
         
         return coin_price_now
 
+
+## 원하는 시점의 코인 가격 비교
 @app.route('/msg5', methods=['POST'])
 def msg():
     dataReceive = request.get_json()
@@ -924,7 +928,395 @@ def msg():
 }
         return  jsonify(price_down)
 
+@app.route('/searchnews',methods=['POST'])
+def searchnews():
+    
 
+    dataReceive = request.get_json()
+    print(dataReceive)
+    search_name = dataReceive['action']['clientExtra']['key']
+    query = quote(search_name )
+
+    news_num = 5
+
+    news_url = f'https://search.naver.com/search.naver?where=news&sm=tab_jum&query={query}'
+
+    req = requests.get(news_url)
+    soup = BeautifulSoup(req.text, 'html.parser')
+
+    news_dict = {} 
+    idx = 0 
+    #cur_page = 1
+
+    while idx < news_num:
+    ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
+        
+        table = soup.find('ul',{'class' : 'list_news'})
+        li_list = table.find_all('li', {'id': re.compile('sp_nws.*')})
+        area_list = [li.find('div', {'class' : 'news_area'}) for li in li_list]
+        a_list = [area.find('a', {'class' : 'news_tit'}) for area in area_list]
+        
+        for n in a_list[:min(len(a_list), news_num-idx)]:
+            news_dict[idx] = {'title' : n.get('title'),
+                              'url' : n.get('href') }
+            idx += 1
+
+        #cur_page += 1
+        
+        #pages = soup.find('div', {'class' : 'sc_page_inner'})
+        #next_page_url = [p for p in pages.find_all('a') if p.text == str(cur_page)][0].get('href')
+        
+        #req = requests.get('https://search.naver.com/search.naver' + next_page_url)
+        #soup = BeautifulSoup(req.text, 'html.parser')
+
+
+    news_df = pd.DataFrame(news_dict)
+
+    title = []
+    url = []
+    i = 0
+    for i in range(len(news_dict)):
+      title.append(news_df.loc['title'][i])
+      url.append(news_df.loc['url'][i])
+    #print(title)
+
+
+    
+    
+    imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query='
+    imgurl = imgurl + query
+    
+    #print(imgurl)
+    req = urllib.request.Request(imgurl)
+    #print(req)
+    res = urllib.request.urlopen(imgurl).read()  # 여기가 문제에요, 고쳤어요 -> url 형식으로 바꿔주었어요 (quote)
+    #print('res:' ,res)
+    
+    soup = BeautifulSoup(res,'html.parser')
+    soup = soup.find_all("a",class_="dsc_thumb")
+    #print(soup)
+    #print(soup[0])
+    #print
+    imgUrl = []
+    for i in range(len(soup)):
+      imgUrl.append(soup[i].find("img")["src"])
+
+    #img = []
+    #for i in range(5):
+    #  img.append(imgUrl[i])
+      
+    responseBody = {"version": "2.0",
+                "template": {
+                "outputs": [
+                {
+                    "carousel": {
+                    "type":"listCard",
+                    "items": [
+                        {
+                        "header": {
+                        "title": f"{search_name} 소식"
+                        },
+              "items": [
+                {
+                "title": f"{title[0]}",
+                "imageUrl": f"{imgUrl[0]}",
+                "link": {
+                  "web": f"{url[0]}"
+                        }
+                },
+                {
+                  "title": f"{title[1]}",
+                  "imageUrl": f"{imgUrl[1]}",
+                  "link": {
+                    "web": f"{url[1]}"
+                  }
+                },
+                {
+                  "title": f"{title[2]}",
+                 "imageUrl": f"{imgUrl[2]}"  ,             
+                  "link": {
+                    "web": f"{url[2]}"
+                  }
+                },
+                {
+                  "title": f"{title[3]}",
+                  "imageUrl": f"{imgUrl[3]}",
+                  "link": {
+                    "web": f"{url[3]}"
+                  }
+                },
+                {
+                  "title": f"{title[4]}",
+                  "imageUrl": f"{imgUrl[4]}",      
+                  "link": {
+                    "web": f"{url[4]}"
+                  }
+              }
+              ],
+                "buttons": [
+            {
+              "label": "더 보기",
+              "action": "webLink",
+              "webLinkUrl": f"https://search.naver.com/search.naver?where=news&sm=tab_jum&query={search_name}"
+            }
+                
+              ]
+                  }
+              ]  
+          }
+        }
+        ]
+        }
+        }
+    return responseBody
+
+
+
+
+@app.route('/basic',methods=['POST'])
+def sayHello():
+    #body = request.get_json()
+    #print(body)
+    #print(body['userRequest']['utterance'])
+
+
+    query = "비트코인|가상화폐|가상자산|이더리움"
+    query = query.replace(' ', '+') 
+
+    news_num = 5
+
+    news_url = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
+                
+    req = requests.get(news_url.format(query))
+    soup = BeautifulSoup(req.text, 'html.parser')
+
+    news_dict = {} 
+    idx = 0 
+    #cur_page = 1
+
+    while idx < news_num:
+    ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
+        
+        table = soup.find('ul',{'class' : 'list_news'})
+        li_list = table.find_all('li', {'id': re.compile('sp_nws.*')})
+        area_list = [li.find('div', {'class' : 'news_area'}) for li in li_list]
+        a_list = [area.find('a', {'class' : 'news_tit'}) for area in area_list]
+        
+        for n in a_list[:min(len(a_list), news_num-idx)]:
+            news_dict[idx] = {'title' : n.get('title'),
+                              'url' : n.get('href') }
+            idx += 1
+
+        
+
+
+    news_df = pd.DataFrame(news_dict)
+
+    title = []
+    url = []
+    i = 0
+    for i in range(len(news_dict)):
+      title.append(news_df.loc['title'][i])
+      url.append(news_df.loc['url'][i])
+    #print(title)
+
+
+    
+    
+    imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
+    req = urllib.request.Request(imgurl)
+    res = urllib.request.urlopen(imgurl).read()
+    
+    soup = BeautifulSoup(res,'html.parser')
+    soup = soup.find_all("a",class_="dsc_thumb")
+    #print(soup[0])
+    #print
+    imgUrl = []
+    for i in range(len(soup)):
+      imgUrl.append(soup[i].find("img")["src"])
+
+    #img = []
+    #for i in range(5):
+    #  img.append(imgUrl[i])
+      
+    responseBody = {"version": "2.0",
+                "template": {
+                "outputs": [
+                {
+                    "carousel": {
+                    "type":"listCard",
+                    "items": [
+                        {
+                        "header": {
+                        "title": "가상화폐 연관 뉴스 보러가기"
+                        },
+              "items": [
+                {
+                "title": f"{title[0]}",
+                "imageUrl": f"{imgUrl[0]}",
+                "link": {
+                  "web": f"{url[0]}"
+                        }
+                },
+                {
+                  "title": f"{title[1]}",
+                  "imageUrl": f"{imgUrl[1]}",
+                  "link": {
+                    "web": f"{url[1]}"
+                  }
+                },
+                {
+                  "title": f"{title[2]}",
+                 "imageUrl": f"{imgUrl[2]}"  ,             
+                  "link": {
+                    "web": f"{url[2]}"
+                  }
+                },
+                {
+                  "title": f"{title[3]}",
+                  "imageUrl": f"{imgUrl[3]}",
+                  "link": {
+                    "web": f"{url[3]}"
+                  }
+                },
+                {
+                  "title": f"{title[4]}",
+                  "imageUrl": f"{imgUrl[4]}",      
+                  "link": {
+                    "web": f"{url[4]}"
+                  }
+              }
+              ],
+                "buttons": [
+            {
+              "label": "더 보기",
+              "action": "webLink",
+              "webLinkUrl": "https://search.naver.com/search.naver?where=news&sm=tab_jum&query=비트코인%7C이더리움%7C가상화폐%7C가상자산"
+            }
+                
+              ]
+                  }
+              ]  
+          }
+        }
+        ]
+        }
+        }
+    return responseBody
+
+
+
+
+
+
+
+@app.route('/youtube',methods=['POST'])
+# 모듈 설치
+#pip install --upgrade google_api_python_client
+#pip install oauth2client
+
+# 모듈 import 단
+#from googleapiclient.discovery import build
+#from googleapiclient.errors import HttpError
+#from oauth2client.tools import argparser
+
+# 모듈을 requirements 에 추가해줘야 heroku deploy가 작동한다.
+# google_api_python_client==2.48.0
+# oauth2client==4.1.3
+
+def sayHello1():
+    #body1 = request.get_json()
+    #print(body1)
+    #print(body1['userRequest']['utterance'])
+
+# https://console.cloud.google.com/apis/credentials 여기서 API발급받아 사용
+    DEVELOPER_KEY='AIzaSyBa_S65tRPb1mALqTtsDB1e9p6s-7kshJA' # 내 API 키값 입력
+    YOUTUBE_API_SERVICE_NAME='youtube'
+    YOUTUBE_API_VERSION='v3'
+
+    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+                                            developerKey = DEVELOPER_KEY)
+
+    search_response=youtube.search().list(
+        q="비트코인",
+        
+        part='id, snippet',
+        maxResults=5,
+        ).execute()
+    print(search_response)
+    search_title = []
+    search_url = []
+    thumb_img = []
+    for i in range (5):
+        search_title.append(search_response['items'][i]['snippet']['title'])
+        search_url.append('https://youtube.com/watch?v='+ search_response['items'][i]['id']['videoId'])
+        thumb_img.append(search_response['items'][i]['snippet']['thumbnails']['default']['url'])
+    print(thumb_img)  
+   
+    responseBody1 = {"version": "2.0",
+                      "template": {
+                      "outputs": [
+                      {
+                          "carousel": {
+                          "type":"listCard",
+                          "items": [
+                              {
+                              "header": {
+                              "title": "비트코인 영상 보러가기"
+                              },
+                    "items": [
+                      {
+                      "title": f"{search_title[0]}",
+                      "imageUrl": f"{thumb_img[0]}",  
+                      "link": {
+                        "web": f"{search_url[0]}"
+                              }
+                      },
+                      {
+                        "title": f"{search_title[1]}",
+                       "imageUrl": f"{thumb_img[1]}", 
+                        "link": {
+                          "web": f"{search_url[1]}"
+                        }
+                      },
+                      {
+                        "title": f"{search_title[2]}",
+                      "imageUrl": f"{thumb_img[2]}", 
+                        "link": {
+                          "web": f"{search_url[2]}"
+                        }
+                      },
+                      {
+                        "title": f"{search_title[3]}",
+                        "imageUrl": f"{thumb_img[3]}", 
+                        "link": {
+                          "web": f"{search_url[3]}"
+                        }
+                      },
+                      {
+                        "title": f"{search_title[4]}",
+                        "imageUrl": f"{thumb_img[4]}", 
+                        "link": {
+                          "web": f"{search_url[4]}"
+                        }
+                    }
+                    ],
+                      "buttons": [
+                  {
+                    "label": "더 보기",
+                    "action": "webLink",
+                    "webLinkUrl": "https://www.youtube.com/results?search_query=비트코인"
+                  }
+                      
+                    ]
+                        }
+                    ]  
+                }
+              }
+              ]
+              }
+              }
+    return responseBody1
 
 
 
