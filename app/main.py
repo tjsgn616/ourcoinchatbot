@@ -859,7 +859,6 @@ def hope_pirce():
         
         return coin_price_now
 
-        
 @app.route('/msg5', methods=['POST'])
 def msg():
     dataReceive = request.get_json()
@@ -958,7 +957,7 @@ def msg():
                                     "action":"block",
                                     "label":"시점 조회로 돌아가기",
                                     "blockId": "6281c5009ac8ed784416bccd",
-                                    #"messageText":"짜잔!"
+                                    "messageText":"짜잔!"
                                 }
                             ]
                         }
