@@ -1,6 +1,6 @@
 import time
 from apscheduler.schedulers.blocking import BlockingScheduler
-from . import KRW
+#from . import KRW
 #from . import jobs 
 from . import top5
 sched = BlockingScheduler(timezone='Asia/Seoul')
