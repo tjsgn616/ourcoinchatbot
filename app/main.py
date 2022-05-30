@@ -555,7 +555,7 @@ def acc():
 
 # --------------------------------- 실시간 상세 조회  -------------------------------------
 @app.route("/sang",methods=['POST'])
-def snag():
+def sang():
     
     dataRecive = request.get_json()
     # print(dataRecive)
