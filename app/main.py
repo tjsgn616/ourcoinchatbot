@@ -290,262 +290,145 @@ def test():
         }
         }
         return coin_price_now
-        
-@app.route('/acc',methods=['POST'])
-def acc():
-    # market 한국 이름 뽑아내기
-    nameData = marketData()
-    # -------------------------------------------------if문 top_market_list nameData로 바꾸기
-    top_acc_kor = []
-    top_change_kor = []
-    top_live_kor = []
-    top_acc_id = []
-    top_change_id = []
-    top_live_id = []
-    for i in range(5):
-        for j in range(len(top_market_list)):
-            if top_market_list.iloc[j]['market'] == top_acc.iloc[i]['market']:
-                # top_acc_kor.append(top_market_list.iloc[j]['korean_name'])
-                top_acc_kor.append(nameData.iloc[j]['korean_name'])
-                top_acc_id.append(nameData.iloc[j]['Id'])
-            if top_change.iloc[i]['market'] == top_market_list.iloc[j]['market']:
-                top_change_kor.append(nameData.iloc[j]['korean_name'])
-                top_change_id.append(nameData.iloc[j]['Id'])
-            if top_live.iloc[i]['market'] == top_market_list.iloc[j]['market']:
-                top_live_kor.append(nameData.iloc[j]['korean_name'])
-                top_live_id.append(nameData.iloc[j]['Id'])
+###### 
+
+## /acc 
+## 실시간 top 5
+
+#####
 
 
+@app.route("/sang",methods=['POST'])
+def sang():
+    
+    dataRecive = request.get_json()
+    # print(dataRecive)
+    coin_korea = dataRecive['action']['clientExtra']['key1']
+    coin_market = dataRecive['action']['clientExtra']['key2']
+    coin_id = dataRecive['action']['clientExtra']['key3']
+    print(coin_korea,coin_market,coin_id)
 
-    live_coin = {
-            "version": "2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText" : {
-                            "text":"'실시간 TOP5 코인'에서는 1시간 기준 실시간 거래량과 변동량을 확인 할 수 있는 곳입니다."
-                        }
-                    },
+    # 현재가 정보 불러오기
+    url = f"https://api.upbit.com/v1/ticker?markets={coin_market}"
+    headers = {"Accept": "application/json"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+    res = res[0]
+
+    # KRW로 값 표시하기
+    coin_kind = coin_market.split('-')[0]
+    print(coin_kind)
+
+    if "KRW" not in coin_kind:
+        if "BTC" in coin_kind:
+            toKRW = pyupbit.get_current_price("KRW-BTC")
+        else : 
+            USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
+            USD = USD.json()
+            USD = USD[0]['basePrice']
+            toKRW = USD
+    else:
+        toKRW = 1
+
+    
+
+    # 시간 
+    tz = pytz.timezone('Asia/Seoul')
+    time_now = datetime.datetime.now(tz)
+    time_now = time_now.strftime('%Y-%m-%d %H:%M')
+    
+    information = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
                 {
-                    "carousel": {
-                    "type": "listCard",
-                    "items": [
-                        {
-                        "header": {
-                            "title": "실시간 누적 거래량 TOP 5"
+                    "itemCard": {
+                        "imageTitle": {
+                            "title": f"{coin_market}",
+                            "description": f"{time_now}"
                         },
-                        "items": [
-                            {
-                            "title": f"{top_acc_kor[0]} ({top_acc.iloc[0]['market']})",
-                            "description": f"{top_acc.iloc[0]['change_rate']:,}-{top_acc.iloc[0]['change_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[0]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_acc_kor[0]}",
-                                "key2": f"{top_acc.iloc[0]['market']}",
-                                "key3": f"{top_acc_id[0]}"
-                            }
-                            },
-                            {
-                            "title": f"{top_acc_kor[1]} ({top_acc.iloc[1]['market']})",
-                            "description": f"{top_acc.iloc[1]['change_rate']:,}-{top_acc.iloc[1]['change_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[1]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_acc_kor[1]}",
-                                "key2": f"{top_acc.iloc[1]['market']}",
-                                "key3": f"{top_acc_id[1]}"
-                            }
-                            },
-                            {
-                            "title": f"{top_acc_kor[2]} ({top_acc.iloc[2]['market']})",
-                            "description": f"{top_acc.iloc[2]['change_rate']:,}-{top_acc.iloc[2]['change_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[2]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_acc_kor[2]}",
-                                "key2": f"{top_acc.iloc[2]['market']}",
-                                "key3": f"{top_acc_id[2]}"
-                            }
-                            },
-                            {
-                            "title": f"{top_acc_kor[3]} ({top_acc.iloc[3]['market']})",
-                            "description": f"{top_acc.iloc[3]['change_rate']:,}-{top_acc.iloc[3]['change_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[3]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_acc_kor[3]}",
-                                "key2": f"{top_acc.iloc[3]['market']}",
-                                "key3": f"{top_acc_id[3]}"
-                            }
-                            },
-                            {
-                            "title": f"{top_acc_kor[4]} ({top_acc.iloc[4]['market']})",
-                            "description": f"{top_acc.iloc[4]['change_rate']:,}-{top_acc.iloc[4]['change_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_acc_id[4]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_acc_kor[4]}",
-                                "key2": f"{top_acc.iloc[4]['market']}",
-                                "key3": f"{top_acc_id[4]}"
-                            }
-                            }
-                        ]
+                        "title": "BTC, USDT는 KRW로 환산된 값.",
+                        "description": "52주 신고가/신저가 - ",
+                        "thumbnail": {
+                            "imageUrl": "https://user-images.githubusercontent.com/101306637/170913204-78700f45-1092-460d-a8c6-ef1d493b3bff.png",
+                            "width": 800,
+                            "height": 800
                         },
-                        {
-                        "header": {
-                            "title": "정각 기준 실시간 변동량 TOP 5"
+                        "profile": {
+                            "title": f"{coin_korea}",
+                            "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
                         },
-                        "items": [
+                        "itemList": [
                             {
-                            "title": f"{top_live_kor[0]} ({top_live.iloc[0]['market']})",
-                            "description": f"{top_live.iloc[0]['live_rate']}-{top_live.iloc[0]['live_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[0]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_live_kor[0]}",
-                                "key2": f"{top_live.iloc[0]['market']}",
-                                "key3": f"{top_live_id[0]}"
-                            }
+                                "title": "시가",
+                                "description": f"{res['opening_price'] * toKRW:,}"
                             },
                             {
-                            "title": f"{top_live_kor[1]} ({top_live.iloc[1]['market']})",
-                            "description": f"{top_live.iloc[1]['live_rate']}-{top_live.iloc[1]['live_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[1]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_live_kor[1]}",
-                                "key2": f"{top_live.iloc[1]['market']}",
-                                "key3": f"{top_live_id[1]}"
-                            }
+                                "title": "고가",
+                                "description": f"{res['high_price'] * toKRW:,}"
                             },
                             {
-                            "title": f"{top_live_kor[2]} ({top_live.iloc[2]['market']})",
-                            "description": f"{top_live.iloc[2]['live_rate']}-{top_live.iloc[2]['live_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[2]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_live_kor[2]}",
-                                "key2": f"{top_live.iloc[2]['market']}",
-                                "key3": f"{top_live_id[2]}"
-                            }
+                                "title": "저가",
+                                "description": f"{res['low_price']*toKRW:,}"
                             },
                             {
-                            "title": f"{top_live_kor[3]} ({top_live.iloc[3]['market']})",
-                            "description": f"{top_live.iloc[3]['live_rate']}-{top_live.iloc[3]['live_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[3]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_live_kor[3]}",
-                                "key2": f"{top_live.iloc[3]['market']}",
-                                "key3": f"{top_live_id[3]}"
-                            }
+                                "title": "전일 종가",
+                                "description": f"{res['prev_closing_price']*toKRW:,}"
                             },
                             {
-                            "title": f"{top_live_kor[4]} ({top_live.iloc[4]['market']})",
-                            "description": f"{top_live.iloc[4]['live_rate']}-{top_live.iloc[4]['live_rate_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[4]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_live_kor[4]}",
-                                "key2": f"{top_live.iloc[4]['market']}",
-                                "key3": f"{top_live_id[4]}"
-                            }
-                            }
-                        ]
-                        },
-                        {
-                        "header": {
-                            "title": "전일 대비 실시간 변동량 TOP 5"
-                        },
-                        "items": [
-                            {
-                            "title": f"{top_change_kor[0]} ({top_change.iloc[0]['market']})",
-                            "description": f"{top_change.iloc[0]['change']}-{top_change.iloc[0]['change_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[0]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_change_kor[0]}",
-                                "key2": f"{top_change.iloc[0]['market']}",
-                                "key3": f"{top_change_id[0]}"
-                            }
+                                "title": "변동률",
+                                "description": f"{res['signed_change_rate']*100:,.2f}"
                             },
                             {
-                            "title": f"{top_change_kor[1]} ({top_change.iloc[1]['market']})",
-                            "description": f"{top_change.iloc[1]['change']}-{top_change.iloc[1]['change_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[1]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_change_kor[1]}",
-                                "key2": f"{top_change.iloc[1]['market']}",
-                                "key3": f"{top_change_id[1]}"
-                            }
+                                "title": "최근 거래량",
+                                "description": f"{res['trade_volume']:,}"
                             },
                             {
-                            "title": f"{top_change_kor[2]} ({top_change.iloc[2]['market']})",
-                            "description": f"{top_change.iloc[2]['change']}-{top_change.iloc[2]['change_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[2]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_change_kor[2]}",
-                                "key2": f"{top_change.iloc[2]['market']}",
-                                "key3": f"{top_change_id[2]}"
-                            }
+                                "title": "신고가",
+                                "description": f"{res['highest_52_week_price']*toKRW:,}"
                             },
                             {
-                            "title": f"{top_change_kor[3]} ({top_change.iloc[3]['market']})",
-                            "description": f"{top_change.iloc[3]['change']}-{top_change.iloc[3]['change_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[3]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_change_kor[3]}",
-                                "key2": f"{top_change.iloc[3]['market']}",
-                                "key3": f"{top_change_id[3]}"
-                            }
+                                "title": "신고가 달성",
+                                "description": f"{res['highest_52_week_date']}"
                             },
                             {
-                            "title": f"{top_change_kor[4]} ({top_change.iloc[4]['market']})",
-                            "description": f"{top_change.iloc[4]['change']}-{top_change.iloc[4]['change_str']}",
-                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[4]}.png",
-                            "action":"block",
-                            "blockId":"629020537befc3101c3bde55",
-                            "extra":{
-                                "key1": f"{top_change_kor[4]}",
-                                "key2": f"{top_change.iloc[4]['market']}",
-                                "key3": f"{top_change_id[4]}"
-                            }
+                                "title": "신저가",
+                                "description": f"{res['lowest_52_week_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "신저가 달성",
+                                "description": f"{res['lowest_52_week_date']}"
                             }
                         ],
+                        "itemListAlignment" : "right",
+                        "itemListSummary": {
+                            "title": "종가",
+                            "description": f"{res['trade_price']*toKRW:,}"
+                        },
                         "buttons": [
                             {
-                            "label": "처음으로 돌아가기",
-                            "action": "block",
-                            "blockId":"627a3d5745b5fc3106459c56",
-                            "messageText" : "처음으로 돌아가기"
+                                "label": "관련 뉴스 보러가기",
+                                "action": "block",
+                                "blockId": "6290494c51c40d32c6d8de9c",
+                                "extra":{
+                                "key": f"{coin_korea}"
                             }
-                        ]
-                        }
-                    ]
+                            },
+                            {
+                                "label": "업비트로 바로 가기",
+                                "action": "webLink",
+                                "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{coin_market}"
+                            }
+                        ],
+                        "buttonLayout" : "vertical"
                     }
                 }
-                ]
-            }
+            ]
         }
-    return live_coin
+    }
+    return information
+
+
 
 
 
