@@ -2,12 +2,12 @@ import time
 from apscheduler.schedulers.blocking import BlockingScheduler
 #from . import KRW
 #from . import jobs 
-import top5
-#from . import top5
+#import top5
+from . import top5
 sched = BlockingScheduler(timezone='Asia/Seoul')
 
 # 매일 12시 30분에 실행
-@sched.scheduled_job('interval', seconds=10, id='test_1')
+@sched.scheduled_job('interval', seconds=30, id='test_1')
 def job1():
     #KRW.func_9()
     print(f'job1 : {time.strftime("%H:%M:%S")}')
@@ -16,7 +16,7 @@ def job1():
 # 매일 12시 30분에 실행
 #@sched.scheduled_job('interval', seconds=10, id='test_2')
 #@sched.scheduled_job('cron', minute='2', id='test_2')
-@sched.scheduled_job('cron', minute='3', id='test_2')
+@sched.scheduled_job('cron', minute='5', id='test_2')
 def job2():
     top5.si()
     #print(f'job2 : {time.strftime("%H:%M:%S")}')
