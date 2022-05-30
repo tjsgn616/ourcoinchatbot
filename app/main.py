@@ -873,7 +873,7 @@ def msg():
     #coin_name = coin_nu.replace(" ","")
 
 
-    namedata = marketData() # 에반데
+    namedata = marketData() 
     answer = []
     for i in namedata.index:
         if coin_name == namedata.korean_name[i] or coin_name == namedata.english_name[i] or coin_name == namedata.market[i]:
