@@ -7,10 +7,10 @@ from app import top5
 sched = BlockingScheduler(timezone='Asia/Seoul')
 
 # 매일 12시 30분에 실행
-@sched.scheduled_job('interval', seconds=30, id='test_1')
-def job1():
+#@sched.scheduled_job('interval', seconds=30, id='test_1')
+#def job1():
     #KRW.func_9()
-    print(f'job1 : {time.strftime("%H:%M:%S")}')
+    #print(f'job1 : {time.strftime("%H:%M:%S")}')
 
 
 # 매일 12시 30분에 실행
