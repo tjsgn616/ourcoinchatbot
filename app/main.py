@@ -1361,22 +1361,7 @@ def sayHello():
                               'url' : n.get('href') }
             idx += 1
 
-        #cur_page += 1
-        #print(cur_page)
-        #pages = soup.find('div', {'class' : 'sc_page_inner'})
-        #print(pages)
-        #print(pages.find_all('a'))
-        #what = (p for p in pages.find_all('a') if p.text == cur_page)
-        #print(what)
-        #for p in pages.find_all('a'):
-            #print(p)
-            #if p.text == cur_page:
-            #    next_page_url = p.get('href')
-            #    print(next_page_url)
-        #next_page_url = [p for p in pages.find_all('a') if p.text == cur_page][0].encode('utf-8').get('href')
         
-        #req = requests.get('https://search.naver.com/search.naver' + next_page_url)
-        #soup = BeautifulSoup(req.text, 'html.parser')
 
 
     news_df = DataFrame(news_dict)
