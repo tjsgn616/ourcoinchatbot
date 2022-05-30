@@ -358,7 +358,6 @@ def msg():
         return  jsonify(price_down)
 
 
-app = Flask(__name__) 
 @app.route('/price', methods=['POST'])
 def func_9():
     test = {
