@@ -21,10 +21,10 @@ def func_9():
     response = requests.get(url)
     response = response.text 
 
-    with open("filename.csv", 'w') as file:
+    with open("data/filename.csv", 'w') as file:
         writer = csv.writer(file)
         writer.writerow(response)
-    test = pd.read_csv("./app/filename.csv")  
+    test = pd.read_csv("./app/data/filename.csv")  
     print(test)
     #print(jobs.func_11) 
 func_9()
