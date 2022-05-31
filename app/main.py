@@ -1036,8 +1036,8 @@ def searchnews():
     url = []
     i = 0
     for i in range(len(news_dict)):
-      title.append(news_df.loc['title'][i])
-      url.append(news_df.loc['url'][i])
+        title.append(news_df.loc['title'][i])
+        url.append(news_df.loc['url'][i])
     #print(title)
 
 
@@ -1059,7 +1059,7 @@ def searchnews():
     #print
     imgUrl = []
     for i in range(len(soup)):
-      imgUrl.append(soup[i].find("img")["src"])
+        imgUrl.append(soup[i].find("img")["src"])
 
     #img = []
     #for i in range(5):
