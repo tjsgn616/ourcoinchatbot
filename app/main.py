@@ -20,9 +20,8 @@ from app.top5 import si
 
 app = Flask(__name__)
 
-# top_acc = pd.read_csv("./app/data/top_acc.csv")
-# top_change = pd.read_csv("./app/data/top_change.csv")
-# top_live = pd.read_csv("./app/data/live_top.csv")
+top_change = pd.read_csv("./app/data/top_change.csv")
+top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
 
@@ -300,7 +299,8 @@ def test():
 ## 실시간 top 5
 @app.route('/acc',methods=['POST'])
 def acc():
-    top_live, top_change = si()
+    tl, tc = si()
+    print(tl)
     # market 한국 이름 뽑아내기
     nameData = marketData()
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
