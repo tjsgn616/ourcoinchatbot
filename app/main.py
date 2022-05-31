@@ -15,7 +15,7 @@ import re
 import urllib.request
 from urllib.parse import quote
 
-from app.top5 import liveData
+#from app.top5 import liveData
 
 
 app = Flask(__name__)
