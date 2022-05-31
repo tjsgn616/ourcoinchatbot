@@ -300,10 +300,8 @@ def acc():
     # market 한국 이름 뽑아내기
     nameData = marketData()
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
-    top_acc_kor = []
     top_change_kor = []
     top_live_kor = []
-    top_acc_id = []
     top_change_id = []
     top_live_id = []
     for i in range(5):

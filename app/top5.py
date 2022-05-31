@@ -1,10 +1,9 @@
 from operator import itemgetter
-#import re
 import requests
 import pandas as pd
 import time
 
-#import schedule
+
 
 def si():
     # 누적 거래량 탑 5 구하기 위해 market id 불러오기
