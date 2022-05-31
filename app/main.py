@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 import re
 import urllib.request
 from urllib.parse import quote
-from app import top5
+#from app import top5
 
 app = Flask(__name__)
 
