@@ -14,23 +14,20 @@ from bs4 import BeautifulSoup
 import re
 import urllib.request
 from urllib.parse import quote
-#from app import top5
 
 app = Flask(__name__)
 
+top_acc = pd.read_csv("./app/data/top_acc.csv")
 top_change = pd.read_csv("./app/data/top_change.csv")
 top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
-
 
 ## 데이터 가져오기
 def marketData():
     # 마켓 데이터 불러오기
     marketData = requests.get('https://api.upbit.com/v1/market/all') # API 그냥 쓰면 되는듯
-
     if marketData.status_code == 200 :
         marketData = marketData.json()
-
     # 마켓 코드, 한글, 영어 df로 정리
     market = []
     korean_name = []
@@ -40,7 +37,6 @@ def marketData():
         market.append(namedata['market'])
         korean_name.append(namedata['korean_name'])
         english_name.append(namedata['english_name'].upper().replace(" ",""))
-
     namedata= pd.DataFrame((zip(market, korean_name, english_name)), columns = ['market', 'korean_name', 'english_name'])
     
     # 코인 종류 분할
@@ -58,10 +54,6 @@ def marketData():
         coinId.append(i.split('-')[1])
     namedata['Id'] = coinId
     return namedata
-
-
-
-
 ## 대표 코인 시세 조회
 @app.route('/now', methods=['POST'])
 def now():
@@ -108,7 +100,6 @@ def now():
                             ]
                         }
                     }
-
     return current_price
 ## 그 외 코인 시세 조회
 @app.route('/more',methods=['POST'])
@@ -121,13 +112,11 @@ def test():
     USD = USD.json()
     USD = USD[0]['basePrice']
     print(coin)
-
     
     answer = []
     for i in nameData.index:
         if coin == nameData.korean_name[i] or coin == nameData.english_name[i] or coin == nameData.market[i]:
             answer.append([nameData.market[i],nameData.currency[i]])
-
     # 전체 마켓 시장에서 입력한 코인과 같은 종류의 코인 뽑아서 리스트로 반환 (KRW, BTC,USDT)
     # 코인 외 잘못 발화된 값은 coin_now =[]로 빈 리스트 추출
     # 다양한 입력 형태 다 포용한다.
@@ -140,14 +129,11 @@ def test():
     # print("---coin_name----",coin_now)
     coin_now = set(coin_now)
     # print("----no 중복 코인 ----",coin_now)
-
     # 해당 코인의 화폐 시장 종류 뽑아내서 리스트로 반환 ->selection ['KRW','BTC','USDT] 형태
     # 잘못된 발화인 경우 selection =[] 빈 리스트 추출
     selection = []
     for i in range(len(answer)):
         selection.append(answer[i][1])
-
-
     if coin not in coin_now:
         coin_error = {
             "version":"2.0",
@@ -184,7 +170,6 @@ def test():
                 break
             j +=1
         
-
         # 첫 배포 -> KRW 기준의 시세조회
         # KRW 시장이 없는 코인의 경우 -> 해당 시장 값 * btc로 원화 값 반환
         # KRW 시장이 있는 경우 그대로 현재 시세 조회
@@ -192,7 +177,6 @@ def test():
         for i in range (len(name_list)):
             market_or_name.append(nameData.market[i])
         # print(market_or_name)
-
         # market code로 입력할 경우 그대로 코인 값 출력
         # 한글 또는 영어 이름 입력할 경우 -> KRW,BTC,USDT순으로 첫번째로 존재하는 값 출력
         if coin in market_or_name:
@@ -230,12 +214,10 @@ def test():
                 KRW = selection.index("KRW")
                 ticker = answer[KRW][0]
                 coin_price = pyupbit.get_current_price(ticker)
-
         tz = pytz.timezone('Asia/Seoul')
         time_now = datetime.datetime.now(tz)
         time_now = time_now.strftime('%Y-%m-%d %H:%M')
         print(time_now)
-
         coin_price_now = {
                     "version": "2.0",
                     "template": {
@@ -294,6 +276,7 @@ def test():
 
 ## /acc 
 ## 실시간 top 5
+
 @app.route('/acc',methods=['POST'])
 def acc():
     # market 한국 이름 뽑아내기
@@ -475,6 +458,8 @@ def acc():
             }
         }
     return live_coin
+#####
+
 ## 실시간 상세 조회
 @app.route("/sang",methods=['POST'])
 def sang():
@@ -600,7 +585,6 @@ def sang():
         }
     }
     return information
-
 ## 희망 매도가 조회
 @app.route('/hopeprice',methods=['POST'])
 def hope_pirce():
@@ -616,17 +600,14 @@ def hope_pirce():
     
     Goal_Price = ((Return_Rate + 100)/100)*Average_Price
     Goal_Price = round(Goal_Price,1)
-
     USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
     USD = USD.json()
     USD = USD[0]['basePrice']
-
     # 
     answer = []
     for i in nameData.index:
         if Coin_Name == nameData.korean_name[i] or Coin_Name == nameData.english_name[i] or Coin_Name == nameData.market[i]:
             answer.append([nameData.market[i],nameData.currency[i]])
-
     # 전체 마켓 시장에서 입력한 코인과 같은 종류의 코인 뽑아서 리스트로 반환 (KRW, BTC,USDT)
     # 코인 외 잘못 발화된 값은 coin_now =[]로 빈 리스트 추출
     # 다양한 입력 형태 다 포용한다.
@@ -639,14 +620,11 @@ def hope_pirce():
     # print("---coin_name----",coin_now)
     Coin_now = set(Coin_now)
     # print("----no 중복 코인 ----",coin_now)
-
     # 해당 코인의 화폐 시장 종류 뽑아내서 리스트로 반환 ->selection ['KRW','BTC','USDT] 형태
     # 잘못된 발화인 경우 selection =[] 빈 리스트 추출
     selection = []
     for i in range(len(answer)):
         selection.append(answer[i][1])
-
-
     if Coin_Name not in Coin_now:
         coin_error = {
             "version":"2.0",
@@ -684,7 +662,6 @@ def hope_pirce():
             j +=1
         
         # print("aaaaaaaaaaaaaaaaaaa",coin_korea)
-
         # 첫 배포 -> KRW 기준의 시세조회
         # KRW 시장이 없는 코인의 경우 -> 해당 시장 값 * btc로 원화 값 반환
         # KRW 시장이 있는 경우 그대로 현재 시세 조회
@@ -776,17 +753,6 @@ def hope_pirce():
         
         
         return coin_price_now
-    
-    '''
-    goal_price = ((answer2 + 100)/100)* answer
-  goal_price = round(goal_price)
-  current_price = pyupbit.get_current_price(coin)
-  income = (current_price/answer)*100 - 100
-  print(f"나의 매도 타이밍은 수익율이 {answer2}% 오른 {goal_price}원이 됐을 때입니다.")
-  print(f"현재 수익률은 {income}%입니다.")
-    '''
-
-
 ## 원하는 시점의 코인 가격 비교
 @app.route('/seejum', methods=['POST'])
 def msg():
@@ -799,8 +765,6 @@ def msg():
     coin_name = dataReceive['action']['params']['coin'].upper().replace(" ","") #.upper.replace(" ","")
     #coin_nu = coin_n.upper #.replace(" ","")
     #coin_name = coin_nu.replace(" ","")
-
-
     namedata = marketData() 
     answer = []
     for i in namedata.index:
@@ -835,8 +799,6 @@ def msg():
         }
         return coin_error
         '''
-
-
     full_time = dataReceive["action"]["detailParams"]["datetime"]["origin"] # 시간대 받기
     full_time_replace = full_time.replace("-","").replace("T","").replace(":","")
     full_time_T = full_time.replace("T"," ")
@@ -868,7 +830,6 @@ def msg():
     selection = []
     for i in range(len(answer)):
         selection.append(answer[i][1])
-
     if coin_name not in coin_now:
         coin_error = {
             "version":"2.0",
@@ -895,7 +856,6 @@ def msg():
             }
         }
         return coin_error
-
     else:
         #KRW가 없을 때
         if "KRW" not in selection :
@@ -1108,29 +1068,21 @@ def msg():
     }
 }
         return  jsonify(price_down)
-
-
 ## sunhoo_news
 @app.route('/searchnews',methods=['POST'])
 def searchnews():
     
-
     dataReceive = request.get_json()
     print(dataReceive)
     search_name = dataReceive['action']['clientExtra']['key']
     query = quote(search_name )
-
     news_num = 5
-
     news_url = f'https://search.naver.com/search.naver?where=news&sm=tab_jum&query={query}'
-
     req = requests.get(news_url)
     soup = BeautifulSoup(req.text, 'html.parser')
-
     news_dict = {} 
     idx = 0 
     #cur_page = 1
-
     while idx < news_num:
     ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
         
@@ -1143,7 +1095,6 @@ def searchnews():
             news_dict[idx] = {'title' : n.get('title'),
                               'url' : n.get('href') }
             idx += 1
-
         #cur_page += 1
         
         #pages = soup.find('div', {'class' : 'sc_page_inner'})
@@ -1151,10 +1102,7 @@ def searchnews():
         
         #req = requests.get('https://search.naver.com/search.naver' + next_page_url)
         #soup = BeautifulSoup(req.text, 'html.parser')
-
-
     news_df = pd.DataFrame(news_dict)
-
     title = []
     url = []
     i = 0
@@ -1162,8 +1110,6 @@ def searchnews():
       title.append(news_df.loc['title'][i])
       url.append(news_df.loc['url'][i])
     #print(title)
-
-
     
     
     imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query='
@@ -1183,7 +1129,6 @@ def searchnews():
     imgUrl = []
     for i in range(len(soup)):
       imgUrl.append(soup[i].find("img")["src"])
-
     #img = []
     #for i in range(5):
     #  img.append(imgUrl[i])
@@ -1252,29 +1197,60 @@ def searchnews():
         }
         }
     return responseBody
-
-
-
 ## sunhoo_news_all
 @app.route('/basic',methods=['POST'])
-def sayHello():    
+def sayHello():
+    #body = request.get_json()
+    #print(body)
+    #print(body['userRequest']['utterance'])
+    query = "비트코인|가상화폐|가상자산|이더리움"
+    query = query.replace(' ', '+') 
+    news_num = 5
     news_url = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
-    req = requests.get(news_url)
+                
+    req = requests.get(news_url.format(query))
     soup = BeautifulSoup(req.text, 'html.parser')
-
-    table = soup.find('ul',{'class' : 'list_news'})
-    list = table.find_all('a', {'class' : "news_tit"})
-#url = list.find()
+    news_dict = {} 
+    idx = 0 
+    #cur_page = 1
+    while idx < news_num:
+    ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
+        
+        table = soup.find('ul',{'class' : 'list_news'})
+        li_list = table.find_all('li', {'id': re.compile('sp_nws.*')})
+        area_list = [li.find('div', {'class' : 'news_area'}) for li in li_list]
+        a_list = [area.find('a', {'class' : 'news_tit'}) for area in area_list]
+        
+        for n in a_list[:min(len(a_list), news_num-idx)]:
+            news_dict[idx] = {'title' : n.get('title'),
+                              'url' : n.get('href') }
+            idx += 1
+        
+    news_df = pd.DataFrame(news_dict)
     title = []
     url = []
-    for i in range(5):
-    #    print(i)
-        title.append(list[i].get('title'))
-        url.append(list[i].get('href'))
-    img_soup = soup.find_all("a",class_="dsc_thumb")
+    i = 0
+    for i in range(len(news_dict)):
+      title.append(news_df.loc['title'][i])
+      url.append(news_df.loc['url'][i])
+    #print(title)
+    
+    
+    imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
+    req = urllib.request.Request(imgurl)
+    res = urllib.request.urlopen(imgurl).read()
+    
+    soup = BeautifulSoup(res,'html.parser')
+    soup = soup.find_all("a",class_="dsc_thumb")
+    #print(soup[0])
+    #print
     imgUrl = []
-    for i in range (5):
-        imgUrl.append(img_soup[i].find("img")["src"])    
+    for i in range(len(soup)):
+      imgUrl.append(soup[i].find("img")["src"])
+    #img = []
+    #for i in range(5):
+    #  img.append(imgUrl[i])
+      
     responseBody = {"version": "2.0",
                 "template": {
                 "outputs": [
@@ -1339,40 +1315,28 @@ def sayHello():
         }
         }
     return responseBody
-
-
-
-
-
-
 ## sunhoo_youtube
 @app.route('/youtube',methods=['POST'])
 # 모듈 설치
 #pip install --upgrade google_api_python_client
 #pip install oauth2client
-
 # 모듈 import 단
 #from googleapiclient.discovery import build
 #from googleapiclient.errors import HttpError
 #from oauth2client.tools import argparser
-
 # 모듈을 requirements 에 추가해줘야 heroku deploy가 작동한다.
 # google_api_python_client==2.48.0
 # oauth2client==4.1.3
-
 def sayHello1():
     #body1 = request.get_json()
     #print(body1)
     #print(body1['userRequest']['utterance'])
-
 # https://console.cloud.google.com/apis/credentials 여기서 API발급받아 사용
     DEVELOPER_KEY='AIzaSyBa_S65tRPb1mALqTtsDB1e9p6s-7kshJA' # 내 API 키값 입력
     YOUTUBE_API_SERVICE_NAME='youtube'
     YOUTUBE_API_VERSION='v3'
-
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                                             developerKey = DEVELOPER_KEY)
-
     search_response=youtube.search().list(
         q="비트코인",
         
@@ -1453,8 +1417,3 @@ def sayHello1():
               }
               }
     return responseBody1
-
-
-
-
-
