@@ -1257,71 +1257,24 @@ def searchnews():
 
 ## sunhoo_news_all
 @app.route('/basic',methods=['POST'])
-def sayHello():
-    #body = request.get_json()
-    #print(body)
-    #print(body['userRequest']['utterance'])
-
-
-    query = "비트코인|가상화폐|가상자산|이더리움"
-    query = query.replace(' ', '+') 
-
-    news_num = 5
-
+def sayHello():    
     news_url = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
-                
-    req = requests.get(news_url.format(query))
+    req = requests.get(news_url)
     soup = BeautifulSoup(req.text, 'html.parser')
 
-    news_dict = {} 
-    idx = 0 
-    #cur_page = 1
-
-    while idx < news_num:
-    ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
-        
-        table = soup.find('ul',{'class' : 'list_news'})
-        li_list = table.find_all('li', {'id': re.compile('sp_nws.*')})
-        area_list = [li.find('div', {'class' : 'news_area'}) for li in li_list]
-        a_list = [area.find('a', {'class' : 'news_tit'}) for area in area_list]
-        
-        for n in a_list[:min(len(a_list), news_num-idx)]:
-            news_dict[idx] = {'title' : n.get('title'),
-                              'url' : n.get('href') }
-            idx += 1
-
-        
-
-
-    news_df = pd.DataFrame(news_dict)
-
+    table = soup.find('ul',{'class' : 'list_news'})
+    list = table.find_all('a', {'class' : "news_tit"})
+#url = list.find()
     title = []
     url = []
-    i = 0
-    for i in range(len(news_dict)):
-      title.append(news_df.loc['title'][i])
-      url.append(news_df.loc['url'][i])
-    #print(title)
-
-
-    
-    
-    imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
-    req = urllib.request.Request(imgurl)
-    res = urllib.request.urlopen(imgurl).read()
-    
-    soup = BeautifulSoup(res,'html.parser')
-    soup = soup.find_all("a",class_="dsc_thumb")
-    #print(soup[0])
-    #print
+    for i in range(5):
+    #    print(i)
+        title.append(list[i].get('title'))
+        url.append(list[i].get('href'))
+    img_soup = soup.find_all("a",class_="dsc_thumb")
     imgUrl = []
-    for i in range(len(soup)):
-      imgUrl.append(soup[i].find("img")["src"])
-
-    #img = []
-    #for i in range(5):
-    #  img.append(imgUrl[i])
-      
+    for i in range (5):
+        imgUrl.append(img_soup[i].find("img")["src"])    
     responseBody = {"version": "2.0",
                 "template": {
                 "outputs": [
