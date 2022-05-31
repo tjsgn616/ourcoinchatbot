@@ -3,8 +3,6 @@ import requests
 import pandas as pd
 import time
 
-
-
 def si():
     # 누적 거래량 탑 5 구하기 위해 market id 불러오기
     market_list = pd.read_csv("./app/data/market_list.csv")
@@ -146,4 +144,6 @@ def si():
     top_change_val.columns=['market','change','change_str']
     top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
 
+
 si()
+
