@@ -476,7 +476,136 @@ def acc():
             }
         }
     return live_coin
+    
+@app.route("/sang",methods=['POST'])
+def snag():
+    
+    dataRecive = request.get_json()
+    # print(dataRecive)
+    coin_korea = dataRecive['action']['clientExtra']['key1']
+    coin_market = dataRecive['action']['clientExtra']['key2']
+    coin_id = dataRecive['action']['clientExtra']['key3']
+    print(coin_korea,coin_market,coin_id)
 
+    # 현재가 정보 불러오기
+    url = f"https://api.upbit.com/v1/ticker?markets={coin_market}"
+    headers = {"Accept": "application/json"}
+    response = requests.get(url, headers=headers)
+    res = response.json()
+    res = res[0]
+
+    # KRW로 값 표시하기
+    coin_kind = coin_market.split('-')[0]
+    print(coin_kind)
+
+    if "KRW" not in coin_kind:
+        if "BTC" in coin_kind:
+            toKRW = pyupbit.get_current_price("KRW-BTC")
+        else : 
+            USD = requests.get('https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD')
+            USD = USD.json()
+            USD = USD[0]['basePrice']
+            toKRW = USD
+    else:
+        toKRW = 1
+
+    
+
+    # 시간 
+    tz = pytz.timezone('Asia/Seoul')
+    time_now = datetime.datetime.now(tz)
+    time_now = time_now.strftime('%Y-%m-%d %H:%M')
+    
+    information = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "itemCard": {
+                        "imageTitle": {
+                            "title": f"{coin_market}",
+                            "description": f"{time_now}"
+                        },
+                        "title": "BTC, USDT는 KRW로 환산된 값.",
+                        "description": "52주 신고가/신저가 - ",
+                        "thumbnail": {
+                            "imageUrl": "https://user-images.githubusercontent.com/101306637/170913204-78700f45-1092-460d-a8c6-ef1d493b3bff.png",
+                            "width": 800,
+                            "height": 800
+                        },
+                        "profile": {
+                            "title": f"{coin_korea}",
+                            "imageUrl": f"https://static.upbit.com/logos/{coin_id}.png"
+                        },
+                        "itemList": [
+                            {
+                                "title": "시가",
+                                "description": f"{res['opening_price'] * toKRW:,}"
+                            },
+                            {
+                                "title": "고가",
+                                "description": f"{res['high_price'] * toKRW:,}"
+                            },
+                            {
+                                "title": "저가",
+                                "description": f"{res['low_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "전일 종가",
+                                "description": f"{res['prev_closing_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "변동률",
+                                "description": f"{res['signed_change_rate']*100:,.2f}"
+                            },
+                            {
+                                "title": "최근 거래량",
+                                "description": f"{res['trade_volume']:,}"
+                            },
+                            {
+                                "title": "신고가",
+                                "description": f"{res['highest_52_week_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "신고가 달성",
+                                "description": f"{res['highest_52_week_date']}"
+                            },
+                            {
+                                "title": "신저가",
+                                "description": f"{res['lowest_52_week_price']*toKRW:,}"
+                            },
+                            {
+                                "title": "신저가 달성",
+                                "description": f"{res['lowest_52_week_date']}"
+                            }
+                        ],
+                        "itemListAlignment" : "right",
+                        "itemListSummary": {
+                            "title": "종가",
+                            "description": f"{res['trade_price']*toKRW:,}"
+                        },
+                        "buttons": [
+                            {
+                                "label": "관련 뉴스 보러가기",
+                                "action": "block",
+                                "blockId": "6290494c51c40d32c6d8de9c",
+                                "extra":{
+                                "key": f"{coin_korea}"
+                            }
+                            },
+                            {
+                                "label": "업비트로 바로 가기",
+                                "action": "webLink",
+                                "webLinkUrl": f"https://upbit.com/exchange?code=CRIX.UPBIT.{coin_market}"
+                            }
+                        ],
+                        "buttonLayout" : "vertical"
+                    }
+                }
+            ]
+        }
+    }
+    return information
 
 ## 희망 매도가 조회
 @app.route('/hopeprice',methods=['POST'])
