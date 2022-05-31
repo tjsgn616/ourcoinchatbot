@@ -15,12 +15,14 @@ import re
 import urllib.request
 from urllib.parse import quote
 
+from app.top5 import si
+
 
 app = Flask(__name__)
 
-top_acc = pd.read_csv("./app/data/top_acc.csv")
-top_change = pd.read_csv("./app/data/top_change.csv")
-top_live = pd.read_csv("./app/data/live_top.csv")
+# top_acc = pd.read_csv("./app/data/top_acc.csv")
+# top_change = pd.read_csv("./app/data/top_change.csv")
+# top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
 
@@ -111,6 +113,7 @@ def now():
                     }
 
     return current_price
+
 ## 그 외 코인 시세 조회
 @app.route('/more',methods=['POST'])
 def test():
@@ -297,6 +300,7 @@ def test():
 ## 실시간 top 5
 @app.route('/acc',methods=['POST'])
 def acc():
+    top_live, top_change = si()
     # market 한국 이름 뽑아내기
     nameData = marketData()
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
@@ -476,9 +480,9 @@ def acc():
             }
         }
     return live_coin
-    
+
 @app.route("/sang",methods=['POST'])
-def snag():
+def sang():
     
     dataRecive = request.get_json()
     # print(dataRecive)
