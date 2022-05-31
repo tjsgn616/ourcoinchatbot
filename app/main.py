@@ -1127,77 +1127,26 @@ def searchnews():
 
     dataReceive = request.get_json()
     print(dataReceive)
+    print('activating')
     search_name = dataReceive['action']['clientExtra']['key']
-    query = quote(search_name )
-
-    news_num = 5
-
+    query = quote(search_name)
     news_url = f'https://search.naver.com/search.naver?where=news&sm=tab_jum&query={query}'
-
     req = requests.get(news_url)
     soup = BeautifulSoup(req.text, 'html.parser')
 
-    news_dict = {} 
-    idx = 0 
-    #cur_page = 1
-
-    while idx < news_num:
-    ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
-        
-        table = soup.find('ul',{'class' : 'list_news'})
-        li_list = table.find_all('li', {'id': re.compile('sp_nws.*')})
-        area_list = [li.find('div', {'class' : 'news_area'}) for li in li_list]
-        a_list = [area.find('a', {'class' : 'news_tit'}) for area in area_list]
-        
-        for n in a_list[:min(len(a_list), news_num-idx)]:
-            news_dict[idx] = {'title' : n.get('title'),
-                              'url' : n.get('href') }
-            idx += 1
-
-        #cur_page += 1
-        
-        #pages = soup.find('div', {'class' : 'sc_page_inner'})
-        #next_page_url = [p for p in pages.find_all('a') if p.text == str(cur_page)][0].get('href')
-        
-        #req = requests.get('https://search.naver.com/search.naver' + next_page_url)
-        #soup = BeautifulSoup(req.text, 'html.parser')
-
-
-    news_df = pd.DataFrame(news_dict)
-
+    table = soup.find('ul',{'class' : 'list_news'})
+    list = table.find_all('a', {'class' : "news_tit"})
+#url = list.find()
     title = []
     url = []
-    i = 0
-    for i in range(len(news_dict)):
-        title.append(news_df.loc['title'][i])
-        url.append(news_df.loc['url'][i])
-    #print(title)
-
-
-    
-    
-    imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query='
-    imgurl = imgurl + query
-    
-    #print(imgurl)
-    req = urllib.request.Request(imgurl)
-    #print(req)
-    res = urllib.request.urlopen(imgurl).read()  # 여기가 문제에요, 고쳤어요 -> url 형식으로 바꿔주었어요 (quote)
-    #print('res:' ,res)
-    
-    soup = BeautifulSoup(res,'html.parser')
-    soup = soup.find_all("a",class_="dsc_thumb")
-    #print(soup)
-    #print(soup[0])
-    #print
+    for i in range(5):
+    #    print(i)
+        title.append(list[i].get('title'))
+        url.append(list[i].get('href'))
+    img_soup = soup.find_all("a",class_="dsc_thumb")
     imgUrl = []
-    for i in range(len(soup)):
-        imgUrl.append(soup[i].find("img")["src"])
-
-    #img = []
-    #for i in range(5):
-    #  img.append(imgUrl[i])
-      
+    for i in range (5):
+        imgUrl.append(img_soup[i].find("img")["src"])
     responseBody = {"version": "2.0",
                 "template": {
                 "outputs": [
