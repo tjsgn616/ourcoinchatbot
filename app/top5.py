@@ -3,6 +3,8 @@ import requests
 import pandas as pd
 import time
 
+
+
 def si():
     # 누적 거래량 탑 5 구하기 위해 market id 불러오기
     market_list = pd.read_csv("./app/data/market_list.csv")
@@ -44,11 +46,41 @@ def si():
 
 
     # 누적거래 탑 5 정렬
+    top_coin_acc = sorted(all_response,key=itemgetter('candle_acc_trade_volume'),reverse=True)
     # 변동률 탑 5 정렬
     top_coin_ch = sorted(all_res_pct,key=itemgetter('change_rate'),reverse=True)
 
 
+
+
+    # 누적거래 탑 5 (1시간)
+    acc_market = []
+    acc_volumne = []
+    acc_change_rate = []
+    acc_change_rate_str = []
+
+    for i in range(5):
+        acc_market.append(top_coin_acc[i]['market'])
+        # if 
+        acc_volumne.append(top_coin_acc[i]['candle_acc_trade_volume'])
+        for j in range(len(top_coin_acc)):
+            if top_coin_acc[i]['market'] == all_res_pct[j]['market']:
+                acc_change_rate.append(round(all_res_pct[j]['change_rate']*100,2))
+                if all_res_pct[j]['change'] == "RISE":
+                    acc_change_rate_str.append("상승")
+                elif all_res_pct[j]['change'] == "FALL":
+                    acc_change_rate_str.append("하락")
+                else:
+                    acc_change_rate_str.append("보합")
+
     # print(acc_change_str)
+    top_acc = list(zip(acc_market,acc_volumne,acc_change_rate,acc_change_rate_str))
+    print("실시간 1분동안의 누적 거래량 탑 5")
+    print(top_acc)
+
+    top_acc_val = pd.DataFrame(top_acc)
+    top_acc_val.columns=['market','acc_trade_volume','change_rate','change_rate_str']
+    top_acc_val.to_csv("./app/data/top_acc.csv",index=True, header = True)
 
 
     # 1시간 변동률 탑 5 (매 정각으로 부터)
@@ -112,9 +144,6 @@ def si():
 
     top_change_val = pd.DataFrame(top_change_val)
     top_change_val.columns=['market','change','change_str']
-    #return live_coin, top_change_val
     top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
 
-
 si()
-

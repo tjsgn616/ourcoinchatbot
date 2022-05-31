@@ -18,7 +18,9 @@ from app import top5
 
 app = Flask(__name__)
 
-
+top_change = pd.read_csv("./app/data/top_change.csv")
+top_live = pd.read_csv("./app/data/live_top.csv")
+top_market_list = pd.read_csv("./app/data/market_list.csv")
 
 
 ## 데이터 가져오기
@@ -296,10 +298,6 @@ def test():
 def acc():
     # market 한국 이름 뽑아내기
     nameData = marketData()
-    #top_live, top_change= top5.si()
-    top_change = pd.read_csv("./app/data/top_change.csv")
-    top_live = pd.read_csv("./app/data/live_top.csv")
-    top_market_list = pd.read_csv("./app/data/market_list.csv")
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
     top_change_kor = []
     top_live_kor = []
