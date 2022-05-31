@@ -7,7 +7,7 @@ import time
 
 def si():
     # 누적 거래량 탑 5 구하기 위해 market id 불러오기
-    market_list = pd.read_csv("./app/data/market_list.csv")
+    market_list = pd.read_csv("data/market_list.csv")
     market_list = market_list['market']
     market_list = market_list.values.tolist()
     c = len(market_list)
@@ -80,7 +80,7 @@ def si():
 
     top_acc_val = pd.DataFrame(top_acc)
     top_acc_val.columns=['market','acc_trade_volume','change_rate','change_rate_str']
-    top_acc_val.to_csv("./app/data/top_acc.csv",index=True, header = True)
+    top_acc_val.to_csv("data/top_acc.csv",index=True, header = True)
 
 
     # 1시간 변동률 탑 5 (매 정각으로 부터)
@@ -118,7 +118,7 @@ def si():
     print(live_coin)
     live_coin = pd.DataFrame(live_coin)
     live_coin.columns=['market','base_time','live_rate','live_rate_str']
-    live_coin.to_csv("./app/data/live_top.csv",index=True, header=True)
+    live_coin.to_csv("data/live_top.csv",index=True, header=True)
 
 
     # 전일 대비 변동률 탑 5
@@ -144,6 +144,6 @@ def si():
 
     top_change_val = pd.DataFrame(top_change_val)
     top_change_val.columns=['market','change','change_str']
-    top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
+    top_change_val.to_csv("data/top_change.csv",index=True, header = True)
 
 si()
