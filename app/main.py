@@ -299,8 +299,8 @@ def test():
 ## 실시간 top 5
 @app.route('/acc',methods=['POST'])
 def acc():
-    tl, tc = liveData()
-    print(tl)
+    # tl, tc = liveData()
+    # print(tl)
     # market 한국 이름 뽑아내기
     nameData = marketData()
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
