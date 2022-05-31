@@ -2,9 +2,10 @@ from operator import itemgetter
 import requests
 import pandas as pd
 import time
+from flask import Flask
 
-
-
+app = Flask(__name__)
+@app.route('/price', methods=['POST'])
 def si():
     # 누적 거래량 탑 5 구하기 위해 market id 불러오기
     market_list = pd.read_csv("./app/data/market_list.csv")
@@ -141,9 +142,22 @@ def si():
 
     print("시세 변동률 탑 5 (전일대비 실시간)")
     print(top_change_val)
+    
 
     top_change_val = pd.DataFrame(top_change_val)
     top_change_val.columns=['market','change','change_str']
     top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
-
-si()
+    test = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": f"{top_change_val},{live_coin},{top_acc}"
+                }
+            }
+        ]
+    }
+}   
+    return test
+#si()
