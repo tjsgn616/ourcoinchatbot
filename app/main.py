@@ -295,7 +295,187 @@ def test():
 
 ## /acc 
 ## 실시간 top 5
+@app.route('/acc',methods=['POST'])
+def acc():
+    # market 한국 이름 뽑아내기
+    nameData = marketData()
+    # -------------------------------------------------if문 top_market_list nameData로 바꾸기
+    top_change_kor = []
+    top_live_kor = []
+    top_change_id = []
+    top_live_id = []
+    for i in range(5):
+        for j in range(len(top_market_list)):
+            if top_change.iloc[i]['market'] == top_market_list.iloc[j]['market']:
+                top_change_kor.append(nameData.iloc[j]['korean_name'])
+                top_change_id.append(nameData.iloc[j]['Id'])
+            if top_live.iloc[i]['market'] == top_market_list.iloc[j]['market']:
+                top_live_kor.append(nameData.iloc[j]['korean_name'])
+                top_live_id.append(nameData.iloc[j]['Id'])
 
+
+    live_coin = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText" : {
+                            "text":"지난 한 시간동안의 가격 변동량과 하루 전 실시간 변동량"
+                        }
+                    },
+                {
+                    "carousel": {
+                    "type": "listCard",
+                    "items": [
+                        {
+                        "header": {
+                            "title": "정각 기준 실시간 변동량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_live_kor[0]} ({top_live.iloc[0]['market']})",
+                            "description": f"{top_live.iloc[0]['live_rate']}-{top_live.iloc[0]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[0]}",
+                                "key2": f"{top_live.iloc[0]['market']}",
+                                "key3": f"{top_live_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[1]} ({top_live.iloc[1]['market']})",
+                            "description": f"{top_live.iloc[1]['live_rate']}-{top_live.iloc[1]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[1]}",
+                                "key2": f"{top_live.iloc[1]['market']}",
+                                "key3": f"{top_live_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[2]} ({top_live.iloc[2]['market']})",
+                            "description": f"{top_live.iloc[2]['live_rate']}-{top_live.iloc[2]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[2]}",
+                                "key2": f"{top_live.iloc[2]['market']}",
+                                "key3": f"{top_live_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[3]} ({top_live.iloc[3]['market']})",
+                            "description": f"{top_live.iloc[3]['live_rate']}-{top_live.iloc[3]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[3]}",
+                                "key2": f"{top_live.iloc[3]['market']}",
+                                "key3": f"{top_live_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[4]} ({top_live.iloc[4]['market']})",
+                            "description": f"{top_live.iloc[4]['live_rate']}-{top_live.iloc[4]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[4]}",
+                                "key2": f"{top_live.iloc[4]['market']}",
+                                "key3": f"{top_live_id[4]}"
+                            }
+                            }
+                        ]
+                        },
+                        {
+                        "header": {
+                            "title": "전일 대비 실시간 변동량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_change_kor[0]} ({top_change.iloc[0]['market']})",
+                            "description": f"{top_change.iloc[0]['change']}-{top_change.iloc[0]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[0]}",
+                                "key2": f"{top_change.iloc[0]['market']}",
+                                "key3": f"{top_change_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[1]} ({top_change.iloc[1]['market']})",
+                            "description": f"{top_change.iloc[1]['change']}-{top_change.iloc[1]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[1]}",
+                                "key2": f"{top_change.iloc[1]['market']}",
+                                "key3": f"{top_change_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[2]} ({top_change.iloc[2]['market']})",
+                            "description": f"{top_change.iloc[2]['change']}-{top_change.iloc[2]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[2]}",
+                                "key2": f"{top_change.iloc[2]['market']}",
+                                "key3": f"{top_change_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[3]} ({top_change.iloc[3]['market']})",
+                            "description": f"{top_change.iloc[3]['change']}-{top_change.iloc[3]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[3]}",
+                                "key2": f"{top_change.iloc[3]['market']}",
+                                "key3": f"{top_change_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[4]} ({top_change.iloc[4]['market']})",
+                            "description": f"{top_change.iloc[4]['change']}-{top_change.iloc[4]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[4]}",
+                                "key2": f"{top_change.iloc[4]['market']}",
+                                "key3": f"{top_change_id[4]}"
+                            }
+                            }
+                        ],
+                        "buttons": [
+                            {
+                            "label": "처음으로 돌아가기",
+                            "action": "block",
+                            "blockId":"627a3d5745b5fc3106459c56",
+                            "messageText" : "처음으로 돌아가기"
+                            }
+                        ]
+                        }
+                    ]
+                    }
+                }
+                ]
+            }
+        }
+    return live_coin
 #####
 
 ## 실시간 상세 조회
