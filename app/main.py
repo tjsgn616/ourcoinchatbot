@@ -1215,6 +1215,10 @@ def searchnews():
 
 
 ## sunhoo_news_all
+
+
+'''
+
 @app.route('/basic',methods=['POST'])
 def basic():
     #body = request.get_json()
@@ -1347,8 +1351,90 @@ def basic():
     return responseBody
 
 
+'''
+@app.route('/basic',methods=['POST'])
+def basic():    
+    news_url = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
+    req = requests.get(news_url)
+    soup = BeautifulSoup(req.text, 'html.parser')
 
-
+    table = soup.find('ul',{'class' : 'list_news'})
+    list = table.find_all('a', {'class' : "news_tit"})
+#url = list.find()
+    title = []
+    url = []
+    for i in range(5):
+    #    print(i)
+        title.append(list[i].get('title'))
+        url.append(list[i].get('href'))
+    img_soup = soup.find_all("a",class_="dsc_thumb")
+    imgUrl = []
+    for i in range (5):
+        imgUrl.append(img_soup[i].find("img")["src"])    
+    responseBody = {"version": "2.0",
+                "template": {
+                "outputs": [
+                {
+                    "carousel": {
+                    "type":"listCard",
+                    "items": [
+                        {
+                        "header": {
+                        "title": "가상화폐 연관 뉴스 보러가기"
+                        },
+              "items": [
+                {
+                "title": f"{title[0]}",
+                "imageUrl": f"{imgUrl[0]}",
+                "link": {
+                  "web": f"{url[0]}"
+                        }
+                },
+                {
+                  "title": f"{title[1]}",
+                  "imageUrl": f"{imgUrl[1]}",
+                  "link": {
+                    "web": f"{url[1]}"
+                  }
+                },
+                {
+                  "title": f"{title[2]}",
+                 "imageUrl": f"{imgUrl[2]}"  ,             
+                  "link": {
+                    "web": f"{url[2]}"
+                  }
+                },
+                {
+                  "title": f"{title[3]}",
+                  "imageUrl": f"{imgUrl[3]}",
+                  "link": {
+                    "web": f"{url[3]}"
+                  }
+                },
+                {
+                  "title": f"{title[4]}",
+                  "imageUrl": f"{imgUrl[4]}",      
+                  "link": {
+                    "web": f"{url[4]}"
+                  }
+              }
+              ],
+                "buttons": [
+            {
+              "label": "더 보기",
+              "action": "webLink",
+              "webLinkUrl": "https://search.naver.com/search.naver?where=news&sm=tab_jum&query=비트코인%7C이더리움%7C가상화폐%7C가상자산"
+            }
+                
+              ]
+                  }
+              ]  
+          }
+        }
+        ]
+        }
+        }
+    return responseBody
 
 
 ## sunhoo_youtube
