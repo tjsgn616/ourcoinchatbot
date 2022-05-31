@@ -17,7 +17,7 @@ from urllib.parse import quote
 
 app = Flask(__name__)
 
-top_acc = pd.read_csv("./app/data/top_acc.csv")
+#top_acc = pd.read_csv("./app/data/top_acc.csv")
 top_change = pd.read_csv("./app/data/top_change.csv")
 top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
