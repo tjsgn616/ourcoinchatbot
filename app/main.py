@@ -115,7 +115,7 @@ def now():
 
 ## 그 외 코인 시세 조회
 @app.route('/more',methods=['POST'])
-def test():
+def more():
     # 마켓 이름 데이터, 환율값, 발화 값 가져오기
     nameData = marketData()
     dataRecive = request.get_json()
@@ -613,7 +613,7 @@ def sang():
 
 ## 희망 매도가 조회
 @app.route('/hopeprice',methods=['POST'])
-def hope_pirce():
+def hopeprice():
     nameData = marketData()
     dataReceive = request.get_json()
     
@@ -799,7 +799,7 @@ def hope_pirce():
 
 ## 원하는 시점의 코인 가격 비교
 @app.route('/seejum', methods=['POST'])
-def msg():
+def seejum():
     dataReceive = request.get_json()
     
     #namedata2 = namedata
@@ -1216,7 +1216,7 @@ def searchnews():
 
 ## sunhoo_news_all
 @app.route('/basic',methods=['POST'])
-def sayHello():
+def basic():
     #body = request.get_json()
     #print(body)
     #print(body['userRequest']['utterance'])
@@ -1366,7 +1366,7 @@ def sayHello():
 # google_api_python_client==2.48.0
 # oauth2client==4.1.3
 
-def sayHello1():
+def youtube():
     #body1 = request.get_json()
     #print(body1)
     #print(body1['userRequest']['utterance'])
