@@ -473,6 +473,15 @@ def hope_pirce():
         
         
         return coin_price_now
+    
+    '''
+    goal_price = ((answer2 + 100)/100)* answer
+  goal_price = round(goal_price)
+  current_price = pyupbit.get_current_price(coin)
+  income = (current_price/answer)*100 - 100
+  print(f"나의 매도 타이밍은 수익율이 {answer2}% 오른 {goal_price}원이 됐을 때입니다.")
+  print(f"현재 수익률은 {income}%입니다.")
+    '''
 
 
 ## 원하는 시점의 코인 가격 비교
