@@ -11,7 +11,7 @@ from googleapiclient.errors import HttpError
 from oauth2client.tools import argparser
 from bs4 import BeautifulSoup
 #from pandas import DataFrame
-#import re
+import re
 import urllib.request
 from urllib.parse import quote
 
