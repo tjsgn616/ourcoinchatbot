@@ -106,10 +106,16 @@ def si():
 
     print("시세 변동률 탑 5 (전일대비 실시간)")
     print(top_change_val)
-    top_change = top_change_val
-    top_live = live_coin
+    # top_change = top_change_val
+    # top_live = live_coin
     # top_change_val = pd.DataFrame(top_change_val)
     # top_change_val.columns=['market','change','change_str']
     # top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
+    return top_change_val, live_coin
+
+def liveData(top_change_val, live_coin):
+    top_change = top_change_val
+    top_live = live_coin
     return top_live, top_change
+    
 si()
