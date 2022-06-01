@@ -1,5 +1,5 @@
 #from re import template
-from flask import Flask, jsonify, request #, g ,make_response
+from flask import Flask, jsonify, request,g #, g ,make_response
 import pandas as pd
 import pyupbit
 import requests
@@ -19,19 +19,17 @@ from urllib.parse import quote
 
 from app import test
 
-
-
 app = Flask(__name__)
 
 top_change = pd.read_csv("./app/data/top_change.csv")
 top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
-
+testt = test.test()
 
 @app.route('/price',methods=['POST'])
 def price():
-    testt = test.result
+    #testt = test.test()
     test = {
     "version": "2.0",
     "template": {
