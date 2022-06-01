@@ -119,7 +119,7 @@ def si():
 
 
 def liveData():
-    print("데이터베이스 저장 시작")
+    
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
@@ -141,7 +141,7 @@ def liveData():
     df2 = top_change_val
         # 데이터 불러오기
     # 되는거 확인 top 파일을 import 해서 가져오면 될듯
-
+    print("데이터베이스 저장 시작")
     df.to_sql(name = 'live_coin',
             con = engine_postgresql,
             schema = 'public',
