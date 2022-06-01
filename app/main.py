@@ -314,7 +314,7 @@ def price():
         "outputs": [
             {
                 "simpleText": {
-                    "text": f"{result}집에 {result2} 싶어요"
+                    "text": f"{result2}"
                 }
             }
         ]
