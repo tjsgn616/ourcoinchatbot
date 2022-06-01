@@ -137,14 +137,14 @@ def si():
     df.to_sql(name = 'live_coin',
             con = engine_postgresql,
             schema = 'public',
-            if_exists = 'append',
+            if_exists = 'replace',
             index = False
             ),
 
     df2.to_sql(name = 'top_change_val',
             con = engine_postgresql,
             schema = 'public',
-            if_exists = 'append',
+            if_exists = 'replace',
             index = False
             )
 
