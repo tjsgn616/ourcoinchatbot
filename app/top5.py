@@ -2,12 +2,14 @@ from operator import itemgetter
 import requests
 import pandas as pd
 import time
-
-
+from sqlalchemy import create_engine
+import pandas.io.sql as psql
+import psycopg2    
 
 def si():
     # 탑 5 구하기 위해 market id 불러오기
-    market_list = pd.read_csv("./app/data/market_list.csv")
+    #market_list = pd.read_csv("./app/data/market_list.csv")
+    market_list = pd.read_csv("data/market_list.csv")
     market_list = market_list['market']
     market_list = market_list.values.tolist()
     c = len(market_list)
@@ -81,7 +83,7 @@ def si():
     live_coin = live_coin[:5]
     print("정각 기준 실시가 변동률 탑 5")
     print(live_coin)
-    # live_coin = pd.DataFrame(live_coin)
+    live_coin = pd.DataFrame(live_coin)
     # live_coin.columns=['market','base_time','live_rate','live_rate_str']
     # live_coin.to_csv("./app/data/live_top.csv",index=True, header=True)
 
@@ -108,7 +110,7 @@ def si():
     print(top_change_val)
     # top_change = top_change_val
     # top_live = live_coin
-    # top_change_val = pd.DataFrame(top_change_val)
+    top_change_val = pd.DataFrame(top_change_val)
     # top_change_val.columns=['market','change','change_str']
     # top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
     #return top_change_val, live_coin
@@ -117,5 +119,40 @@ def si():
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
-    
+    return(top_change_val,live_coin)
 si()
+
+def qwerty(top_change_val,live_coin):
+    # PostgreSQL 데이터베이스 접속 엔진 생성.
+    local_postgresql_url = "postgresql://etdrsbuvfkhhee:e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a@ec2-54-157-79-121.compute-1.amazonaws.com:5432/d5c17nuarv857h"
+    # "postgresql://user:password@localhost:5432/DB명"
+
+    # localhost의 812 포트를 Parallels에 설치된 PostgreSQL 5432 포트로 포트포워딩.
+    engine_postgresql = create_engine(local_postgresql_url)
+
+    df = live_coin
+    df2 = top_change_val
+     # 데이터 불러오기
+    # 되는거 확인 top 파일을 import 해서 가져오면 될듯
+
+    df.to_sql(name = 'live_coin',
+            con = engine_postgresql,
+            schema = 'public',
+            if_exists = 'append',
+            index = False
+            ),
+
+    df2.to_sql(name = 'top_change_val',
+            con = engine_postgresql,
+            schema = 'public',
+            if_exists = 'append',
+            index = False
+            )
+    
+    
+    connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
+
+    result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
+    result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
+    return(result,result2)
+qwerty()

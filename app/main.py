@@ -17,7 +17,7 @@ from urllib.parse import quote
 ####### test ######
 #from app.top5 import liveData
 
-from app import test
+from app import top5
 
 app = Flask(__name__)
 
@@ -25,18 +25,19 @@ top_change = pd.read_csv("./app/data/top_change.csv")
 top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
-testt = test.test()
+qwerty = top5.qwerty()
 
 @app.route('/price',methods=['POST'])
 def price():
-    #testt = test.test()
+    result = qwerty[0]
+    result2 = qwerty[1]
     test = {
     "version": "2.0",
     "template": {
         "outputs": [
             {
                 "simpleText": {
-                    "text": f"{testt}집에 가고 싶어요"
+                    "text": f"{result}집에 {result2} 싶어요"
                 }
             }
         ]
