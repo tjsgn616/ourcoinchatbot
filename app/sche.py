@@ -7,14 +7,14 @@ from app import top5
 sched = BlockingScheduler(timezone='Asia/Seoul')
 
 # 매일 12시 30분에 실행
-#@sched.scheduled_job('interval', seconds=30, id='test_1')
-#def job1():
-    #KRW.func_9()
+@sched.scheduled_job('interval', minutes=10, id='test_1')
+def job1():
+    top5.liveData()
     #print(f'job1 : {time.strftime("%H:%M:%S")}')
 
 
 # 매일 12시 30분에 실행
-@sched.scheduled_job('interval', minutes=10, id='test_1')
+@sched.scheduled_job('interval', minutes=10, id='test_2')
 #@sched.scheduled_job('cron', minute='2', id='test_2')
 #@sched.scheduled_job('cron', minute='5', id='test_2')
 def job2():

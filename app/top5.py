@@ -8,8 +8,8 @@ from sqlalchemy import create_engine
 
 def si():
     # 탑 5 구하기 위해 market id 불러오기
-    #market_list = pd.read_csv("./app/data/market_list.csv")
-    market_list = pd.read_csv("data/market_list.csv")
+    market_list = pd.read_csv("./app/data/market_list.csv")
+    #market_list = pd.read_csv("data/market_list.csv")
     market_list = market_list['market']
     market_list = market_list.values.tolist()
     c = len(market_list)
@@ -115,9 +115,10 @@ def si():
     top_change_val.columns=['market','change','change_str']
     top_change_val = top_change_val
     # top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
-    #return top_change_val, live_coin
+    return top_change_val, live_coin
+si()
 
-# def liveData(top_change_val, live_coin):
+def liveData(top_change_val, live_coin):
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
@@ -150,7 +151,7 @@ def si():
             index = False
             )
 
-si()
+liveData()
 
     
     
