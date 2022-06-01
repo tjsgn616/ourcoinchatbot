@@ -17,7 +17,7 @@ from urllib.parse import quote
 ####### test ######
 #from app.top5 import liveData
 
-import app.test
+from app import top5
 
 
 
@@ -27,11 +27,11 @@ top_change = pd.read_csv("./app/data/top_change.csv")
 top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
-qwerty = app.test
-testt = qwerty.result
+
+
 @app.route('/price',methods=['POST'])
 def price():
-   
+    testt = top5.result
     test = {
     "version": "2.0",
     "template": {
