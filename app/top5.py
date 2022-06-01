@@ -119,11 +119,10 @@ def si():
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
-    return(top_change_val,live_coin)
-si()
 
-def qwerty(top_change_val,live_coin):
-    # PostgreSQL 데이터베이스 접속 엔진 생성.
+###
+
+        # PostgreSQL 데이터베이스 접속 엔진 생성.
     local_postgresql_url = "postgresql://etdrsbuvfkhhee:e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a@ec2-54-157-79-121.compute-1.amazonaws.com:5432/d5c17nuarv857h"
     # "postgresql://user:password@localhost:5432/DB명"
 
@@ -132,7 +131,7 @@ def qwerty(top_change_val,live_coin):
 
     df = live_coin
     df2 = top_change_val
-     # 데이터 불러오기
+        # 데이터 불러오기
     # 되는거 확인 top 파일을 import 해서 가져오면 될듯
 
     df.to_sql(name = 'live_coin',
@@ -148,11 +147,9 @@ def qwerty(top_change_val,live_coin):
             if_exists = 'append',
             index = False
             )
-    
-    
-    connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
 
-    result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
-    result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
-    return(result,result2)
-qwerty()
+si()
+
+    
+    
+    
