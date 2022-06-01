@@ -1,5 +1,10 @@
 import pandas as pd
-from sqlalchemy import create_engine    # DB 접속 엔진을 만들어준다.
+from sqlalchemy import create_engine
+import pandas.io.sql as psql
+
+import psycopg2    
+
+
 host = 'ec2-54-157-79-121.compute-1.amazonaws.com'
 user = 'etdrsbuvfkhhee'
 password = 'e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a'
@@ -27,15 +32,12 @@ df.to_sql(name = 'test',
 
 ## 출력 구문
 
-import pandas.io.sql as psql
 
-import psycopg2
+def test():
 
- 
+    connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
 
-connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
+    result = psql.read_sql("SELECT * FROM test;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
 
-result = psql.read_sql("SELECT * FROM test;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
-
-print(result)
+    return(result)
 
