@@ -14,7 +14,7 @@ sched = BlockingScheduler(timezone='Asia/Seoul')
 
 
 # 매일 12시 30분에 실행
-@sched.scheduled_job('interval', minutes=10, id='test_1')
+@sched.scheduled_job('interval', seconds=5, id='test_1')
 #@sched.scheduled_job('cron', minute='2', id='test_2')
 #@sched.scheduled_job('cron', minute='5', id='test_2')
 def job2():

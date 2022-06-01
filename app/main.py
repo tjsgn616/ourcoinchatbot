@@ -22,14 +22,15 @@ import psycopg2
 
 app = Flask(__name__)
 
-top_change = pd.read_csv("./app/data/top_change.csv")
-top_live = pd.read_csv("./app/data/live_top.csv")
+#top_change = pd.read_csv("./app/data/top_change.csv")
+#top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
 
 #result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
 #result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
 
 
+connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
 
 
 ## 데이터 가져오기
@@ -301,12 +302,12 @@ def more():
         }
         return coin_price_now
 ###### 
-
+'''
 @app.route('/price',methods=['POST'])
 def price():
-    connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
-    result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
-    result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
+    #connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', dbname='d5c17nuarv857h', user='etdrsbuvfkhhee', password='e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a')
+    #result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
+    #result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
     
     test = {
     "version": "2.0",
@@ -321,6 +322,7 @@ def price():
     }
 }
     return test
+'''
 ## /acc 
 ## 실시간 top 5
 @app.route('/acc',methods=['POST'])
@@ -329,8 +331,8 @@ def acc():
     # print(tl)
     # market 한국 이름 뽑아내기
     nameData = marketData()
-    #result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
-    #result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
+    top_live = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
+    top_change = psql.read_sql("SELECT * FROM top_change_val;", connection)
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
     top_change_kor = []
     top_live_kor = []
