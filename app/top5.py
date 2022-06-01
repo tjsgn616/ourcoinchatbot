@@ -115,15 +115,19 @@ def si():
     top_change_val.columns=['market','change','change_str']
     top_change_val = top_change_val
     # top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
-    return top_change_val, live_coin
-si()
+    return (live_coin, top_change_val)
 
-def liveData(top_change_val, live_coin):
+
+def liveData():
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
-
-###
+    gmail = si() # 그냥 눈에 들어오는 단어로 변수함
+    live_coin = gmail[0]
+    top_change_val = gmail[1]
+    #print(live_coin)
+    #print(top_change_val)
+    #live_coin = si()
 
         # PostgreSQL 데이터베이스 접속 엔진 생성.
     local_postgresql_url = "postgresql://etdrsbuvfkhhee:e65424e293a012117389160f4f259d5325da7c65962e14cc0a6193efda84391a@ec2-54-157-79-121.compute-1.amazonaws.com:5432/d5c17nuarv857h"
@@ -150,7 +154,6 @@ def liveData(top_change_val, live_coin):
             if_exists = 'replace',
             index = False
             )
-
 liveData()
 
     
