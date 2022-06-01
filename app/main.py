@@ -30,23 +30,7 @@ connection = psycopg2.connect(host='ec2-54-157-79-121.compute-1.amazonaws.com', 
 #result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
 #result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
 
-@app.route('/price',methods=['POST'])
-def price():
-    result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
-    result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
-    test = {
-    "version": "2.0",
-    "template": {
-        "outputs": [
-            {
-                "simpleText": {
-                    "text": f"{result}집에 {result2} 싶어요"
-                }
-            }
-        ]
-    }
-}
-    return test
+
 
 
 ## 데이터 가져오기
@@ -319,6 +303,24 @@ def more():
         return coin_price_now
 ###### 
 
+@app.route('/price',methods=['POST'])
+def price():
+    result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
+    result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
+    
+    test = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": f"{result}집에 {result2} 싶어요"
+                }
+            }
+        ]
+    }
+}
+    return test
 ## /acc 
 ## 실시간 top 5
 @app.route('/acc',methods=['POST'])
@@ -327,6 +329,8 @@ def acc():
     # print(tl)
     # market 한국 이름 뽑아내기
     nameData = marketData()
+    #result = psql.read_sql("SELECT * FROM live_coin;", connection) # 괄호안에 SQL 구문 써주면 될듯.. 테이블 읽는 구문도 있던걸로 아는데
+    #result2 = psql.read_sql("SELECT * FROM top_change_val;", connection)
     # -------------------------------------------------if문 top_market_list nameData로 바꾸기
     top_change_kor = []
     top_live_kor = []

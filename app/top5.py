@@ -84,7 +84,8 @@ def si():
     print("정각 기준 실시가 변동률 탑 5")
     print(live_coin)
     live_coin = pd.DataFrame(live_coin)
-    # live_coin.columns=['market','base_time','live_rate','live_rate_str']
+    live_coin.columns=['market','base_time','live_rate','live_rate_str']
+    live_coin = live_coin
     # live_coin.to_csv("./app/data/live_top.csv",index=True, header=True)
 
 
@@ -111,7 +112,8 @@ def si():
     # top_change = top_change_val
     # top_live = live_coin
     top_change_val = pd.DataFrame(top_change_val)
-    # top_change_val.columns=['market','change','change_str']
+    top_change_val.columns=['market','change','change_str']
+    top_change_val = top_change_val
     # top_change_val.to_csv("./app/data/top_change.csv",index=True, header = True)
     #return top_change_val, live_coin
 
