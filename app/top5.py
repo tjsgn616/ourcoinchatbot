@@ -3,13 +3,13 @@ import requests
 import pandas as pd
 import time
 from sqlalchemy import create_engine
-import pandas.io.sql as psql
-import psycopg2    
+#import pandas.io.sql as psql
+#from psycopg2 import extensions      
 
 def si():
     # 탑 5 구하기 위해 market id 불러오기
-    market_list = pd.read_csv("./app/data/market_list.csv")
-    #market_list = pd.read_csv("data/market_list.csv")
+    #market_list = pd.read_csv("./app/data/market_list.csv")
+    market_list = pd.read_csv("data/market_list.csv")
     market_list = market_list['market']
     market_list = market_list.values.tolist()
     c = len(market_list)
