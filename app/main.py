@@ -11,17 +11,41 @@ from googleapiclient.errors import HttpError
 from oauth2client.tools import argparser
 from bs4 import BeautifulSoup
 #from pandas import DataFrame
-#import re
+import re
 import urllib.request
 from urllib.parse import quote
-
+####### test ######
+#from app.top5 import liveData
+import app.test
 
 app = Flask(__name__)
 
-top_acc = pd.read_csv("./app/data/top_acc.csv")
 top_change = pd.read_csv("./app/data/top_change.csv")
 top_live = pd.read_csv("./app/data/live_top.csv")
 top_market_list = pd.read_csv("./app/data/market_list.csv")
+
+qwerty = app.test
+testt = qwerty.result
+@app.route('/price',methods=['POST'])
+def price():
+   
+    test = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": f"{testt}집에 가고 싶어요"
+                }
+            }
+        ]
+    }
+}
+    return test
+
+
+
+
 
 
 ## 데이터 가져오기
@@ -111,9 +135,10 @@ def now():
                     }
 
     return current_price
+
 ## 그 외 코인 시세 조회
 @app.route('/more',methods=['POST'])
-def test():
+def more():
     # 마켓 이름 데이터, 환율값, 발화 값 가져오기
     nameData = marketData()
     dataRecive = request.get_json()
@@ -295,10 +320,190 @@ def test():
 
 ## /acc 
 ## 실시간 top 5
+@app.route('/acc',methods=['POST'])
+def acc():
+    # tl, tc = liveData()
+    # print(tl)
+    # market 한국 이름 뽑아내기
+    nameData = marketData()
+    # -------------------------------------------------if문 top_market_list nameData로 바꾸기
+    top_change_kor = []
+    top_live_kor = []
+    top_change_id = []
+    top_live_id = []
+    for i in range(5):
+        for j in range(len(top_market_list)):
+            if top_change.iloc[i]['market'] == top_market_list.iloc[j]['market']:
+                top_change_kor.append(nameData.iloc[j]['korean_name'])
+                top_change_id.append(nameData.iloc[j]['Id'])
+            if top_live.iloc[i]['market'] == top_market_list.iloc[j]['market']:
+                top_live_kor.append(nameData.iloc[j]['korean_name'])
+                top_live_id.append(nameData.iloc[j]['Id'])
 
-#####
 
-## 실시간 상세 조회
+    live_coin = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText" : {
+                            "text":"지난 한 시간동안의 가격 변동량과 하루 전 실시간 변동량"
+                        }
+                    },
+                {
+                    "carousel": {
+                    "type": "listCard",
+                    "items": [
+                        {
+                        "header": {
+                            "title": "정각 기준 실시간 변동량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_live_kor[0]} ({top_live.iloc[0]['market']})",
+                            "description": f"{top_live.iloc[0]['live_rate']}-{top_live.iloc[0]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[0]}",
+                                "key2": f"{top_live.iloc[0]['market']}",
+                                "key3": f"{top_live_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[1]} ({top_live.iloc[1]['market']})",
+                            "description": f"{top_live.iloc[1]['live_rate']}-{top_live.iloc[1]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[1]}",
+                                "key2": f"{top_live.iloc[1]['market']}",
+                                "key3": f"{top_live_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[2]} ({top_live.iloc[2]['market']})",
+                            "description": f"{top_live.iloc[2]['live_rate']}-{top_live.iloc[2]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[2]}",
+                                "key2": f"{top_live.iloc[2]['market']}",
+                                "key3": f"{top_live_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[3]} ({top_live.iloc[3]['market']})",
+                            "description": f"{top_live.iloc[3]['live_rate']}-{top_live.iloc[3]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[3]}",
+                                "key2": f"{top_live.iloc[3]['market']}",
+                                "key3": f"{top_live_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_live_kor[4]} ({top_live.iloc[4]['market']})",
+                            "description": f"{top_live.iloc[4]['live_rate']}-{top_live.iloc[4]['live_rate_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_live_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_live_kor[4]}",
+                                "key2": f"{top_live.iloc[4]['market']}",
+                                "key3": f"{top_live_id[4]}"
+                            }
+                            }
+                        ]
+                        },
+                        {
+                        "header": {
+                            "title": "전일 대비 실시간 변동량 TOP 5"
+                        },
+                        "items": [
+                            {
+                            "title": f"{top_change_kor[0]} ({top_change.iloc[0]['market']})",
+                            "description": f"{top_change.iloc[0]['change']}-{top_change.iloc[0]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[0]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[0]}",
+                                "key2": f"{top_change.iloc[0]['market']}",
+                                "key3": f"{top_change_id[0]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[1]} ({top_change.iloc[1]['market']})",
+                            "description": f"{top_change.iloc[1]['change']}-{top_change.iloc[1]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[1]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[1]}",
+                                "key2": f"{top_change.iloc[1]['market']}",
+                                "key3": f"{top_change_id[1]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[2]} ({top_change.iloc[2]['market']})",
+                            "description": f"{top_change.iloc[2]['change']}-{top_change.iloc[2]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[2]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[2]}",
+                                "key2": f"{top_change.iloc[2]['market']}",
+                                "key3": f"{top_change_id[2]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[3]} ({top_change.iloc[3]['market']})",
+                            "description": f"{top_change.iloc[3]['change']}-{top_change.iloc[3]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[3]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[3]}",
+                                "key2": f"{top_change.iloc[3]['market']}",
+                                "key3": f"{top_change_id[3]}"
+                            }
+                            },
+                            {
+                            "title": f"{top_change_kor[4]} ({top_change.iloc[4]['market']})",
+                            "description": f"{top_change.iloc[4]['change']}-{top_change.iloc[4]['change_str']}",
+                            "imageUrl": f"https://static.upbit.com/logos/{top_change_id[4]}.png",
+                            "action":"block",
+                            "blockId":"629020537befc3101c3bde55",
+                            "extra":{
+                                "key1": f"{top_change_kor[4]}",
+                                "key2": f"{top_change.iloc[4]['market']}",
+                                "key3": f"{top_change_id[4]}"
+                            }
+                            }
+                        ],
+                        "buttons": [
+                            {
+                            "label": "처음으로 돌아가기",
+                            "action": "block",
+                            "blockId":"627a3d5745b5fc3106459c56",
+                            "messageText" : "처음으로 돌아가기"
+                            }
+                        ]
+                        }
+                    ]
+                    }
+                }
+                ]
+            }
+        }
+    return live_coin
+
 @app.route("/sang",methods=['POST'])
 def sang():
     
@@ -429,10 +634,9 @@ def sang():
     }
     return information
 
-
 ## 희망 매도가 조회
 @app.route('/hopeprice',methods=['POST'])
-def hope_pirce():
+def hopeprice():
     nameData = marketData()
     dataReceive = request.get_json()
     
@@ -605,11 +809,20 @@ def hope_pirce():
         
         
         return coin_price_now
+    
+    '''
+    goal_price = ((answer2 + 100)/100)* answer
+  goal_price = round(goal_price)
+  current_price = pyupbit.get_current_price(coin)
+  income = (current_price/answer)*100 - 100
+  print(f"나의 매도 타이밍은 수익율이 {answer2}% 오른 {goal_price}원이 됐을 때입니다.")
+  print(f"현재 수익률은 {income}%입니다.")
+    '''
 
 
 ## 원하는 시점의 코인 가격 비교
 @app.route('/seejum', methods=['POST'])
-def msg():
+def seejum():
     dataReceive = request.get_json()
     
     #namedata2 = namedata
@@ -937,77 +1150,26 @@ def searchnews():
 
     dataReceive = request.get_json()
     print(dataReceive)
+    print('activating')
     search_name = dataReceive['action']['clientExtra']['key']
-    query = quote(search_name )
-
-    news_num = 5
-
+    query = quote(search_name)
     news_url = f'https://search.naver.com/search.naver?where=news&sm=tab_jum&query={query}'
-
     req = requests.get(news_url)
     soup = BeautifulSoup(req.text, 'html.parser')
 
-    news_dict = {} 
-    idx = 0 
-    #cur_page = 1
-
-    while idx < news_num:
-    ### 네이버 뉴스 웹페이지 구성이 바뀌어 태그명, class 속성 값 등을 수정함(20210126) ###
-        
-        table = soup.find('ul',{'class' : 'list_news'})
-        li_list = table.find_all('li', {'id': re.compile('sp_nws.*')})
-        area_list = [li.find('div', {'class' : 'news_area'}) for li in li_list]
-        a_list = [area.find('a', {'class' : 'news_tit'}) for area in area_list]
-        
-        for n in a_list[:min(len(a_list), news_num-idx)]:
-            news_dict[idx] = {'title' : n.get('title'),
-                              'url' : n.get('href') }
-            idx += 1
-
-        #cur_page += 1
-        
-        #pages = soup.find('div', {'class' : 'sc_page_inner'})
-        #next_page_url = [p for p in pages.find_all('a') if p.text == str(cur_page)][0].get('href')
-        
-        #req = requests.get('https://search.naver.com/search.naver' + next_page_url)
-        #soup = BeautifulSoup(req.text, 'html.parser')
-
-
-    news_df = pd.DataFrame(news_dict)
-
+    table = soup.find('ul',{'class' : 'list_news'})
+    list = table.find_all('a', {'class' : "news_tit"})
+#url = list.find()
     title = []
     url = []
-    i = 0
-    for i in range(len(news_dict)):
-      title.append(news_df.loc['title'][i])
-      url.append(news_df.loc['url'][i])
-    #print(title)
-
-
-    
-    
-    imgurl = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query='
-    imgurl = imgurl + query
-    
-    #print(imgurl)
-    req = urllib.request.Request(imgurl)
-    #print(req)
-    res = urllib.request.urlopen(imgurl).read()  # 여기가 문제에요, 고쳤어요 -> url 형식으로 바꿔주었어요 (quote)
-    #print('res:' ,res)
-    
-    soup = BeautifulSoup(res,'html.parser')
-    soup = soup.find_all("a",class_="dsc_thumb")
-    #print(soup)
-    #print(soup[0])
-    #print
+    for i in range(5):
+    #    print(i)
+        title.append(list[i].get('title'))
+        url.append(list[i].get('href'))
+    img_soup = soup.find_all("a",class_="dsc_thumb")
     imgUrl = []
-    for i in range(len(soup)):
-      imgUrl.append(soup[i].find("img")["src"])
-
-    #img = []
-    #for i in range(5):
-    #  img.append(imgUrl[i])
-      
+    for i in range (5):
+        imgUrl.append(img_soup[i].find("img")["src"])
     responseBody = {"version": "2.0",
                 "template": {
                 "outputs": [
@@ -1076,8 +1238,12 @@ def searchnews():
 
 
 ## sunhoo_news_all
+
+
+'''
+
 @app.route('/basic',methods=['POST'])
-def sayHello():
+def basic():
     #body = request.get_json()
     #print(body)
     #print(body['userRequest']['utterance'])
@@ -1208,8 +1374,90 @@ def sayHello():
     return responseBody
 
 
+'''
+@app.route('/basic',methods=['POST'])
+def basic():    
+    news_url = 'https://search.naver.com/search.naver?where=news&sm=tab_jum&query=%EB%B9%84%ED%8A%B8%EC%BD%94%EC%9D%B8%7C%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%7C%EA%B0%80%EC%83%81%ED%99%94%ED%8F%90%7C%EA%B0%80%EC%83%81%EC%9E%90%EC%82%B0'
+    req = requests.get(news_url)
+    soup = BeautifulSoup(req.text, 'html.parser')
 
-
+    table = soup.find('ul',{'class' : 'list_news'})
+    list = table.find_all('a', {'class' : "news_tit"})
+#url = list.find()
+    title = []
+    url = []
+    for i in range(5):
+    #    print(i)
+        title.append(list[i].get('title'))
+        url.append(list[i].get('href'))
+    img_soup = soup.find_all("a",class_="dsc_thumb")
+    imgUrl = []
+    for i in range (5):
+        imgUrl.append(img_soup[i].find("img")["src"])    
+    responseBody = {"version": "2.0",
+                "template": {
+                "outputs": [
+                {
+                    "carousel": {
+                    "type":"listCard",
+                    "items": [
+                        {
+                        "header": {
+                        "title": "가상화폐 연관 뉴스 보러가기"
+                        },
+              "items": [
+                {
+                "title": f"{title[0]}",
+                "imageUrl": f"{imgUrl[0]}",
+                "link": {
+                  "web": f"{url[0]}"
+                        }
+                },
+                {
+                  "title": f"{title[1]}",
+                  "imageUrl": f"{imgUrl[1]}",
+                  "link": {
+                    "web": f"{url[1]}"
+                  }
+                },
+                {
+                  "title": f"{title[2]}",
+                 "imageUrl": f"{imgUrl[2]}"  ,             
+                  "link": {
+                    "web": f"{url[2]}"
+                  }
+                },
+                {
+                  "title": f"{title[3]}",
+                  "imageUrl": f"{imgUrl[3]}",
+                  "link": {
+                    "web": f"{url[3]}"
+                  }
+                },
+                {
+                  "title": f"{title[4]}",
+                  "imageUrl": f"{imgUrl[4]}",      
+                  "link": {
+                    "web": f"{url[4]}"
+                  }
+              }
+              ],
+                "buttons": [
+            {
+              "label": "더 보기",
+              "action": "webLink",
+              "webLinkUrl": "https://search.naver.com/search.naver?where=news&sm=tab_jum&query=비트코인%7C이더리움%7C가상화폐%7C가상자산"
+            }
+                
+              ]
+                  }
+              ]  
+          }
+        }
+        ]
+        }
+        }
+    return responseBody
 
 
 ## sunhoo_youtube
@@ -1227,7 +1475,7 @@ def sayHello():
 # google_api_python_client==2.48.0
 # oauth2client==4.1.3
 
-def sayHello1():
+def youtube():
     #body1 = request.get_json()
     #print(body1)
     #print(body1['userRequest']['utterance'])
@@ -1320,7 +1568,6 @@ def sayHello1():
               }
               }
     return responseBody1
-
 
 
 
