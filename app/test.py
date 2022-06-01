@@ -13,7 +13,7 @@ local_postgresql_url = "postgresql://etdrsbuvfkhhee:e65424e293a012117389160f4f25
 engine_postgresql = create_engine(local_postgresql_url)
 
 
-df = pd.read_csv("data/market_list.csv") # 데이터 불러오기
+df = pd.read_csv("./app/data/market_list.csv") # 데이터 불러오기
 # 되는거 확인 top 파일을 import 해서 가져오면 될듯
 
 df.to_sql(name = 'test',
