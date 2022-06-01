@@ -119,6 +119,7 @@ def si():
 
 
 def liveData():
+    print("데이터베이스 저장 시작")
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
@@ -154,6 +155,7 @@ def liveData():
             if_exists = 'replace',
             index = False
             )
+    print("데이터베이스에 저장 완료")
 liveData()
 
     
