@@ -1487,7 +1487,7 @@ def youtube():
     #print(body1['userRequest']['utterance'])
 
 # https://console.cloud.google.com/apis/credentials 여기서 API발급받아 사용
-    DEVELOPER_KEY='AIzaSyBa_S65tRPb1mALqTtsDB1e9p6s-7kshJA' # 내 API 키값 입력
+    DEVELOPER_KEY='개인API시리얼코드' # 내 API 키값 입력
     YOUTUBE_API_SERVICE_NAME='youtube'
     YOUTUBE_API_VERSION='v3'
 
