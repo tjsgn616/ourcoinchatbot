@@ -1,6 +1,7 @@
 # 개요
 - 코인114는 시세 조회, 지정한 시점과의 코인 비교 기능을 제공하고, 실시간 top5 코인 정보와 뉴스, 영상을 통해 코인 동향 까지 파악할 수 있는 카카오톡 챗봇입니다.
-- 필요한 library들을 requirements.txt에 입력해 주어야 정상적으로 작동한다.
+- 필요한 library들을 requirements.txt에 입력해 주어야 정상적으로 작동합니다.
+
 # main.py
 ## marketData()
 - request와 업비트 API를 이용하여 market(가상화폐코드),KoreanName,EnglishName 정보를 불러옵니다.
@@ -47,6 +48,7 @@
 - pip install --upgrade google_api_python_client
 - pip install oauth2client
 - 네이버 검색과 다르게 동시에 검색하는 기능이 없고, 개별로 검색했을 때 가장 유의미한 검색 결과를 출력하는 검색어가 비트코인 이라고 판단되어 비트코인 에 대한 검색 결과를 출력하도록 하였습니다.
+- 
 # topfive.py
 ## top()
 - market 이름과 market 코드가 저장되어 있는 market_list.csv파일을 불러옵니다.
@@ -63,3 +65,19 @@
 # wsgi.py
 ## 서버 실행
 - 해당 파일 내용에 포함된 파일을 서버에서 실행 하도록 해주는 파일입니다.
+
+
+# deploy.sh
+
+- 배포하는 과정을 요약하기 위해 deploy.sh를 만들 수 있습니다.
+- deploy.sh 파일을 만들고, 메모장으로 배포 코드를 입력해 놓습니다.
+  - deploy.sh 에는 아래 내용이 포함돼 있습니다.
+  - git add .
+  - git commit -am "updated"
+  - git push heroku master
+
+# requirements.txt
+- 코드에서 사용한 library들을 모두 기록해 놓습니다.
+
+# runtime.txt
+- 구동할 python 버전을 기록해 놓습니다.
