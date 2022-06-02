@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 #import pandas.io.sql as psql
 #from psycopg2 import extensions      
 
-def si():
+def top():
     # 탑 5 구하기 위해 market id 불러오기
     market_list = pd.read_csv("./app/data/market_list.csv")
     #market_list = pd.read_csv("data/market_list.csv")
@@ -123,7 +123,7 @@ def liveData():
 #     top_change = top_change_val
 #     top_live = live_coin
 #     return top_live, top_change
-    gmail = si() # 그냥 눈에 들어오는 단어로 변수함
+    gmail = top() # 그냥 눈에 들어오는 단어로 변수함
     live_coin = gmail[0]
     top_change_val = gmail[1]
     #print(live_coin)

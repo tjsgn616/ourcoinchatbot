@@ -9,7 +9,7 @@ sched = BlockingScheduler(timezone='Asia/Seoul')
 # 매일 12시 30분에 실행
 @sched.scheduled_job('interval', minutes=5, id='test_1')
 def job1():
-    top5.si()
+    top5.top()
     #print(f'job1 : {time.strftime("%H:%M:%S")}')
 
 
